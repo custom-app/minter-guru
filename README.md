@@ -1,2 +1,2 @@
-# crypto-insta
-Web3 revolution app
+# NFT minting app for your photos
+Our mission is to distribute web3 revolution across the world
