@@ -25,6 +25,9 @@
 		11ED5AA0284705F800F0D61D /* MainContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A9F284705F800F0D61D /* MainContainer.swift */; };
 		11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AA12847077A00F0D61D /* BottomMenu.swift */; };
 		11ED5AA828470D3600F0D61D /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11ED5AA728470D3600F0D61D /* WalletConnectSwift */; };
+		11ED5AAA284710B400F0D61D /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AA9284710B400F0D61D /* AuthContainer.swift */; };
+		11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AAB284710BE00F0D61D /* MintContainer.swift */; };
+		11ED5AAE284710C800F0D61D /* GalleryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AAD284710C800F0D61D /* GalleryContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,9 @@
 		11ED5A9F284705F800F0D61D /* MainContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContainer.swift; sourceTree = "<group>"; };
 		11ED5AA12847077A00F0D61D /* BottomMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomMenu.swift; sourceTree = "<group>"; };
 		11ED5AA528470CEC00F0D61D /* WalletConnectSwift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WalletConnectSwift; path = ../../WalletConnectSwift; sourceTree = "<group>"; };
+		11ED5AA9284710B400F0D61D /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
+		11ED5AAB284710BE00F0D61D /* MintContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintContainer.swift; sourceTree = "<group>"; };
+		11ED5AAD284710C800F0D61D /* GalleryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +162,7 @@
 		11ED5A8A2846C40400F0D61D /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				11ED5AA9284710B400F0D61D /* AuthContainer.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -163,6 +170,7 @@
 		11ED5A8B2846C41500F0D61D /* Mint */ = {
 			isa = PBXGroup;
 			children = (
+				11ED5AAB284710BE00F0D61D /* MintContainer.swift */,
 			);
 			path = Mint;
 			sourceTree = "<group>";
@@ -170,6 +178,7 @@
 		11ED5A8C2846C42700F0D61D /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				11ED5AAD284710C800F0D61D /* GalleryContainer.swift */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -270,12 +279,15 @@
 			files = (
 				11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */,
 				11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */,
+				11ED5AAA284710B400F0D61D /* AuthContainer.swift in Sources */,
+				11ED5AAE284710C800F0D61D /* GalleryContainer.swift in Sources */,
 				11ED5AA0284705F800F0D61D /* MainContainer.swift in Sources */,
 				11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */,
 				11D2572728444C790028E2B4 /* ContentView.swift in Sources */,
 				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
 				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
+				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,

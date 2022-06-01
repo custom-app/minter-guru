@@ -7,5 +7,7 @@
 		<string>metamask</string>
 		<string>trust</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 </dict>
 </plist>

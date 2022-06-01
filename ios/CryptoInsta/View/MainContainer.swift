@@ -14,11 +14,15 @@ struct MainContainer: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { geometry in
-                VStack {
-                    Spacer()
-                }
+            switch globalVm.currentTab {
+            case .wallet:
+                AuthContainer()
+            case .mint:
+                MintContainer()
+            case .gallery:
+                GalleryContainer()
             }
+            
             BottomMenu()
         }
         .background(Color.white)
