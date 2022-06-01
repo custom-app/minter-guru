@@ -2,7 +2,7 @@
 //  CryptoInstaApp.swift
 //  CryptoInsta
 //
-//  Created by Лев Бакланов on 30.05.2022.
+//  Created by Lev Baklanov on 30.05.2022.
 //
 
 import SwiftUI

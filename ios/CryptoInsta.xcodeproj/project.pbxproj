@@ -11,6 +11,20 @@
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
 		11D2572C28444C7B0028E2B4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572B28444C7B0028E2B4 /* Preview Assets.xcassets */; };
+		11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */; };
+		11ED5A802846BCC600F0D61D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A7F2846BCC600F0D61D /* Constants.swift */; };
+		11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A812846BD4000F0D61D /* Extensions.swift */; };
+		11ED5A892846C1E600F0D61D /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 11ED5A882846C1E600F0D61D /* web3swift */; };
+		11ED5A912846C5FD00F0D61D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A902846C5FD00F0D61D /* Config.swift */; };
+		11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A922846C7AE00F0D61D /* Colors.swift */; };
+		11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */; };
+		11ED5A972847015300F0D61D /* Wallets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A962847015300F0D61D /* Wallets.swift */; };
+		11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A992847052300F0D61D /* IdentifiableAlert.swift */; };
+		11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A9B2847055200F0D61D /* PhotoPicker.swift */; };
+		11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A9D2847059B00F0D61D /* Placeholder.swift */; };
+		11ED5AA0284705F800F0D61D /* MainContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A9F284705F800F0D61D /* MainContainer.swift */; };
+		11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AA12847077A00F0D61D /* BottomMenu.swift */; };
+		11ED5AA828470D3600F0D61D /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11ED5AA728470D3600F0D61D /* WalletConnectSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +33,20 @@
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		11D2572828444C7B0028E2B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11D2572B28444C7B0028E2B4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalViewModel.swift; sourceTree = "<group>"; };
+		11ED5A7F2846BCC600F0D61D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		11ED5A812846BD4000F0D61D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		11ED5A902846C5FD00F0D61D /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		11ED5A922846C7AE00F0D61D /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWorker.swift; sourceTree = "<group>"; };
+		11ED5A962847015300F0D61D /* Wallets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallets.swift; sourceTree = "<group>"; };
+		11ED5A98284703C100F0D61D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		11ED5A992847052300F0D61D /* IdentifiableAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableAlert.swift; sourceTree = "<group>"; };
+		11ED5A9B2847055200F0D61D /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		11ED5A9D2847059B00F0D61D /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
+		11ED5A9F284705F800F0D61D /* MainContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContainer.swift; sourceTree = "<group>"; };
+		11ED5AA12847077A00F0D61D /* BottomMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomMenu.swift; sourceTree = "<group>"; };
+		11ED5AA528470CEC00F0D61D /* WalletConnectSwift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WalletConnectSwift; path = ../../WalletConnectSwift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11ED5AA828470D3600F0D61D /* WalletConnectSwift in Frameworks */,
+				11ED5A892846C1E600F0D61D /* web3swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,8 +65,10 @@
 		11D2571828444C790028E2B4 = {
 			isa = PBXGroup;
 			children = (
+				11ED5A852846BFFA00F0D61D /* Packages */,
 				11D2572328444C790028E2B4 /* CryptoInsta */,
 				11D2572228444C790028E2B4 /* Products */,
+				11ED5AA628470D3600F0D61D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -51,8 +83,13 @@
 		11D2572328444C790028E2B4 /* CryptoInsta */ = {
 			isa = PBXGroup;
 			children = (
-				11D2572428444C790028E2B4 /* CryptoInstaApp.swift */,
+				11ED5A98284703C100F0D61D /* Info.plist */,
+				11ED5A7E2846BC0E00F0D61D /* Util */,
+				11ED5A7B2846BB6E00F0D61D /* ViewModel */,
+				11ED5A7A2846BB6700F0D61D /* Model */,
+				11ED5A792846BAA500F0D61D /* View */,
 				11D2572628444C790028E2B4 /* ContentView.swift */,
+				11D2572428444C790028E2B4 /* CryptoInstaApp.swift */,
 				11D2572828444C7B0028E2B4 /* Assets.xcassets */,
 				11D2572A28444C7B0028E2B4 /* Preview Content */,
 			);
@@ -65,6 +102,93 @@
 				11D2572B28444C7B0028E2B4 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		11ED5A792846BAA500F0D61D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				11ED5A8D2846C45000F0D61D /* Components */,
+				11ED5A8A2846C40400F0D61D /* Auth */,
+				11ED5A8B2846C41500F0D61D /* Mint */,
+				11ED5A8C2846C42700F0D61D /* Gallery */,
+				11ED5A9F284705F800F0D61D /* MainContainer.swift */,
+				11ED5AA12847077A00F0D61D /* BottomMenu.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		11ED5A7A2846BB6700F0D61D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				11ED5A962847015300F0D61D /* Wallets.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		11ED5A7B2846BB6E00F0D61D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		11ED5A7E2846BC0E00F0D61D /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				11ED5A7F2846BCC600F0D61D /* Constants.swift */,
+				11ED5A812846BD4000F0D61D /* Extensions.swift */,
+				11ED5A902846C5FD00F0D61D /* Config.swift */,
+				11ED5A922846C7AE00F0D61D /* Colors.swift */,
+				11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		11ED5A852846BFFA00F0D61D /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				11ED5AA528470CEC00F0D61D /* WalletConnectSwift */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		11ED5A8A2846C40400F0D61D /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		11ED5A8B2846C41500F0D61D /* Mint */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mint;
+			sourceTree = "<group>";
+		};
+		11ED5A8C2846C42700F0D61D /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Gallery;
+			sourceTree = "<group>";
+		};
+		11ED5A8D2846C45000F0D61D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				11ED5A992847052300F0D61D /* IdentifiableAlert.swift */,
+				11ED5A9B2847055200F0D61D /* PhotoPicker.swift */,
+				11ED5A9D2847059B00F0D61D /* Placeholder.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		11ED5AA628470D3600F0D61D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +207,10 @@
 			dependencies = (
 			);
 			name = CryptoInsta;
+			packageProductDependencies = (
+				11ED5A882846C1E600F0D61D /* web3swift */,
+				11ED5AA728470D3600F0D61D /* WalletConnectSwift */,
+			);
 			productName = CryptoInsta;
 			productReference = 11D2572128444C790028E2B4 /* CryptoInsta.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +239,9 @@
 				Base,
 			);
 			mainGroup = 11D2571828444C790028E2B4;
+			packageReferences = (
+				11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */,
+			);
 			productRefGroup = 11D2572228444C790028E2B4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,8 +268,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */,
+				11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */,
+				11ED5AA0284705F800F0D61D /* MainContainer.swift in Sources */,
+				11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */,
 				11D2572728444C790028E2B4 /* ContentView.swift in Sources */,
+				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
+				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
+				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
+				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
+				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
+				11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */,
+				11ED5A802846BCC600F0D61D /* Constants.swift in Sources */,
+				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,11 +413,15 @@
 				DEVELOPMENT_TEAM = 7VF24UW9N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CryptoInsta/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For creating nft of photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -284,7 +431,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -299,11 +446,15 @@
 				DEVELOPMENT_TEAM = 7VF24UW9N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CryptoInsta/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For creating nft of photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -313,7 +464,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -339,6 +490,29 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skywinder/web3swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		11ED5A882846C1E600F0D61D /* web3swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */;
+			productName = web3swift;
+		};
+		11ED5AA728470D3600F0D61D /* WalletConnectSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WalletConnectSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 11D2571928444C790028E2B4 /* Project object */;
 }
