@@ -24,6 +24,8 @@ class GlobalViewModel: ObservableObject {
     @Published
     var wcWorker = WalletConnectWorker()
     
+    var backgroundManager = BackgroundTasksManager.shared
+    
     var walletAccount: String? {
         return wcWorker.session?.walletInfo!.accounts[0].lowercased()
     }

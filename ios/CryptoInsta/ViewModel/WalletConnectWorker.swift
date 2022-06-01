@@ -26,6 +26,8 @@ class WalletConnectWorker: ObservableObject {
     
     var pendingDeepLink: String?
     
+    var backgroundManager = BackgroundTasksManager.shared
+    
     
     func initWalletConnect() {
         print("init wallet connect: \(walletConnect == nil)")
@@ -66,6 +68,7 @@ class WalletConnectWorker: ObservableObject {
                 //TODO: deeplink into app in store
             }
         }
+        backgroundManager.createConnectBackgroundTask()
     }
     
 }
@@ -73,6 +76,7 @@ class WalletConnectWorker: ObservableObject {
 extension WalletConnectWorker: WalletConnectDelegate {
     func failedToConnect() {
         print("failed to connect")
+        backgroundManager.finishConnectBackgroundTask()
         DispatchQueue.main.async { [unowned self] in
             withAnimation {
                 isConnecting = false
@@ -84,6 +88,7 @@ extension WalletConnectWorker: WalletConnectDelegate {
 
     func didConnect() {
         print("did connect")
+        backgroundManager.finishConnectBackgroundTask()
         DispatchQueue.main.async { [unowned self] in
             withAnimation {
                 isConnecting = false
@@ -130,6 +135,7 @@ extension WalletConnectWorker: WalletConnectDelegate {
     func didDisconnect(isReconnecting: Bool) {
         print("did disconnect, is reconnecting: \(isReconnecting)")
         if !isReconnecting {
+            backgroundManager.finishConnectBackgroundTask()
             DispatchQueue.main.async { [unowned self] in
                 withAnimation {
                     isConnecting = false
