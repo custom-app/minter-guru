@@ -54,7 +54,7 @@ struct MintContainer: View {
                         }
                         return
                     }
-                    globalVm.pickedImage = image
+                    globalVm.handleImagePicked(photo: image)
                 }
             }
             

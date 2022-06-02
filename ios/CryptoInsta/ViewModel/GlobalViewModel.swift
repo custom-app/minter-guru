@@ -70,7 +70,6 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
@@ -90,6 +89,17 @@ class GlobalViewModel: ObservableObject {
             }
         @unknown default:
             print("Unknown photo library authorization status")
+        }
+    }
+    
+    func handleImagePicked(photo: UIImage) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            let compressed = ImageWorker.compressImage(image: photo)
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.pickedImage = compressed
+                }
+            }
         }
     }
 }
