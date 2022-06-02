@@ -14,54 +14,84 @@ struct AuthContainer: View {
     
     var body: some View {
         VStack {
-            Button {
-                globalVm.connect(wallet: Wallets.TrustWallet)
-            } label: {
-                HStack {
-                    Spacer()
-                    Text(Wallets.TrustWallet.name)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color.green)
-                    Spacer()
+            if globalVm.session == nil {
+                ZStack {
+                    Button {
+                        globalVm.connect(wallet: Wallets.TrustWallet)
+                    } label: {
+                        HStack {
+                            Spacer()
+                            Text(Wallets.TrustWallet.name)
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.green)
+                            Spacer()
+                        }
+                        .padding(.vertical, 15)
+                        .background(Color.white)
+                        .cornerRadius(32)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 32)
+                                .stroke(Color.green, lineWidth: 2)
+                        )
+                    }
+                    if globalVm.connectingWalletName == Wallets.TrustWallet.name {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                .scaleEffect(1.2)
+                        }
+                        .padding(.trailing, 10)
+                    }
                 }
-                .padding(.vertical, 15)
-                .background(Color.white)
-                .cornerRadius(32)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 32)
-                        .stroke(Color.green, lineWidth: 2)
-                )
-            }
-            .padding(.horizontal, 30)
-            .padding(.bottom, 24)
-            Button {
-                globalVm.connect(wallet: Wallets.Metamask)
-            } label: {
-                HStack {
-                    Spacer()
-                    Text(Wallets.Metamask.name)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color.green)
-                    Spacer()
+                .padding(.horizontal, 30)
+                .padding(.vertical, 24)
+                Button {
+                    globalVm.connect(wallet: Wallets.Metamask)
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text(Wallets.Metamask.name)
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.green)
+                        Spacer()
+                    }
+                    .padding(.vertical, 15)
+                    .background(Color.white)
+                    .cornerRadius(32)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 32)
+                            .stroke(Color.green, lineWidth: 2)
+                    )
                 }
-                .padding(.vertical, 15)
-                .background(Color.white)
-                .cornerRadius(32)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 32)
-                        .stroke(Color.green, lineWidth: 2)
-                )
+                .padding(.horizontal, 30)
+            } else {
+                Button {
+                    globalVm.disconnect()
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("Disconnect")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.green)
+                        Spacer()
+                    }
+                    .padding(.vertical, 15)
+                    .background(Color.white)
+                    .cornerRadius(32)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 32)
+                            .stroke(Color.green, lineWidth: 2)
+                    )
+                }
+                .padding(.horizontal, 30)
+                .padding(.top, 30)
             }
-            .padding(.horizontal, 30)
             Spacer()
         }
     }
 }
 
-struct AuthContainer_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthContainer()
-    }
-}

@@ -24,7 +24,7 @@ class WalletConnect {
         let clientMeta = Session.ClientMeta(name: "Cryptogram",
                                             description: "Cryptogram mobile app",
                                             icons: [],
-                                            url: URL(string: "")!)
+                                            url: URL(string: "https://google.com")!)
         let dAppInfo = Session.DAppInfo(peerId: UUID().uuidString,
                                         peerMeta: clientMeta,
                                         chainId: Config.TESTING ? Constants.ChainId.PolygonTestnet :

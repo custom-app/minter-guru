@@ -9,26 +9,41 @@ import Foundation
 import WalletConnectSwift
 import SwiftUI
 
-class WalletConnectWorker: ObservableObject {
+// Wallet connect logic for global viewmodel
+extension GlobalViewModel {
     
-    private let deepLinkDelay = 0.5
+    var walletAccount: String? {
+        return session?.walletInfo!.accounts[0].lowercased()
+    }
     
-    @Published
-    var session: Session?
-    @Published
-    var currentWallet: Wallet?
-    @Published
-    var isConnecting: Bool = false
-    @Published
-    var isReconnecting: Bool = false
-    @Published
-    var walletConnect: WalletConnect?
+    var walletName: String {
+        if let name = session?.walletInfo?.peerMeta.name {
+            return name
+        }
+        return currentWallet?.name ?? ""
+    }
     
-    private var pendingDeepLink: String?
+    var isWrongChain: Bool {
+        let requiredChainId = Config.TESTING ? Constants.ChainId.PolygonTestnet : Constants.ChainId.Polygon
+        if let chainId = session?.walletInfo?.chainId,
+           chainId != requiredChainId {
+            return true
+        }
+        return false
+    }
     
-    private var backgroundManager = BackgroundTasksManager.shared
-    
-    func initWc() {
+    func openWallet() {
+        if let wallet = currentWallet {
+            if let url = URL(string: wallet.formLinkForOpen()),
+               UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                //TODO: mb show message for wallet verification only in this case?
+            }
+        }
+    }
+
+    func initWalletConnect() {
         print("init wallet connect: \(walletConnect == nil)")
         if walletConnect == nil {
             walletConnect = WalletConnect(delegate: self)
@@ -42,7 +57,10 @@ class WalletConnectWorker: ObservableObject {
     }
     
     func connect(wallet: Wallet) {
-        guard let walletConnect = walletConnect else { return  }
+        guard let walletConnect = walletConnect else { return }
+        withAnimation {
+            connectingWalletName = wallet.name
+        }
         let connectionUrl = walletConnect.connect()
         pendingDeepLink = wallet.formWcDeepLink(connectionUrl: connectionUrl)
         currentWallet = wallet
@@ -61,6 +79,9 @@ class WalletConnectWorker: ObservableObject {
         guard let deepLink = pendingDeepLink else { return }
         pendingDeepLink = nil
         DispatchQueue.main.asyncAfter(deadline: .now() + deepLinkDelay) {
+            withAnimation {
+                self.connectingWalletName = ""
+            }
             if let url = URL(string: deepLink), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
@@ -72,12 +93,13 @@ class WalletConnectWorker: ObservableObject {
     
 }
 
-extension WalletConnectWorker: WalletConnectDelegate {
+extension GlobalViewModel: WalletConnectDelegate {
     func failedToConnect() {
         print("failed to connect")
         backgroundManager.finishConnectBackgroundTask()
         DispatchQueue.main.async { [unowned self] in
             withAnimation {
+                self.connectingWalletName = ""
                 isConnecting = false
                 isReconnecting = false
             }
@@ -86,7 +108,6 @@ extension WalletConnectWorker: WalletConnectDelegate {
     }
 
     func didConnect() {
-        print("did connect")
         backgroundManager.finishConnectBackgroundTask()
         DispatchQueue.main.async { [unowned self] in
             withAnimation {

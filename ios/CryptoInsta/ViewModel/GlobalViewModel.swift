@@ -12,6 +12,23 @@ import WalletConnectSwift
 
 class GlobalViewModel: ObservableObject {
     
+    let deepLinkDelay = 0.5
+    
+    //Wallet connect block
+    @Published
+    var session: Session?
+    @Published
+    var currentWallet: Wallet?
+    @Published
+    var isConnecting: Bool = false
+    @Published
+    var isReconnecting: Bool = false
+    @Published
+    var walletConnect: WalletConnect?
+    var pendingDeepLink: String?
+    @Published
+    var connectingWalletName = ""
+    
     @Published
     var currentTab: TabItem = .wallet
     
@@ -21,58 +38,10 @@ class GlobalViewModel: ObservableObject {
     @Published
     var alert: IdentifiableAlert?
     
-    @Published
-    var wcWorker = WalletConnectWorker()
+    var backgroundManager = BackgroundTasksManager.shared
     
-    private var backgroundManager = BackgroundTasksManager.shared
-    
-    @Published
     var web3 = Web3Worker(endpoint: Config.TESTING ?
                           Config.PolygonEndpoints.Testnet : Config.PolygonEndpoints.Mainnet)
-    
-    var walletAccount: String? {
-        return wcWorker.session?.walletInfo!.accounts[0].lowercased()
-    }
-    
-    var walletName: String {
-        if let name = wcWorker.session?.walletInfo?.peerMeta.name {
-            return name
-        }
-        return wcWorker.currentWallet?.name ?? ""
-    }
-    
-    var isWrongChain: Bool {
-        let requiredChainId = Config.TESTING ? Constants.ChainId.PolygonTestnet : Constants.ChainId.Polygon
-        if let session = wcWorker.session,
-           let chainId = session.walletInfo?.chainId,
-           chainId != requiredChainId {
-            return true
-        }
-        return false
-    }
-    
-    func initWalletConnect() {
-        wcWorker.initWc()
-    }
-    
-    func connect(wallet: Wallet) {
-        wcWorker.connect(wallet: wallet)
-    }
-    
-    func disconnect() {
-        wcWorker.disconnect()
-    }
-    
-    func openWallet() {
-        if let wallet = wcWorker.currentWallet {
-            if let url = URL(string: wallet.formLinkForOpen()),
-               UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                //TODO: mb show message for wallet verification only in this case?
-            }
-        }
-    }
     
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
         let status = PHPhotoLibrary.authorizationStatus()

@@ -11,7 +11,7 @@
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
 		11D2572C28444C7B0028E2B4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572B28444C7B0028E2B4 /* Preview Assets.xcassets */; };
-		11DEE92F2847F75300B7E2E5 /* WalletConnectWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DEE92E2847F75300B7E2E5 /* WalletConnectWorker.swift */; };
+		11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DEE92E2847F75300B7E2E5 /* WalletConnectExtension.swift */; };
 		11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DEE9302847F82000B7E2E5 /* WalletConnect.swift */; };
 		11DEE933284803B900B7E2E5 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DEE932284803B900B7E2E5 /* Errors.swift */; };
 		11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DEE9342848063D00B7E2E5 /* BackgroundTasksManager.swift */; };
@@ -42,7 +42,7 @@
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		11D2572828444C7B0028E2B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11D2572B28444C7B0028E2B4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		11DEE92E2847F75300B7E2E5 /* WalletConnectWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectWorker.swift; sourceTree = "<group>"; };
+		11DEE92E2847F75300B7E2E5 /* WalletConnectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectExtension.swift; sourceTree = "<group>"; };
 		11DEE9302847F82000B7E2E5 /* WalletConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnect.swift; sourceTree = "<group>"; };
 		11DEE932284803B900B7E2E5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		11DEE9342848063D00B7E2E5 /* BackgroundTasksManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTasksManager.swift; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */,
-				11DEE92E2847F75300B7E2E5 /* WalletConnectWorker.swift */,
+				11DEE92E2847F75300B7E2E5 /* WalletConnectExtension.swift */,
 				11DEE9302847F82000B7E2E5 /* WalletConnect.swift */,
 				11DEE938284854DF00B7E2E5 /* Web3Worker.swift */,
 			);
@@ -309,7 +309,7 @@
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
-				11DEE92F2847F75300B7E2E5 /* WalletConnectWorker.swift in Sources */,
+				11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */,
 				11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
