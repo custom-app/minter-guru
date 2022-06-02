@@ -24,12 +24,11 @@ class WalletConnectWorker: ObservableObject {
     @Published
     var walletConnect: WalletConnect?
     
-    var pendingDeepLink: String?
+    private var pendingDeepLink: String?
     
-    var backgroundManager = BackgroundTasksManager.shared
+    private var backgroundManager = BackgroundTasksManager.shared
     
-    
-    func initWalletConnect() {
+    func initWc() {
         print("init wallet connect: \(walletConnect == nil)")
         if walletConnect == nil {
             walletConnect = WalletConnect(delegate: self)

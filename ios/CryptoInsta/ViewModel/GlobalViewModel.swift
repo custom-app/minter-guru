@@ -24,7 +24,7 @@ class GlobalViewModel: ObservableObject {
     @Published
     var wcWorker = WalletConnectWorker()
     
-    var backgroundManager = BackgroundTasksManager.shared
+    private var backgroundManager = BackgroundTasksManager.shared
     
     var walletAccount: String? {
         return wcWorker.session?.walletInfo!.accounts[0].lowercased()
@@ -45,6 +45,18 @@ class GlobalViewModel: ObservableObject {
             return true
         }
         return false
+    }
+    
+    func initWalletConnect() {
+        wcWorker.initWc()
+    }
+    
+    func connect(wallet: Wallet) {
+        wcWorker.connect(wallet: wallet)
+    }
+    
+    func disconnect() {
+        wcWorker.disconnect()
     }
     
     func openWallet() {

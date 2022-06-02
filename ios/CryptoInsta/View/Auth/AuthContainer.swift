@@ -8,8 +8,53 @@
 import SwiftUI
 
 struct AuthContainer: View {
+    
+    @EnvironmentObject
+    var globalVm: GlobalViewModel
+    
     var body: some View {
         VStack {
+            Button {
+                globalVm.connect(wallet: Wallets.TrustWallet)
+            } label: {
+                HStack {
+                    Spacer()
+                    Text(Wallets.TrustWallet.name)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.green)
+                    Spacer()
+                }
+                .padding(.vertical, 15)
+                .background(Color.white)
+                .cornerRadius(32)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 32)
+                        .stroke(Color.green, lineWidth: 2)
+                )
+            }
+            .padding(.horizontal, 30)
+            .padding(.bottom, 24)
+            Button {
+                globalVm.connect(wallet: Wallets.Metamask)
+            } label: {
+                HStack {
+                    Spacer()
+                    Text(Wallets.Metamask.name)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.green)
+                    Spacer()
+                }
+                .padding(.vertical, 15)
+                .background(Color.white)
+                .cornerRadius(32)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 32)
+                        .stroke(Color.green, lineWidth: 2)
+                )
+            }
+            .padding(.horizontal, 30)
             Spacer()
         }
     }

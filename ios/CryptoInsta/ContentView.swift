@@ -22,7 +22,7 @@ struct ContentView: View {
         .environmentObject(globalVm)
         .onAppear {
             print("content view on appear")
-            // init wallet connect here
+            globalVm.initWalletConnect()
         }
     }
 }
