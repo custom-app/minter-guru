@@ -26,6 +26,10 @@ class GlobalViewModel: ObservableObject {
     
     private var backgroundManager = BackgroundTasksManager.shared
     
+    @Published
+    var web3 = Web3Worker(endpoint: Config.TESTING ?
+                          Config.PolygonEndpoints.Testnet : Config.PolygonEndpoints.Mainnet)
+    
     var walletAccount: String? {
         return wcWorker.session?.walletInfo!.accounts[0].lowercased()
     }
