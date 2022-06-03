@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1108864C284ABE59002C4E5A /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864B284ABE59002C4E5A /* Tools.swift */; };
+		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
+		11A7496B2849B38200387869 /* RequestSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A7496A2849B38200387869 /* RequestSigner.swift */; };
+		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
@@ -37,6 +41,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1108864B284ABE59002C4E5A /* Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
+		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
+		11A7496A2849B38200387869 /* RequestSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSigner.swift; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -72,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11A7496E2849CD6700387869 /* AWSSigner in Frameworks */,
 				11ED5AA828470D3600F0D61D /* WalletConnectSwift in Frameworks */,
 				11ED5A892846C1E600F0D61D /* web3swift in Frameworks */,
 			);
@@ -165,6 +173,9 @@
 				11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */,
 				11DEE9342848063D00B7E2E5 /* BackgroundTasksManager.swift */,
 				11DEE9362848501400B7E2E5 /* ImageWorker.swift */,
+				11A749682849A9F100387869 /* HttpRequester.swift */,
+				11A7496A2849B38200387869 /* RequestSigner.swift */,
+				1108864B284ABE59002C4E5A /* Tools.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -237,6 +248,7 @@
 			packageProductDependencies = (
 				11ED5A882846C1E600F0D61D /* web3swift */,
 				11ED5AA728470D3600F0D61D /* WalletConnectSwift */,
+				11A7496D2849CD6700387869 /* AWSSigner */,
 			);
 			productName = CryptoInsta;
 			productReference = 11D2572128444C790028E2B4 /* CryptoInsta.app */;
@@ -268,6 +280,7 @@
 			mainGroup = 11D2571828444C790028E2B4;
 			packageReferences = (
 				11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */,
+				11A7496C2849CD6700387869 /* XCRemoteSwiftPackageReference "aws-signer-v4" */,
 			);
 			productRefGroup = 11D2572228444C790028E2B4 /* Products */;
 			projectDirPath = "";
@@ -308,15 +321,18 @@
 				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
+				1108864C284ABE59002C4E5A /* Tools.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
 				11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */,
 				11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
+				11A7496B2849B38200387869 /* RequestSigner.swift in Sources */,
 				11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */,
 				11ED5A802846BCC600F0D61D /* Constants.swift in Sources */,
 				11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */,
+				11A749692849A9F100387869 /* HttpRequester.swift in Sources */,
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,6 +544,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		11A7496C2849CD6700387869 /* XCRemoteSwiftPackageReference "aws-signer-v4" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adam-fowler/aws-signer-v4";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skywinder/web3swift";
@@ -539,6 +563,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		11A7496D2849CD6700387869 /* AWSSigner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11A7496C2849CD6700387869 /* XCRemoteSwiftPackageReference "aws-signer-v4" */;
+			productName = AWSSigner;
+		};
 		11ED5A882846C1E600F0D61D /* web3swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */;

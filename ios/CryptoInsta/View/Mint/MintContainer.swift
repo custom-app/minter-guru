@@ -29,32 +29,46 @@ struct MintContainer: View {
                     .padding(.vertical, 30)
             }
             
-            Button {
-                globalVm.checkGalleryAuth {
-                    showPhotoPicker = true
+            if let image = globalVm.pickedImage {
+                Button {
+                    globalVm.uploadImageToIpfs(image: image, onSuccess: {resp in})
+                } label: {
+                    Text("Upload photo")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 26)
+                        .padding(.vertical, 14)
+                        .background(Color.green)
+                        .cornerRadius(30)
                 }
-            } label: {
-                Text("Pick photo")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 26)
-                    .padding(.vertical, 14)
-                    .background(Color.green)
-                    .cornerRadius(30)
-            }
-            .padding(.bottom, 40)
-            .sheet(isPresented: $showPhotoPicker) {
-                PhotoPicker { image in
-                    print("image picked")
-                    showPhotoPicker = false
-                    guard let image = image else {
-                        print("image nil")
-                        withAnimation {
-                            globalVm.pickedImage = nil
-                        }
-                        return
+            } else {
+                Button {
+                    globalVm.checkGalleryAuth {
+                        showPhotoPicker = true
                     }
-                    globalVm.handleImagePicked(photo: image)
+                } label: {
+                    Text("Pick photo")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 26)
+                        .padding(.vertical, 14)
+                        .background(Color.green)
+                        .cornerRadius(30)
+                }
+                .padding(.bottom, 40)
+                .sheet(isPresented: $showPhotoPicker) {
+                    PhotoPicker { image in
+                        print("image picked")
+                        showPhotoPicker = false
+                        guard let image = image else {
+                            print("image nil")
+                            withAnimation {
+                                globalVm.pickedImage = nil
+                            }
+                            return
+                        }
+                        globalVm.handleImagePicked(photo: image)
+                    }
                 }
             }
             

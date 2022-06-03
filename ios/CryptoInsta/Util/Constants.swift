@@ -23,4 +23,8 @@ struct Constants {
         static let Polygon = 137
         static let PolygonTestnet = 80001
     }
+    
+    struct Filebase {
+        static let endpoint = "s3.filebase.com"
+    }
 }

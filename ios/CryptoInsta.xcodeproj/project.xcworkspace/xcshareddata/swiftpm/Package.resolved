@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "aws-signer-v4",
+        "repositoryURL": "https://github.com/adam-fowler/aws-signer-v4",
+        "state": {
+          "branch": null,
+          "revision": "2e205327f842f808340e7e40eee3f9dec7e1f649",
+          "version": "2.1.1"
+        }
+      },
+      {
         "package": "BigInt",
         "repositoryURL": "https://github.com/attaswift/BigInt.git",
         "state": {
@@ -35,6 +44,15 @@
           "branch": null,
           "revision": "df8d82047f6654d8e4b655d1b1525c64e1059d21",
           "version": "4.0.4"
+        }
+      },
+      {
+        "package": "swift-nio",
+        "repositoryURL": "https://github.com/apple/swift-nio",
+        "state": {
+          "branch": null,
+          "revision": "124119f0bb12384cef35aa041d7c3a686108722d",
+          "version": "2.40.0"
         }
       },
       {

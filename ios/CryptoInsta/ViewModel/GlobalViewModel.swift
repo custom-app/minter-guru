@@ -75,4 +75,30 @@ class GlobalViewModel: ObservableObject {
             }
         }
     }
+    
+    func uploadImageToIpfs(image: UIImage,
+                           quality: Double = 0.85,
+                           onSuccess: @escaping (String) -> ()) {
+        if let address = walletAccount, address.count > 2 {
+        print("uploading image to ipfs")
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                guard let data = image.jpegData(compressionQuality: quality) else {
+                    print("error getting jpeg data for photo")
+                    return
+                }
+                let filename = Tools.generatePictureName(address: address)
+                HttpRequester.shared.uploadPictureToFilebase(data: data, filename: filename) { cid, error in
+                    if let error = error {
+                        print("Error uploading photo: \(error)")
+                        return
+                    }
+                    if let cid = cid {
+                        print("uploaded photo: \(cid)")
+                    }
+                }
+            }
+        } else {
+            //TODO: show alert that user should connect wallet to upload photo
+        }
+    }
 }
