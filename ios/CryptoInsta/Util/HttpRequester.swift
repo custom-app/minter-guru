@@ -122,7 +122,7 @@ class HttpRequester {
                 print("meta response ok")
                 print("meta response: \(String(decoding: data, as: UTF8.self))")
                 if let cid = httpResponse.allHeaderFields["x-amz-meta-cid"] as? String, !cid.isEmpty {
-                    print("image response cid: \(cid)")
+                    print("meta response cid: \(cid)")
                     DispatchQueue.main.async {
                         onResult(cid, nil)
                     }

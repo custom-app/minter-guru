@@ -12,14 +12,13 @@ struct NftMeta: Codable {
     let description: String
     let image: String
     let properties: MetaProperties
-    var collectionName: String?
     
     func httpImageLink() -> String {
         return Tools.ipfsLinkToHttp(ipfsLink: image)
     }
     
-    func httpFilebaseLink() -> String {
-        return Tools.ipfsLinkToFilebase(ipfsLink: image)
+    func httpFilebaseImageLink() -> String {
+        return Tools.formFilebaseLink(filename: properties.imageName)
     }
     
     init(name: String, description: String, image: String, properties: MetaProperties) {

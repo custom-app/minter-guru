@@ -33,8 +33,8 @@ class Tools {
         ipfsLink.replacingOccurrences(of: "ipfs://", with: "https://ipfs.filebase.io/ipfs/")
     }
     
-    static func ipfsLinkToFilebase(ipfsLink: String) -> String {
-        ipfsLink.replacingOccurrences(of: "ipfs://", with: "https://\(Config.Filebase.bucket).s3.filebase.com/")
+    static func formFilebaseLink(filename: String) -> String {
+        "https://\(Config.Filebase.bucket).s3.filebase.com/\(filename)"
     }
     
     static func cidFromIpfsLink(_ ipfsLink: String) -> String {

@@ -43,6 +43,11 @@ class GlobalViewModel: ObservableObject {
     var web3 = Web3Worker(endpoint: Config.TESTING ?
                           Config.PolygonEndpoints.Testnet : Config.PolygonEndpoints.Mainnet)
     
+    @Published
+    var nftList: [NftObject] = []
+    @Published
+    var nftListLoaded = false
+    
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
@@ -119,6 +124,49 @@ class GlobalViewModel: ObservableObject {
                 }
                 if let cid = cid {
                     print("uploaded meta: \(cid)")
+                }
+            }
+        }
+    }
+    
+    func loadNftList() {
+        print("loading list")
+        //TODO: unmock
+        DispatchQueue.global(qos: .userInitiated).async {
+            let nft1 = NftObject(metaUrl: "ipfs://QmXFn9DnZQGxEjHbwbc4kyZUWX5GQepov1is8bVCnGm573")
+            let nft2 = NftObject(metaUrl: "ipfs://QmfDjV1hnYThocfbgsXZPdJbnHWdWVckZufmtQ87Sgncv1")
+            let nft3 = NftObject(metaUrl: "ipfs://QmYrtUVi4DUM8KSCz3m8YH5mfGXaivd2hXhL7ZUMcaQ3r4")
+            let nft4 = NftObject(metaUrl: "ipfs://QmUu1yosmZk3c3sR9XCPMzFj455eoJdJcKKh2Stp5xH5iM")
+            DispatchQueue.main.async { [self] in
+                withAnimation {
+                    self.nftList = [nft1, nft2, nft3, nft4]
+                }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.loadNftMeta()
+                }
+            }
+        }
+    }
+    
+    func loadNftMeta() {
+        for nft in nftList {
+            if let url = URL(string: Tools.ipfsLinkToHttp(ipfsLink: nft.metaUrl)) {
+                HttpRequester.shared.loadMeta(url: url) { [self] meta, error in
+                    if error != nil {
+                        //TODO: handle error
+                        print("error getting meta: \(error)")
+                    } else if let meta = meta {
+                        DispatchQueue.main.async {
+                            if let index = self.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                                withAnimation {
+                                    self.nftList[index].meta = meta
+                                }
+                            }
+                        }
+                    } else {
+                        //should never happen
+                        print("got nil meta w/o error")
+                    }
                 }
             }
         }

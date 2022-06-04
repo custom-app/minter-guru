@@ -108,6 +108,7 @@ extension GlobalViewModel: WalletConnectDelegate {
     }
 
     func didConnect() {
+        print("did connect callback")
         backgroundManager.finishConnectBackgroundTask()
         DispatchQueue.main.async { [unowned self] in
             withAnimation {
@@ -118,6 +119,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                     currentWallet = Wallets.bySession(session: session)
                 }
                 //TODO: load initial info here
+                loadNftList()
             }
         }
     }
