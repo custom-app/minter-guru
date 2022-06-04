@@ -31,7 +31,7 @@ struct MintContainer: View {
             
             if let image = globalVm.pickedImage {
                 Button {
-                    globalVm.uploadImageToIpfs(image: image, onSuccess: {resp in})
+                    globalVm.uploadImageToIpfs(image: image, name: "Some name")
                 } label: {
                     Text("Upload photo")
                         .font(.system(size: 18, weight: .bold))
