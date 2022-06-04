@@ -171,4 +171,31 @@ class GlobalViewModel: ObservableObject {
             }
         }
     }
+    
+    func loadImage(nft: NftObject) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let meta = nft.meta, let url = URL(string: Tools.formFilebaseLink(filename: "\(meta.properties.imageName).jpg")) {
+                URLSession.shared.dataTask(with: url) { [self] data, response, error in
+                    print("got image response: \(error)")
+                    guard error == nil, let data = data else {
+                        //TODO: handle error
+                        return
+                    }
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        print("searching index")
+                        if let index = self.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                            print("index found")
+                            withAnimation {
+                                self.nftList[index].image = image
+                            }
+                        }
+                    }
+                }
+                .resume()
+            } else {
+                //TODO: handle error
+            }
+        }
+    }
 }

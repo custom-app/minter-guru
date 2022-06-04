@@ -10,6 +10,7 @@
 		1108864C284ABE59002C4E5A /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864B284ABE59002C4E5A /* Tools.swift */; };
 		1108864E284AF497002C4E5A /* NftMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864D284AF497002C4E5A /* NftMeta.swift */; };
 		11088650284B123C002C4E5A /* NftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864F284B123C002C4E5A /* NftObject.swift */; };
+		11088652284B244A002C4E5A /* NftInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11088651284B244A002C4E5A /* NftInfo.swift */; };
 		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
 		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
@@ -45,6 +46,7 @@
 		1108864B284ABE59002C4E5A /* Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
 		1108864D284AF497002C4E5A /* NftMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftMeta.swift; sourceTree = "<group>"; };
 		1108864F284B123C002C4E5A /* NftObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftObject.swift; sourceTree = "<group>"; };
+		11088651284B244A002C4E5A /* NftInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftInfo.swift; sourceTree = "<group>"; };
 		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				11ED5AAD284710C800F0D61D /* GalleryContainer.swift */,
+				11088651284B244A002C4E5A /* NftInfo.swift */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
+				11088652284B244A002C4E5A /* NftInfo.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
 				11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */,
 				11ED5A802846BCC600F0D61D /* Constants.swift in Sources */,
