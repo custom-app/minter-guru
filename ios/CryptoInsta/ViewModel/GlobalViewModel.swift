@@ -86,8 +86,8 @@ class GlobalViewModel: ObservableObject {
                     print("error getting jpeg data for photo")
                     return
                 }
-                let filename = "\(Tools.generatePictureName(address: address)).jpg"
-                HttpRequester.shared.uploadPictureToFilebase(data: data, filename: filename) { cid, error in
+                let filename = (Tools.generatePictureName(address: address))
+                HttpRequester.shared.uploadPictureToFilebase(data: data, filename: "\(filename).jpg") { cid, error in
                     if let error = error {
                         print("Error uploading photo: \(error)")
                         return
