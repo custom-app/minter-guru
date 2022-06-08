@@ -18,15 +18,17 @@ struct GalleryContainer: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 18) {
-                ForEach(globalVm.nftList) { nft in
+                ForEach($globalVm.nftList) { nft in
                     NftListView(nft: nft, selectedNft: $selectedNft)
                 }
             }
             .padding(.top, 30)
             .sheet(item: $selectedNft,
                    onDismiss: { selectedNft = nil }) { nft in
-                NftInfo(nft: nft)
-                    .environmentObject(globalVm)
+                if let index = globalVm.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
+                    NftInfo(nft: $globalVm.nftList[index])
+                        .environmentObject(globalVm)
+                }
             }
         }
     }
@@ -34,6 +36,7 @@ struct GalleryContainer: View {
 
 struct NftListView: View {
     
+    @Binding
     var nft: NftObject
     
     @Binding

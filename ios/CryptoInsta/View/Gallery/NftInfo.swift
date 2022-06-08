@@ -12,7 +12,7 @@ struct NftInfo: View {
     @EnvironmentObject
     var globalVm: GlobalViewModel
     
-    @State
+    @Binding
     var nft: NftObject
     
     var body: some View {
