@@ -12,9 +12,8 @@ contract InstaToken is AccessControl, ERC20 {
         uint256 stepDuration;                // single period duration in seconds
         uint256 steps;                       // count of unlock periods
         uint256 createdAt;                   // started at timestamp
-        uint256 released;                    // already released
+        uint256 withdrawn;                   // already released
         uint256 revokedAt;                   // revocation timestamp
-        uint256 availableAfterRevocation;    // amount of tokens available to release after revocation
     }
 
     /// @dev GameEvent - struct with some gaming activity details
@@ -35,45 +34,57 @@ contract InstaToken is AccessControl, ERC20 {
         uint256 currentSupply;                  // tokens minted via this event
     }
 
+    /// @dev VestingStarted - event emitted when vesting started for some receiver
+    event VestingStarted(address indexed receiver, uint256 stepValue, uint256 stepDuration, uint256 steps);
+
+    /// @dev VestingWithdrawn - event emitted when some amount of vesting tokens
+    event VestingWithdrawn(address indexed receiver, uint256 value);
+
+    /// @dev VestingFullWithdrawn - event emitted when receiver withdrew all tokens
+    event VestingFullWithdrawn(address indexed receiver, uint256 totalValue);
+
+    /// @dev VestingRevoked - event emitted when vesting of receiver is revoked
+    event VestingRevoked(address indexed receiver, uint256 totalValue);
+
+    /// @dev GameEventCreated - event emitted when game event is created
+    event GameEventCreated(uint256 indexed id, uint256 value, uint256 start, uint256 finish,
+        uint256[] thresholds, uint256[] values);
+
+    /// @dev GameEventFinished - event emitted when all tokens from event will be distributed
+    event GameEventFinished(uint256 indexed id);
+
     // constants
     bytes32 public constant LIQUIDITY_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000001;
     bytes32 public constant VESTING_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000002;
     bytes32 public constant GAME_REWARD_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000003;
-    uint256 public constant PERCENT_MULTIPLIER = 1000000;
+    uint256 public constant PERCENT_MULTIPLIER = 10000;  // 100 means 1%. Example: 2/10 - 2*10000/10 = 2000 which is 20%
 
     // token limits
     // liquidityTotalAmount + vestingTotalAmount + gameRewardTotalAmount = totalLimit
-    uint256 public totalLimit;
-    uint256 public liquidityTotalAmount;
-    uint256 public vestingTotalAmount;
-    uint256 public gameRewardTotalAmount;
+    uint256 public totalLimit;                     // limit of minting tokens amount
+    uint256 public liquidityTotalAmount;           // amount of tokens for liquidity
+    uint256 public vestingTotalAmount;             // amount of tokens for vesting
+    uint256 public gameRewardTotalAmount;          // amount of tokens for rewards in game activities
 
     // spent tokens
-    // liquiditySpent + vestingSpent + gameRewardSpent - burned = totalSupply()
-    uint256 public liquiditySpent;
-    uint256 public vestingSpent;
-    uint256 public vestingPendingSpent;
-    uint256 public gameRewardSpent;
-    uint256 public burned;
+    // liquidityTotalAmount + vestingSpent + gameRewardSpent - burned = totalSupply()
+    uint256 public vestingSpent;             // tokens minted for vesting
+    uint256 public vestingPendingSpent;      // tokens locked for vesting (minted + locked)
+    uint256 public gameRewardSpent;          // tokens minted for rewards in game activities
+    uint256 public burned;                   // amount of burned tokens
 
-    GameEvent public currentEvent;
-    mapping(address => VestingRecord) public vestingRecords;
-
-    modifier onlyStartedEvent() {
-        require(hasStartedEvent(), ": started event not found");
-        _;
-    }
-
-    modifier onlyNotStartedEvent() {
-        require(!hasStartedEvent(), ": has started event");
-        _;
-    }
+    uint256 eventsCount = 0;                                          // total count of events
+    mapping(uint256 => GameEvent) public currentEvents;               // current game event
+    mapping(address => VestingRecord) public vestingRecords;          // vestings
 
     /// @dev constructor
-    /// @param _totalLimit -
-    /// @param _liquidityAmount -
-    /// @param _vestingAmount -
-    /// @param _gameRewardAmount -
+    /// @param _totalLimit - limit of amount of minted tokens
+    /// @param _liquidityAmount - amount for liquidity
+    /// @param _vestingAmount - amount for vesting program
+    /// @param _gameRewardAmount - amount for rewards in gaming events
+    /// @param _liquidityAdmin - account, which will receive liquidity tokens
+    /// @param _vestingAdmin - account, which will have permission to create/revoke vesting
+    /// @param _gameRewardAdmin - account, which will have permission to create gaming events and mint rewards
     constructor(
         uint256 _totalLimit,
         uint256 _liquidityAmount,
@@ -96,63 +107,82 @@ contract InstaToken is AccessControl, ERC20 {
     }
 
     /// @dev burn tokens
-    /// @param _from - spending account
-    /// @param _value - spending value
-    function burnWithOptionalReturn(address _from, uint256 _value) external {
+    /// @param from - spending account
+    /// @param value - spending value
+    function burnWithOptionalReturn(address from, uint256 value) external {
         uint256 rate = PERCENT_MULTIPLIER * burned / totalSupply();
-        uint256 toReturn = (rate * _value) / PERCENT_MULTIPLIER;
-        if (toReturn > _value / 2) {
-            toReturn = _value / 2;
+        uint256 toReturn = (rate * value) / PERCENT_MULTIPLIER;
+        if (toReturn > value / 2) {
+            toReturn = value / 2;
         }
         if (toReturn > 0) {
             if (toReturn > gameRewardSpent) {
                 toReturn = gameRewardSpent;
             }
-            transferFrom(_from, address(this), toReturn);
+            transferFrom(from, address(this), toReturn);
             gameRewardSpent -= toReturn;
         }
-        _spendAllowance(_from, _msgSender(), _value - toReturn);
-        _burn(_from, _value - toReturn);
+        _burn(from, value - toReturn);
     }
 
+    /// @dev create vesting record
+    /// @param receiver - receiver of tokens
+    /// @param stepValue - value released in each step
+    /// @param stepDuration - duration of step in seconds
+    /// @param steps - steps qty
+    /// Emits a VestingStarted event
     function createVesting(
-        address _receiver,
-        uint256 _stepValue,
-        uint256 _stepDuration,
-        uint256 _steps
+        address receiver,
+        uint256 stepValue,
+        uint256 stepDuration,
+        uint256 steps
     ) external onlyRole(VESTING_ADMIN_ROLE) {
-        require(_stepValue > 0, "");
-        require(_stepDuration > 0, "");
-        require(_steps > 0, "");
-        require(vestingRecords[_receiver].stepValue == 0, "");
-        require(vestingPendingSpent + _stepValue * _steps <= vestingTotalAmount, "");
-        vestingRecords[_receiver] = VestingRecord(_receiver, _stepValue, _stepDuration, _steps, block.timestamp, 0, 0, 0);
-        vestingPendingSpent += _stepValue * _steps;
+        require(stepValue > 0, "");
+        require(stepDuration > 0, "");
+        require(steps > 0, "");
+        require(vestingRecords[receiver].stepValue == 0, "");
+        require(vestingPendingSpent + stepValue * steps <= vestingTotalAmount, "");
+        vestingRecords[receiver] = VestingRecord(receiver, stepValue, stepDuration, steps, block.timestamp, 0, 0);
+        vestingPendingSpent += stepValue * steps;
+        emit VestingStarted(receiver, stepValue, stepDuration, steps);
     }
 
-    function withdrawVesting(uint256 _value) external {
+    /// @dev withdraw released vesting
+    /// @param value - value to withdraw. Must be less then released and not withdrawn amount of tokens
+    /// Emits a VestingWithdrawn event and VestingFullWithdrawn if all tokens were released and withdrawn
+    function withdrawVesting(uint256 value) external {
         VestingRecord storage record = vestingRecords[_msgSender()];
         require(record.stepValue > 0, "");
-        require(_value <= vestingAvailableToRelease(), "");
-        _mint(_msgSender(), _value);
-        record.released += _value;
-        if (record.released == record.stepValue*record.steps || record.released == record.availableAfterRevocation) {
+        require(value <= vestingAvailableToRelease(), "");
+        _sendTokens(_msgSender(), value);
+        record.withdrawn += value;
+        if (record.withdrawn == record.stepValue * record.steps) {
+            emit VestingFullWithdrawn(_msgSender(), record.withdrawn);
             delete vestingRecords[_msgSender()];
         }
-        vestingSpent += _value;
+        vestingSpent += value;
+        emit VestingWithdrawn(_msgSender(), value);
     }
 
-    function revokeVesting(address _receiver) external onlyRole(VESTING_ADMIN_ROLE) {
-        VestingRecord storage record = vestingRecords[_receiver];
+    /// @dev revoke vesting. All released funds remains with receiver, but new will not unlock
+    /// @param receiver - account for which vesting must be revoked
+    /// Emits a VestingRevoked event and VestingWithdrawn event if there are some released and not withdrawn tokens
+    function revokeVesting(address receiver) external onlyRole(VESTING_ADMIN_ROLE) {
+        VestingRecord storage record = vestingRecords[receiver];
         require(record.stepValue > 0, "");
         record.revokedAt = block.timestamp;
-        record.availableAfterRevocation = record.stepValue * ((record.revokedAt - record.createdAt) / record.stepDuration);
-        vestingPendingSpent -= (record.stepValue * record.steps - record.availableAfterRevocation);
-        if (record.availableAfterRevocation == record.released) {
-            delete vestingRecords[_receiver];
+        uint256 availableAfterRevocation = record.stepValue * ((record.revokedAt - record.createdAt) / record.stepDuration);
+        vestingPendingSpent -= (record.stepValue * record.steps - availableAfterRevocation);
+        if (availableAfterRevocation > record.withdrawn) {
+            _sendTokens(receiver, availableAfterRevocation - record.withdrawn);
+            emit VestingWithdrawn(receiver, availableAfterRevocation - record.withdrawn);
         }
+        emit VestingRevoked(receiver, record.withdrawn);
+        delete vestingRecords[receiver];
     }
 
+    /// @dev get released amount of tokens
+    /// @return released amount of tokens ready for withdraw
     function vestingAvailableToRelease() public view returns (uint256) {
         VestingRecord storage record = vestingRecords[_msgSender()];
         require(record.stepValue > 0, "");
@@ -160,52 +190,125 @@ contract InstaToken is AccessControl, ERC20 {
         if (record.revokedAt > 0) {
             rightBound = record.revokedAt;
         }
-        return record.stepValue * ((rightBound - record.createdAt) / record.stepDuration) - record.released;
+        return record.stepValue * ((rightBound - record.createdAt) / record.stepDuration) - record.withdrawn;
     }
 
+    /// @dev
+    /// @param value - total value for event
+    /// @param start - start of the event
+    /// @param finish - finish of the event
+    /// @param thresholds - thresholds for GameEvent. See GameEvent docs
+    /// @param values - values for GameEvent. See GameEvent docs
+    /// Emits a GameEventCreated event
     function createEvent(
-        uint256 _value,
-        uint256 _start,
-        uint256 _finish,
-        uint256[] memory _thresholds,
-        uint256[] memory _values
-    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) onlyNotStartedEvent {
-        require(_start < _finish, "");
-        require(_value < gameRewardTotalAmount - gameRewardSpent, "");
-        require(_thresholds.length + 1 == _values.length, "");
-        currentEvent = GameEvent(_value, _start, _finish, _thresholds, _values, 0);
+        uint256 value,
+        uint256 start,
+        uint256 finish,
+        uint256[] memory thresholds,
+        uint256[] memory values
+    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
+        require(start < finish, "");
+        require(value < gameRewardTotalAmount - gameRewardSpent, "");
+        require(thresholds.length + 1 == values.length, "");
+        uint256 id = eventsCount;
+        eventsCount++;
+        currentEvents[id] = GameEvent(value, start, finish, thresholds, values, 0);
+        emit GameEventCreated(id, value, start, finish, thresholds, values);
     }
 
+    /// @dev Mint GameEvent reward tokens
+    /// @param id - id of GameEvent
+    /// @param to - receiver of tokens
+    /// Emits a GameEventFinished event if supply fully minted
     function mintGamingAward(
-        address _to
-    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) onlyStartedEvent {
-        uint256 value = calcGamingReward();
-        _mint(_to, value);
+        uint256 id,
+        address to
+    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
+        GameEvent storage ev = currentEvents[id];
+        require(ev.value > 0, "");
+        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "");
+        uint256 value = _calcGamingReward(ev);
+        _sendTokens(to, value);
         gameRewardSpent += value;
-        currentEvent.currentSupply += value;
-    }
-
-    function calcGamingReward() public onlyStartedEvent view returns (uint256) {
-        if ((10 * (block.timestamp - currentEvent.start)) / (currentEvent.finish - currentEvent.start) < 2) {
-            return findGamingReward(PERCENT_MULTIPLIER);
+        ev.currentSupply += value;
+        if (ev.currentSupply == ev.value) {
+            delete currentEvents[id];
+            emit GameEventFinished(id);
         }
-        uint256 eventRate = currentEvent.currentSupply * PERCENT_MULTIPLIER /
-        ((currentEvent.value * (block.timestamp - currentEvent.start)) / (currentEvent.finish - currentEvent.start));
-        return findGamingReward(eventRate);
     }
 
-    function findGamingReward(uint256 _percent) internal view returns (uint256) {
-        for (uint256 i = 0; i < currentEvent.thresholds.length; i++) {
-            if (_percent < currentEvent.thresholds[i]) {
-                return currentEvent.values[i];
+    /// @dev Finish event. Only for expired events in which not full supply was distributed
+    /// @param id - id of GameEvent
+    /// Emits a GameEventFinished event
+    function finishEvent(
+        uint256 id
+    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
+        GameEvent storage ev = currentEvents[id];
+        require(ev.value > 0, "");
+        require(block.timestamp > ev.finish, "");
+        delete currentEvents[id];
+        emit GameEventFinished(id);
+    }
+
+    /// @dev Calculate pending reward for GameEvent
+    /// @param id - id of GameEvent
+    /// @return expected reward
+    function calcGamingReward(uint256 id) public view returns (uint256) {
+        GameEvent storage ev = currentEvents[id];
+        require(ev.value > 0, "");
+        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "");
+        return _calcGamingReward(ev);
+    }
+
+    /// @dev Calculate pending reward for GameEvent helper function
+    /// @param ev - GameEvent to check
+    /// @return expected reward
+    function _calcGamingReward(GameEvent storage ev) internal view returns (uint256) {
+        if ((10 * (block.timestamp - ev.start)) / (ev.finish - ev.start) < 2) {
+            return _findGamingReward(ev, PERCENT_MULTIPLIER);
+        }
+        uint256 expectedSupply = (ev.value * (block.timestamp - ev.start)) / (ev.finish - ev.start);
+        uint256 eventRate = ev.currentSupply * PERCENT_MULTIPLIER / expectedSupply;
+        uint256 res = _findGamingReward(ev, eventRate);
+        if (ev.value - ev.currentSupply < res) {
+            res = ev.value - ev.currentSupply;
+        }
+        return res;
+    }
+
+    /// @dev Helper function. If there are some returned tokens (from burn), then they will be used to send to receiver
+    /// @param to - tokens receiver
+    /// @param value - value to transfer
+    function _sendTokens(address to, uint256 value) internal {
+        uint256 returnedTokens = balanceOf(address(this));
+        uint256 toTransfer;
+        if (returnedTokens >= value) {
+            toTransfer = value;
+        } else {
+            toTransfer = returnedTokens;
+        }
+        uint256 toMint = value - toTransfer;
+        if (toTransfer > 0) {
+            _transfer(address(this), to, toTransfer);
+        }
+        if (toMint > 0) {
+            _mint(to, toMint);
+        }
+    }
+
+    /// @dev Helper function to find gaming reward based on percent of minted supply (100% - expected supply)
+    /// @param ev - event to check
+    /// @param percent - percent to check
+    /// @return expected reward
+    function _findGamingReward(
+        GameEvent storage ev,
+        uint256 percent
+    ) internal view returns (uint256) {
+        for (uint256 i = 0; i < ev.thresholds.length; i++) {
+            if (percent < ev.thresholds[i]) {
+                return ev.values[i];
             }
         }
-        return currentEvent.values[currentEvent.values.length - 1];
-    }
-
-    function hasStartedEvent() internal view returns (bool) {
-        return currentEvent.start <= block.timestamp &&
-        block.timestamp <= currentEvent.finish &&
-        currentEvent.value != currentEvent.currentSupply;
+        return ev.values[ev.values.length - 1];
     }
 }
