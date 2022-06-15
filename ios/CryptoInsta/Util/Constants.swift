@@ -9,10 +9,7 @@ import Foundation
 
 struct Constants {
     
-    static let certificatesNum = 3
-    
     static let sessionKey = "session_key"
-    
     
     struct Bridges {
         static let Gnosis = "https://safe-walletconnect.gnosis.io/"

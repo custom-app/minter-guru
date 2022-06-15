@@ -9,5 +9,12 @@
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>rubik-bold.ttf</string>
+		<string>rubik-medium.ttf</string>
+		<string>rubik-regular.ttf</string>
+		<string>rubik-semibold.ttf</string>
+	</array>
 </dict>
 </plist>

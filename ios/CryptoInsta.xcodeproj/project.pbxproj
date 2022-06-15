@@ -14,6 +14,10 @@
 		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
 		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
 		11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11BE8CDF2855D4410088F261 /* WalletConnectSwift */; };
+		11BEBE58285A5C0200D056FA /* rubik-medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE54285A5C0100D056FA /* rubik-medium.ttf */; };
+		11BEBE59285A5C0200D056FA /* rubik-semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */; };
+		11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE56285A5C0100D056FA /* rubik-regular.ttf */; };
+		11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE57285A5C0200D056FA /* rubik-bold.ttf */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
@@ -48,6 +52,10 @@
 		1108864F284B123C002C4E5A /* NftObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftObject.swift; sourceTree = "<group>"; };
 		11088651284B244A002C4E5A /* NftInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftInfo.swift; sourceTree = "<group>"; };
 		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
+		11BEBE54285A5C0100D056FA /* rubik-medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-medium.ttf"; sourceTree = "<group>"; };
+		11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-semibold.ttf"; sourceTree = "<group>"; };
+		11BEBE56285A5C0100D056FA /* rubik-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-regular.ttf"; sourceTree = "<group>"; };
+		11BEBE57285A5C0200D056FA /* rubik-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-bold.ttf"; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,6 +99,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11BEBE53285A5BED00D056FA /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				11BEBE57285A5C0200D056FA /* rubik-bold.ttf */,
+				11BEBE54285A5C0100D056FA /* rubik-medium.ttf */,
+				11BEBE56285A5C0100D056FA /* rubik-regular.ttf */,
+				11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		11D2571828444C790028E2B4 = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +138,7 @@
 				11ED5A792846BAA500F0D61D /* View */,
 				11D2572628444C790028E2B4 /* ContentView.swift */,
 				11D2572428444C790028E2B4 /* CryptoInstaApp.swift */,
+				11BEBE53285A5BED00D056FA /* fonts */,
 				11D2572828444C7B0028E2B4 /* Assets.xcassets */,
 				11D2572A28444C7B0028E2B4 /* Preview Content */,
 			);
@@ -303,6 +323,10 @@
 			files = (
 				11D2572C28444C7B0028E2B4 /* Preview Assets.xcassets in Resources */,
 				11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */,
+				11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */,
+				11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */,
+				11BEBE58285A5C0200D056FA /* rubik-medium.ttf in Resources */,
+				11BEBE59285A5C0200D056FA /* rubik-semibold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,7 +502,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -511,7 +535,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
