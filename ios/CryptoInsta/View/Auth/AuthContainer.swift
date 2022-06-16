@@ -13,60 +13,21 @@ struct AuthContainer: View {
     var globalVm: GlobalViewModel
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if globalVm.session == nil {
-                ZStack {
-                    Button {
-                        globalVm.connect(wallet: Wallets.TrustWallet)
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text(Wallets.TrustWallet.name)
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.green)
-                            Spacer()
-                        }
-                        .padding(.vertical, 15)
-                        .background(Color.white)
-                        .cornerRadius(32)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 32)
-                                .stroke(Color.green, lineWidth: 2)
-                        )
-                    }
-                    if globalVm.connectingWalletName == Wallets.TrustWallet.name {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                                .scaleEffect(1.2)
-                        }
-                        .padding(.trailing, 10)
-                    }
-                }
-                .padding(.horizontal, 30)
-                .padding(.vertical, 24)
                 Button {
-                    globalVm.connect(wallet: Wallets.Metamask)
+                    globalVm.showConnectSheet = true
                 } label: {
-                    HStack {
-                        Spacer()
-                        Text(Wallets.Metamask.name)
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.green)
-                        Spacer()
-                    }
-                    .padding(.vertical, 15)
-                    .background(Color.white)
-                    .cornerRadius(32)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 32)
-                            .stroke(Color.green, lineWidth: 2)
-                    )
+                    Text("Connect")
+                        .font(.system(size: 17))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 15)
+                        .background(Colors.polygonPurple)
+                        .cornerRadius(32)
                 }
-                .padding(.horizontal, 30)
+                .padding(.top, 24)
             } else {
                 Button {
                     globalVm.disconnect()
@@ -91,6 +52,10 @@ struct AuthContainer: View {
                 .padding(.top, 30)
             }
             Spacer()
+        }
+        .sheet(isPresented: $globalVm.showConnectSheet) {
+            ConnectSheet()
+                .environmentObject(globalVm)
         }
     }
 }

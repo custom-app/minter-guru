@@ -14,6 +14,9 @@ class GlobalViewModel: ObservableObject {
     
     let deepLinkDelay = 0.5
     
+    @Published
+    var showConnectSheet = false
+    
     //Wallet connect block
     @Published
     var session: Session?
@@ -27,7 +30,7 @@ class GlobalViewModel: ObservableObject {
     var walletConnect: WalletConnect?
     var pendingDeepLink: String?
     @Published
-    var connectingWalletName = ""
+    var connectingToBridge = false
     
     @Published
     var currentTab: TabItem = .wallet

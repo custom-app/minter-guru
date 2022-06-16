@@ -18,6 +18,7 @@
 		11BEBE59285A5C0200D056FA /* rubik-semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */; };
 		11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE56285A5C0100D056FA /* rubik-regular.ttf */; };
 		11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE57285A5C0200D056FA /* rubik-bold.ttf */; };
+		11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 		11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-semibold.ttf"; sourceTree = "<group>"; };
 		11BEBE56285A5C0100D056FA /* rubik-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-regular.ttf"; sourceTree = "<group>"; };
 		11BEBE57285A5C0200D056FA /* rubik-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-bold.ttf"; sourceTree = "<group>"; };
+		11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSheet.swift; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				11ED5AA9284710B400F0D61D /* AuthContainer.swift */,
+				11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
 				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
+				11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */,
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				1108864C284ABE59002C4E5A /* Tools.swift in Sources */,

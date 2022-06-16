@@ -59,7 +59,7 @@ extension GlobalViewModel {
     func connect(wallet: Wallet) {
         guard let walletConnect = walletConnect else { return }
         withAnimation {
-            connectingWalletName = wallet.name
+            connectingToBridge = true
         }
         let connectionUrl = walletConnect.connect()
         pendingDeepLink = wallet.formWcDeepLink(connectionUrl: connectionUrl)
@@ -80,7 +80,7 @@ extension GlobalViewModel {
         pendingDeepLink = nil
         DispatchQueue.main.asyncAfter(deadline: .now() + deepLinkDelay) {
             withAnimation {
-                self.connectingWalletName = ""
+                self.connectingToBridge = false
             }
             if let url = URL(string: deepLink), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -99,7 +99,7 @@ extension GlobalViewModel: WalletConnectDelegate {
         backgroundManager.finishConnectBackgroundTask()
         DispatchQueue.main.async { [unowned self] in
             withAnimation {
-                self.connectingWalletName = ""
+                connectingToBridge = false
                 isConnecting = false
                 isReconnecting = false
             }
@@ -118,6 +118,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                 if currentWallet == nil {
                     currentWallet = Wallets.bySession(session: session)
                 }
+                showConnectSheet = false
                 //TODO: load initial info here
                 loadNftList()
             }
