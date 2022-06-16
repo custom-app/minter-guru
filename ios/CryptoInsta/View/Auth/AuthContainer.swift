@@ -13,45 +13,224 @@ struct AuthContainer: View {
     var globalVm: GlobalViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
-            if globalVm.session == nil {
-                Button {
-                    globalVm.showConnectSheet = true
-                } label: {
-                    Text("Connect")
-                        .font(.system(size: 17))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 32)
-                        .padding(.vertical, 15)
-                        .background(Colors.polygonPurple)
-                        .cornerRadius(32)
-                }
-                .padding(.top, 24)
-            } else {
-                Button {
-                    globalVm.disconnect()
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text("Disconnect")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.green)
-                        Spacer()
+        ScrollView {
+            let connected = globalVm.session != nil
+            VStack(spacing: 0) {
+                Text("Crypto wallet")
+                    .foregroundColor(Colors.mainBlack)
+                    .font(.custom("rubik-bold", size: 28))
+                    .padding(.top, 16)
+                    .padding(.horizontal, 10)
+                
+                Text("Status: \(connected ? "connected to \(globalVm.walletName)" : "disconnected")")
+                    .foregroundColor(Colors.mainGrey)
+                    .multilineTextAlignment(.center)
+                    .font(.custom("rubik-bold", size: 20))
+                    .padding(.top, 10)
+                    .padding(.horizontal, 10)
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Address:")
+                        .foregroundColor(Colors.mainBlack)
+                        .font(.custom("rubik-bold", size: 16))
+                    
+                    HStack(spacing: 0) {
+                        if connected {
+                            Image("ic_cross")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+                            
+                            HStack(spacing: 0) {
+                                Text("\(globalVm.walletAccount ?? "")")
+                                    .foregroundColor(Colors.mainBlack)
+                                    .font(.custom("rubik-regular", size: 16))
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                                
+                                Button {
+                                    UIPasteboard.general.string = globalVm.walletAccount ?? ""
+                                } label: {
+                                    Image("ic_copy")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
+                                }
+                                .padding(.leading, 4)
+                            }
+                            .padding(.leading, 5)
+                            .padding(.trailing, 20)
+                        } else {
+                            Image("ic_cross")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+                            
+                            Text("wallet not connected")
+                                .foregroundColor(Colors.mainBlack)
+                                .font(.custom("rubik-regular", size: 16))
+                                .padding(.leading, 5)
+                        }
                     }
-                    .padding(.vertical, 15)
-                    .background(Color.white)
-                    .cornerRadius(32)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 32)
-                            .stroke(Color.green, lineWidth: 2)
-                    )
+                    .padding(.top, 8)
+                    
+                    Rectangle()
+                        .fill(Color(hex: "#EAEAEA"))
+                        .frame(height: 1)
+                        .padding(.top, 8)
+                    
+                    Text("Tokens:")
+                        .foregroundColor(Colors.mainBlack)
+                        .font(.custom("rubik-bold", size: 16))
+                        .padding(.top, 8)
+                    
+                    HStack(spacing: 0) {
+                        Image("ic_cross")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 15, height: 15)
+                        
+                        Text("tokens are not available")
+                            .foregroundColor(Colors.mainBlack)
+                            .font(.custom("rubik-regular", size: 16))
+                            .padding(.leading, 5)
+                    }
+                    .padding(.top, 8)
+                    
+                    Button {
+                        
+                    } label: {
+                        Text("How to earn")
+                            .foregroundColor(Colors.defaultGreen)
+                            .font(.custom("rubik-bold", size: 16))
+                            .padding(.top, 6)
+                    }
                 }
-                .padding(.horizontal, 30)
-                .padding(.top, 30)
+                .padding(20)
+                .background(Colors.mainWhite)
+                .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                .padding(.top, 25)
+                .padding(.horizontal, 26)
+                
+                HStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        Button {
+                            
+                        } label: {
+                            Image("ic_cross")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(Colors.defaultGreen)
+                                .frame(width: 38, height: 38)
+                                .padding(30)
+                                .background(Colors.mainWhite)
+                                .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                                .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                                .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
+                        }
+                        
+                        Text("Guides")
+                            .foregroundColor(Colors.mainBlack)
+                            .font(.custom("rubik-bold", size: 16))
+                            .padding(.top, 10)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 0) {
+                        Button {
+                            
+                        } label: {
+                            Image("ic_cross")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(connected ? Colors.defaultGreen : Colors.darkGrey)
+                                .frame(width: 38, height: 38)
+                                .padding(30)
+                                .background(Colors.mainWhite)
+                                .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                                .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                                .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
+                        }
+                        .disabled(!connected)
+                        
+                        Text("Faucet")
+                            .foregroundColor(Colors.mainBlack)
+                            .font(.custom("rubik-bold", size: 16))
+                            .padding(.top, 10)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 0) {
+                        Button {
+                            
+                        } label: {
+                            Image("ic_cross")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(connected ? Colors.defaultGreen : Colors.darkGrey)
+                                .frame(width: 38, height: 38)
+                                .padding(30)
+                                .background(Colors.mainWhite)
+                                .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                                .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                                .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
+                        }
+                        .disabled(!connected)
+                        
+                        Text("Shop")
+                            .foregroundColor(Colors.mainBlack)
+                            .font(.custom("rubik-bold", size: 16))
+                            .padding(.top, 10)
+                    }
+                }
+                .padding(.horizontal, 26)
+                .padding(.top, 25)
+                
+                if !connected {
+                    Button {
+                        globalVm.showConnectSheet = true
+                    } label: {
+                        HStack(spacing: 0) {
+                            Spacer()
+                            Text("Connect crypto wallet")
+                                .font(.custom("rubik-bold", size: 17))
+                                .fontWeight(.bold)
+                                .foregroundColor(Colors.mainWhite)
+                            Spacer()
+                        }
+                        .padding(.vertical, 15)
+                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
+                                                   startPoint: .leading,
+                                                   endPoint: .trailing))
+                        .cornerRadius(32)
+                        .shadow(color: Colors.defaultGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .padding(.horizontal, 26)
+                    }
+                    .padding(.top, 26)
+                } else {
+                    Button {
+                        globalVm.disconnect()
+                    } label: {
+                        Text("Disconnect")
+                            .font(.custom("rubik-bold", size: 17))
+                            .foregroundColor(Colors.defaultGreen)
+                            .padding(.vertical, 15)
+                            .padding(.horizontal, 34)
+                            .background(Colors.paleGreen)
+                            .cornerRadius(32)
+                            
+                    }
+                    .padding(.top, 26)
+                }
+                Spacer()
             }
-            Spacer()
         }
         .sheet(isPresented: $globalVm.showConnectSheet) {
             ConnectSheet()

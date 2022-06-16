@@ -19,6 +19,10 @@ class Colors {
         Color(hex: "#858585")
     }
     
+    static var darkGrey: Color {
+        Color(hex: "#C0C0C0")
+    }
+    
     static var mainBlack: Color {
         Color(hex: "#3D3D3D")
     }

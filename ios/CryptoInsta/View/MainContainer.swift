@@ -25,7 +25,7 @@ struct MainContainer: View {
             
             BottomMenu()
         }
-        .background(Color.white)
+        .background(Colors.mainWhite.ignoresSafeArea())
         .alert(item: $globalVm.alert) { alert in
             alert.alert()
         }
