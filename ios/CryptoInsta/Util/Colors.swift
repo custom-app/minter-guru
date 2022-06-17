@@ -46,4 +46,8 @@ class Colors {
     static var lightGreen: Color {
         Color(hex: "#1FBBBB")
     }
+    
+    static var paleRed: Color {
+        Color(hex: "#E2D5D5")
+    }
 }

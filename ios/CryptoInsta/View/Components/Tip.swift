@@ -11,6 +11,8 @@ struct Tip: View {
     
     var text: String
     
+    var backgroundColor: Color = Colors.paleGreen
+    
     var body: some View {
         HStack(spacing: 0) {
             Spacer()
@@ -21,7 +23,7 @@ struct Tip: View {
                 .padding(10)
             Spacer()
         }
-        .background(Colors.paleGreen)
+        .background(backgroundColor)
         .cornerRadius(10)
     }
 }

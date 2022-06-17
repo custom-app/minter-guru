@@ -48,6 +48,7 @@
 		11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729B285CE62B000026FD /* GuidesScreen.swift */; };
 		11F9729E285CE738000026FD /* SheetStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729D285CE738000026FD /* SheetStroke.swift */; };
 		11F972A0285CED11000026FD /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729F285CED11000026FD /* Tip.swift */; };
+		11F972A2285CEF6D000026FD /* FaucetScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F972A1285CEF6D000026FD /* FaucetScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,7 @@
 		11F9729B285CE62B000026FD /* GuidesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidesScreen.swift; sourceTree = "<group>"; };
 		11F9729D285CE738000026FD /* SheetStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetStroke.swift; sourceTree = "<group>"; };
 		11F9729F285CED11000026FD /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
+		11F972A1285CEF6D000026FD /* FaucetScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaucetScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +227,7 @@
 				11F9729A285CE605000026FD /* Guides */,
 				11ED5AA9284710B400F0D61D /* AuthContainer.swift */,
 				11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */,
+				11F972A1285CEF6D000026FD /* FaucetScreen.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 				11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */,
 				1108864E284AF497002C4E5A /* NftMeta.swift in Sources */,
 				11A749692849A9F100387869 /* HttpRequester.swift in Sources */,
+				11F972A2285CEF6D000026FD /* FaucetScreen.swift in Sources */,
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

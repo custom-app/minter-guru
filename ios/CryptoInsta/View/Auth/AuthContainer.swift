@@ -177,7 +177,7 @@ struct AuthContainer: View {
                             .padding(.top, 10)
                     }
                     .sheet(isPresented: $showFaucet) {
-                        GuidesScreen()
+                        FaucetScreen()
                             .environmentObject(globalVm)
                     }
                     
