@@ -12,6 +12,15 @@ struct AuthContainer: View {
     @EnvironmentObject
     var globalVm: GlobalViewModel
     
+    @State
+    var showGuides = false
+    
+    @State
+    var showFaucet = false
+    
+    @State
+    var showShop = false
+    
     var body: some View {
         ScrollView {
             let connected = globalVm.session != nil
@@ -117,7 +126,7 @@ struct AuthContainer: View {
                 HStack(spacing: 0) {
                     VStack(spacing: 0) {
                         Button {
-                            
+                            showGuides = true
                         } label: {
                             Image("ic_cross")
                                 .renderingMode(.template)
@@ -137,12 +146,16 @@ struct AuthContainer: View {
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
+                    .sheet(isPresented: $showGuides) {
+                        GuidesScreen()
+                            .environmentObject(globalVm)
+                    }
                     
                     Spacer()
                     
                     VStack(spacing: 0) {
                         Button {
-                            
+                            showFaucet = true
                         } label: {
                             Image("ic_cross")
                                 .renderingMode(.template)
@@ -163,12 +176,16 @@ struct AuthContainer: View {
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
+                    .sheet(isPresented: $showFaucet) {
+                        GuidesScreen()
+                            .environmentObject(globalVm)
+                    }
                     
                     Spacer()
                     
                     VStack(spacing: 0) {
                         Button {
-                            
+                            showShop = true
                         } label: {
                             Image("ic_cross")
                                 .renderingMode(.template)
@@ -189,11 +206,20 @@ struct AuthContainer: View {
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
+                    .sheet(isPresented: $showShop) {
+                        GuidesScreen()
+                            .environmentObject(globalVm)
+                    }
                 }
                 .padding(.horizontal, 26)
                 .padding(.top, 25)
                 
                 if !connected {
+                    
+                    Tip(text: "To use the main functions of the application, you need to connect a wallet")
+                        .padding(.top, 25)
+                        .padding(.horizontal, 26)
+                    
                     Button {
                         globalVm.showConnectSheet = true
                     } label: {
@@ -214,6 +240,10 @@ struct AuthContainer: View {
                         .padding(.horizontal, 26)
                     }
                     .padding(.top, 26)
+                    .sheet(isPresented: $globalVm.showConnectSheet) {
+                        ConnectSheet()
+                            .environmentObject(globalVm)
+                    }
                 } else {
                     Button {
                         globalVm.disconnect()
@@ -231,10 +261,6 @@ struct AuthContainer: View {
                 }
                 Spacer()
             }
-        }
-        .sheet(isPresented: $globalVm.showConnectSheet) {
-            ConnectSheet()
-                .environmentObject(globalVm)
         }
     }
 }

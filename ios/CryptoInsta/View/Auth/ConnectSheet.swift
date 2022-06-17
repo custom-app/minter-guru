@@ -18,11 +18,7 @@ struct ConnectSheet: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                Rectangle()
-                    .fill(Colors.mainGrey)
-                    .frame(width: 54, height: 5)
-                    .cornerRadius(4)
-                    .padding(.top, 8)
+                SheetStroke()
                 
                 Text("Connect crypto wallet")
                     .foregroundColor(Colors.mainBlack)
@@ -86,19 +82,9 @@ struct ConnectSheet: View {
                 .padding(.top, 50)
                 .padding(.horizontal, 26)
                 
-                HStack(spacing: 0) {
-                    Spacer()
-                    Text("Before connecting, please make sure that you have latest wallet app version. Also make sure that you are connecting to Polygon blockchain")
-                        .font(.custom("rubik-regular", size: 14))
-                        .foregroundColor(Colors.mainGrey)
-                        .multilineTextAlignment(.center)
-                        .padding(10)
-                    Spacer()
-                }
-                .background(Colors.paleGreen)
-                .cornerRadius(10)
-                .padding(.top, 50)
-                .padding(.horizontal, 26)
+                Tip(text: "Before connecting, please make sure that you have latest wallet app version. Also make sure that you are connecting to Polygon blockchain")
+                    .padding(.top, 50)
+                    .padding(.horizontal, 26)
 
                 Button {
                     if selectedTrust {

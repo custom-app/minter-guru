@@ -45,6 +45,9 @@
 		11ED5AAA284710B400F0D61D /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AA9284710B400F0D61D /* AuthContainer.swift */; };
 		11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AAB284710BE00F0D61D /* MintContainer.swift */; };
 		11ED5AAE284710C800F0D61D /* GalleryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AAD284710C800F0D61D /* GalleryContainer.swift */; };
+		11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729B285CE62B000026FD /* GuidesScreen.swift */; };
+		11F9729E285CE738000026FD /* SheetStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729D285CE738000026FD /* SheetStroke.swift */; };
+		11F972A0285CED11000026FD /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729F285CED11000026FD /* Tip.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +88,9 @@
 		11ED5AA9284710B400F0D61D /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
 		11ED5AAB284710BE00F0D61D /* MintContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintContainer.swift; sourceTree = "<group>"; };
 		11ED5AAD284710C800F0D61D /* GalleryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryContainer.swift; sourceTree = "<group>"; };
+		11F9729B285CE62B000026FD /* GuidesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidesScreen.swift; sourceTree = "<group>"; };
+		11F9729D285CE738000026FD /* SheetStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetStroke.swift; sourceTree = "<group>"; };
+		11F9729F285CED11000026FD /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +222,7 @@
 		11ED5A8A2846C40400F0D61D /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				11F9729A285CE605000026FD /* Guides */,
 				11ED5AA9284710B400F0D61D /* AuthContainer.swift */,
 				11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */,
 			);
@@ -245,6 +252,8 @@
 				11ED5A992847052300F0D61D /* IdentifiableAlert.swift */,
 				11ED5A9B2847055200F0D61D /* PhotoPicker.swift */,
 				11ED5A9D2847059B00F0D61D /* Placeholder.swift */,
+				11F9729D285CE738000026FD /* SheetStroke.swift */,
+				11F9729F285CED11000026FD /* Tip.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -254,6 +263,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		11F9729A285CE605000026FD /* Guides */ = {
+			isa = PBXGroup;
+			children = (
+				11F9729B285CE62B000026FD /* GuidesScreen.swift */,
+			);
+			path = Guides;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,14 +369,17 @@
 				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
 				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
+				11F9729E285CE738000026FD /* SheetStroke.swift in Sources */,
 				11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */,
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				1108864C284ABE59002C4E5A /* Tools.swift in Sources */,
+				11F972A0285CED11000026FD /* Tip.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
 				11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */,
 				11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
+				11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
 				11088652284B244A002C4E5A /* NftInfo.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
