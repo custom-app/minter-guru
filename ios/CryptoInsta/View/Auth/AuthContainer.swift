@@ -161,7 +161,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(connected ? Colors.defaultGreen : Colors.darkGrey)
+                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.defaultGreen : Colors.darkGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -169,7 +169,7 @@ struct AuthContainer: View {
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
                                 .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
-                        .disabled(!connected)
+                        .disabled(!connected || globalVm.isWrongChain)
                         
                         Text("Faucet")
                             .foregroundColor(Colors.mainBlack)
@@ -191,7 +191,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(connected ? Colors.defaultGreen : Colors.darkGrey)
+                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.defaultGreen : Colors.darkGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -199,7 +199,7 @@ struct AuthContainer: View {
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
                                 .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
-                        .disabled(!connected)
+                        .disabled(!connected || globalVm.isWrongChain)
                         
                         Text("Shop")
                             .foregroundColor(Colors.mainBlack)
@@ -245,6 +245,29 @@ struct AuthContainer: View {
                             .environmentObject(globalVm)
                     }
                 } else {
+                    if globalVm.isWrongChain {
+                        HStack(spacing: 0) {
+                            Spacer()
+                            VStack(spacing: 0) {
+                                Text("Wrong blockchain")
+                                    .font(.custom("rubik-bold", size: 16))
+                                    .foregroundColor(Colors.mainBlack)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("Check out the guidelines to find out how to connect your wallet to the Polygon blockchain or change the wallet")
+                                    .font(.custom("rubik-regular", size: 14))
+                                    .foregroundColor(Colors.mainGrey)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top, 8)
+                            }
+                            .padding(10)
+                            Spacer()
+                        }
+                        .background(Colors.paleRed)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 26)
+                        .padding(.top, 25)
+                    }
                     Button {
                         globalVm.disconnect()
                     } label: {
@@ -257,7 +280,7 @@ struct AuthContainer: View {
                             .cornerRadius(32)
                             
                     }
-                    .padding(.top, 26)
+                    .padding(.top, 25)
                 }
                 Spacer()
             }
