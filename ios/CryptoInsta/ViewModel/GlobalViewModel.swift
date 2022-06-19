@@ -31,6 +31,10 @@ class GlobalViewModel: ObservableObject {
     var pendingDeepLink: String?
     @Published
     var connectingToBridge = false
+    @Published
+    var mintInProgress = false
+    @Published
+    var showMintFinishedSheet = false
     
     @Published
     var currentTab: TabItem = .wallet
@@ -38,11 +42,17 @@ class GlobalViewModel: ObservableObject {
     @Published
     var pickedImage: UIImage?
     @Published
+    var mintedImage: UIImage?
+    @Published
     var pictureName = ""
+    @Published
+    var mintedPictureName = ""
     @Published
     var pickedPrivateCollection = false
     @Published
     var pickedCollectionName = ""
+    @Published
+    var mintedPictureCollection = ""
     @Published
     var privateCollections = ["Collection1", "Name", "Some collection name", "Kekes", "Roflan collection"]
     
@@ -100,7 +110,7 @@ class GlobalViewModel: ObservableObject {
                            name: String,
                            quality: Double = 0.85) {
         if let address = walletAccount, address.count > 2 {
-        print("uploading image to ipfs")
+            print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 guard let data = image.jpegData(compressionQuality: quality) else {
                     print("error getting jpeg data for photo")
@@ -125,7 +135,12 @@ class GlobalViewModel: ObservableObject {
                 }
             }
         } else {
-            //TODO: show alert that user should connect wallet to upload photo
+            DispatchQueue.main.async {
+                self.alert = IdentifiableAlert.build(
+                    id: "wallet_not_connected",
+                    title: "Wallet not connected",
+                    message: "You must connect a wallet to mint the image")
+            }
         }
     }
     
@@ -139,6 +154,17 @@ class GlobalViewModel: ObservableObject {
                 }
                 if let cid = cid {
                     print("uploaded meta: \(cid)")
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self.mintedImage = self.pickedImage
+                            self.pickedImage = nil
+                            self.mintedPictureName = self.pictureName
+                            self.pictureName = ""
+                            self.mintedPictureCollection = self.pickedCollectionName
+                            self.showMintFinishedSheet = true
+                            self.mintInProgress = false
+                        }
+                    }
                 }
             }
         }

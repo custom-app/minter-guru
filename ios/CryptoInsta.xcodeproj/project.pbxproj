@@ -19,6 +19,9 @@
 		11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE56285A5C0100D056FA /* rubik-regular.ttf */; };
 		11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE57285A5C0200D056FA /* rubik-bold.ttf */; };
 		11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */; };
+		11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */; };
+		11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */; };
+		11C9F993285FA7E100A27587 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F992285FA7E100A27587 /* ShareView.swift */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
@@ -62,6 +65,9 @@
 		11BEBE56285A5C0100D056FA /* rubik-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-regular.ttf"; sourceTree = "<group>"; };
 		11BEBE57285A5C0200D056FA /* rubik-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-bold.ttf"; sourceTree = "<group>"; };
 		11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSheet.swift; sourceTree = "<group>"; };
+		11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintProcessingScreen.swift; sourceTree = "<group>"; };
+		11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintFinishedSheet.swift; sourceTree = "<group>"; };
+		11C9F992285FA7E100A27587 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -236,6 +242,8 @@
 			isa = PBXGroup;
 			children = (
 				11ED5AAB284710BE00F0D61D /* MintContainer.swift */,
+				11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */,
+				11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */,
 			);
 			path = Mint;
 			sourceTree = "<group>";
@@ -257,6 +265,7 @@
 				11ED5A9D2847059B00F0D61D /* Placeholder.swift */,
 				11F9729D285CE738000026FD /* SheetStroke.swift */,
 				11F9729F285CED11000026FD /* Tip.swift */,
+				11C9F992285FA7E100A27587 /* ShareView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -370,6 +379,7 @@
 				11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */,
 				11D2572728444C790028E2B4 /* ContentView.swift in Sources */,
 				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
+				11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */,
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
 				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
 				11F9729E285CE738000026FD /* SheetStroke.swift in Sources */,
@@ -383,6 +393,7 @@
 				11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
 				11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */,
+				11C9F993285FA7E100A27587 /* ShareView.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
 				11088652284B244A002C4E5A /* NftInfo.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
@@ -391,6 +402,7 @@
 				11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */,
 				1108864E284AF497002C4E5A /* NftMeta.swift in Sources */,
 				11A749692849A9F100387869 /* HttpRequester.swift in Sources */,
+				11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */,
 				11F972A2285CEF6D000026FD /* FaucetScreen.swift in Sources */,
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 			);

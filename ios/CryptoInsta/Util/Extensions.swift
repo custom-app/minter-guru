@@ -43,6 +43,13 @@ extension Date {
     }
 }
 
+extension String: Identifiable {
+    public typealias ID = Int
+    public var id: Int {
+        return hash
+    }
+}
+
 extension Color {
     init(hex: String) {
         let hex = hex.uppercased().trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
