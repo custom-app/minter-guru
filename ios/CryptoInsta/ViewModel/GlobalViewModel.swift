@@ -37,6 +37,14 @@ class GlobalViewModel: ObservableObject {
     
     @Published
     var pickedImage: UIImage?
+    @Published
+    var pictureName = ""
+    @Published
+    var pickedPrivateCollection = false
+    @Published
+    var pickedCollectionName = ""
+    @Published
+    var privateCollections = ["Collection1", "Name", "Some collection name", "Kekes", "Roflan collection"]
     
     @Published
     var alert: IdentifiableAlert?
@@ -50,6 +58,10 @@ class GlobalViewModel: ObservableObject {
     var nftList: [NftObject] = []
     @Published
     var nftListLoaded = false
+    
+    var isPassBought: Bool {
+        return true
+    }
     
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
         let status = PHPhotoLibrary.authorizationStatus()

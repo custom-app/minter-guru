@@ -31,7 +31,7 @@ class Colors {
         Color(hex: "#F8F8F8")
     }
     
-    static var defaultGreen: Color {
+    static var mainGreen: Color {
         Color(hex: "#0F927A")
     }
     

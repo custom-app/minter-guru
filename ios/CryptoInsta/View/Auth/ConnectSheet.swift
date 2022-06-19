@@ -45,7 +45,7 @@ struct ConnectSheet: View {
                                 .background(Color.white)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: selectedTrust ? Colors.defaultGreen : Colors.mainBlack.opacity(0.15),
+                                .shadow(color: selectedTrust ? Colors.mainGreen : Colors.mainBlack.opacity(0.15),
                                         radius: 10, x: 0, y: 0)
                             
                             Text("Trust Wallet")
@@ -69,7 +69,7 @@ struct ConnectSheet: View {
                                 .background(Color.white)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: selectedTrust ? Colors.mainBlack.opacity(0.15) : Colors.defaultGreen,
+                                .shadow(color: selectedTrust ? Colors.mainBlack.opacity(0.15) : Colors.mainGreen,
                                         radius: 10, x: 0, y: 0)
                             
                             Text("Metamask")
@@ -103,7 +103,7 @@ struct ConnectSheet: View {
                                                    endPoint: .trailing))
                         .cornerRadius(32)
                         .padding(.top, 50)
-                        .shadow(color: Colors.defaultGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                 }
                 
             }

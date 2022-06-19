@@ -110,7 +110,7 @@ struct AuthContainer: View {
                         
                     } label: {
                         Text("How to earn")
-                            .foregroundColor(Colors.defaultGreen)
+                            .foregroundColor(Colors.mainGreen)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 6)
                     }
@@ -132,7 +132,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(Colors.defaultGreen)
+                                .foregroundColor(Colors.mainGreen)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -161,7 +161,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.defaultGreen : Colors.darkGrey)
+                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainGreen : Colors.darkGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -191,7 +191,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.defaultGreen : Colors.darkGrey)
+                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainGreen : Colors.darkGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -236,7 +236,7 @@ struct AuthContainer: View {
                                                    startPoint: .leading,
                                                    endPoint: .trailing))
                         .cornerRadius(32)
-                        .shadow(color: Colors.defaultGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                         .padding(.horizontal, 26)
                     }
                     .padding(.top, 26)
@@ -273,7 +273,7 @@ struct AuthContainer: View {
                     } label: {
                         Text("Disconnect")
                             .font(.custom("rubik-bold", size: 17))
-                            .foregroundColor(Colors.defaultGreen)
+                            .foregroundColor(Colors.mainGreen)
                             .padding(.vertical, 15)
                             .padding(.horizontal, 34)
                             .background(Colors.paleGreen)

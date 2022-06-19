@@ -30,7 +30,7 @@ struct GuidesScreen: View {
                             
                         } label: {
                             Text("Some guide 1")
-                                .foregroundColor(Colors.defaultGreen)
+                                .foregroundColor(Colors.mainGreen)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                         
@@ -42,7 +42,7 @@ struct GuidesScreen: View {
                             
                         } label: {
                             Text("Some guide 2")
-                                .foregroundColor(Colors.defaultGreen)
+                                .foregroundColor(Colors.mainGreen)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                         
@@ -54,7 +54,7 @@ struct GuidesScreen: View {
                             
                         } label: {
                             Text("Some guide 3")
-                                .foregroundColor(Colors.defaultGreen)
+                                .foregroundColor(Colors.mainGreen)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                     }
@@ -75,7 +75,7 @@ struct GuidesScreen: View {
                             
                         } label: {
                             Text("About")
-                                .foregroundColor(Colors.defaultGreen)
+                                .foregroundColor(Colors.mainGreen)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                         .padding(.top, 8)
@@ -100,7 +100,7 @@ struct GuidesScreen: View {
                         
                     } label: {
                         Text("Help")
-                            .foregroundColor(Colors.defaultGreen)
+                            .foregroundColor(Colors.mainGreen)
                             .font(.custom("rubik-bold", size: 17))
                     }
                     .padding(.top, 10)

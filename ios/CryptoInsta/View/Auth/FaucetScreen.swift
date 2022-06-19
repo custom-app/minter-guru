@@ -80,7 +80,7 @@ struct FaucetScreen: View {
                                                    startPoint: .leading,
                                                    endPoint: .trailing))
                         .cornerRadius(32)
-                        .shadow(color: Colors.defaultGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                 }
                 .padding(.top, 50)
             }
