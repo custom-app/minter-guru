@@ -6,8 +6,11 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import fs from "fs";
 
 dotenv.config();
+
+const mumbaiPrivateKey = fs.readFileSync(".mumbai-secret").toString().trim();
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -25,6 +28,11 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   networks: {
+    mumbai: {
+      url: "https://matic-mumbai.chainstacklabs.com",
+      accounts: [mumbaiPrivateKey],
+      chainId: 80001,
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
