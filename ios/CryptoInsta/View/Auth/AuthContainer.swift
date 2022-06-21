@@ -283,6 +283,7 @@ struct AuthContainer: View {
                     .padding(.top, 25)
                 }
                 Spacer()
+                    .frame(minHeight: 80)
             }
         }
     }

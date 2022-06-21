@@ -211,6 +211,9 @@ struct MintContainer: View {
                                     .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                             }
                         }
+                        
+                        Spacer()
+                            .frame(height: 100)
                     }
                 }
                 

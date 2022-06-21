@@ -23,10 +23,7 @@ struct MainContainer: View {
                 GalleryContainer()
             }
             
-            VStack {
-                Spacer()
-                BottomMenu()
-            }
+            BottomMenu()
         }
         .background(Colors.mainWhite.ignoresSafeArea())
         .alert(item: $globalVm.alert) { alert in
