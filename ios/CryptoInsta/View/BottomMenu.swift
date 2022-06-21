@@ -18,53 +18,87 @@ struct BottomMenu: View {
     @EnvironmentObject
     var globalVm: GlobalViewModel
     
-    
     var body: some View {
+        
         HStack(spacing: 0) {
-            HStack {
-                Spacer()
-                Text("Wallet")
-                    .font(.system(size: 16))
-                    .foregroundColor(.black.opacity(globalVm.currentTab == .wallet ? 1 : 0.5))
-                Spacer()
-            }
-            .padding(.vertical, 12)
-            .background(Color.black.opacity(globalVm.currentTab == .wallet ? 0 : 0.1))
-            .onTapGesture {
-                withAnimation {
-                    globalVm.currentTab = .wallet
+            Spacer()
+            HStack(spacing: 0) {
+                ZStack {
+                    ZStack {
+                        Image("ic_wallet")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(globalVm.currentTab == .wallet ? Colors.mainWhite : Colors.darkGrey)
+                            .frame(width: 20.2, height: 17.4)
+                    }
+                    .frame(width: 80, height: 30)
+                    .background(globalVm.currentTab == .wallet ? Colors.mainGreen : Colors.mainWhite)
+                    .cornerRadius(30)
+                    .shadow(color: Colors.mainGreen.opacity(globalVm.currentTab == .wallet ? 0.8 : 0), radius: 3, x: 0, y: 0)
+                }
+                .frame(width: 90, height: 40)
+                .background(Colors.mainWhite)
+                .cornerRadius(30, corners: [.topLeft, .bottomLeft])
+                .onTapGesture {
+                    withAnimation {
+                        globalVm.currentTab = .wallet
+                    }
+                }
+                
+
+                ZStack {
+                    Rectangle()
+                        .fill(Colors.mainWhite)
+                        .frame(width: 90, height: 40)
+
+                    ZStack {
+                        Image("ic_mint_rect")
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(globalVm.currentTab == .mint ? Colors.mainGreen : Colors.mainWhite)
+                            .frame(width: 61, height: 67)
+                        
+                        Image("ic_plus")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(globalVm.currentTab == .mint ? Colors.mainWhite : Colors.darkGrey)
+                            .frame(width: 27.3, height: 27)
+                    }
+                    .compositingGroup()
+                    .shadow(color: Colors.mainGreen.opacity(globalVm.currentTab == .mint ? 0.7 : 0), radius: 5, x: 0, y: 0)
+                }
+                .onTapGesture {
+                    withAnimation {
+                        globalVm.currentTab = .mint
+                    }
+                }
+
+                ZStack {
+                    ZStack {
+                        Image("ic_gallery")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(globalVm.currentTab == .gallery ? Colors.mainWhite : Colors.darkGrey)
+                            .frame(width: 22, height: 22)
+                    }
+                    .frame(width: 80, height: 30)
+                    .background(globalVm.currentTab == .gallery ? Colors.mainGreen : Colors.mainWhite)
+                    .cornerRadius(30)
+                    .shadow(color: Colors.mainGreen.opacity(globalVm.currentTab == .gallery ? 0.8 : 0), radius: 3, x: 0, y: 0)
+                }
+                .frame(width: 90, height: 40)
+                .background(Colors.mainWhite)
+                .cornerRadius(30, corners: [.topRight, .bottomRight])
+                .onTapGesture {
+                    withAnimation {
+                        globalVm.currentTab = .gallery
+                    }
                 }
             }
+            .compositingGroup()
+            .shadow(color: Colors.mainBlack.opacity(0.15), radius: 5)
             
-            HStack {
-                Spacer()
-                Text("Mint")
-                    .font(.system(size: 16))
-                    .foregroundColor(.black.opacity(globalVm.currentTab == .mint ? 1 : 0.5))
-                Spacer()
-            }
-            .padding(.vertical, 12)
-            .background(Color.black.opacity(globalVm.currentTab == .mint ? 0 : 0.1))
-            .onTapGesture {
-                withAnimation {
-                    globalVm.currentTab = .mint
-                }
-            }
-            
-            HStack {
-                Spacer()
-                Text("Gallery")
-                    .font(.system(size: 16))
-                    .foregroundColor(.black.opacity(globalVm.currentTab == .gallery ? 1 : 0.5))
-                Spacer()
-            }
-            .padding(.vertical, 12)
-            .background(Color.black.opacity(globalVm.currentTab == .gallery ? 0 : 0.1))
-            .onTapGesture {
-                withAnimation {
-                    globalVm.currentTab = .gallery
-                }
-            }
+            Spacer()
         }
     }
 }

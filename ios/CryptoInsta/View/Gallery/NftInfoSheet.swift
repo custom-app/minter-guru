@@ -20,7 +20,11 @@ struct NftInfoSheet: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            SheetStroke()
+            HStack {
+                Spacer()
+                SheetStroke()
+                Spacer()
+            }
             
             ScrollView {
                 VStack(spacing: 0) {

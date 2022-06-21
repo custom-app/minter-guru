@@ -13,7 +13,7 @@ struct MainContainer: View {
     var globalVm: GlobalViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
             switch globalVm.currentTab {
             case .wallet:
                 AuthContainer()
@@ -23,7 +23,10 @@ struct MainContainer: View {
                 GalleryContainer()
             }
             
-            BottomMenu()
+            VStack {
+                Spacer()
+                BottomMenu()
+            }
         }
         .background(Colors.mainWhite.ignoresSafeArea())
         .alert(item: $globalVm.alert) { alert in

@@ -79,7 +79,7 @@ struct MintContainer: View {
                                     }
                                 } label: {
                                     VStack(alignment: .leading, spacing: 0) {
-                                        Image("ic_gallery")
+                                        Image("ic_image")
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 60, height: 50)
