@@ -19,16 +19,14 @@ contract PublicCollectionsRouter is Ownable {
         bytes data;
     }
 
-    event CollectionCreated(PublicCollection indexed instance);
-
-    event CollectionDeprecated(PublicCollection indexed instance);
+    event CollectionCreated(PublicCollection indexed instance, uint256 indexed version);
 
     event PublicMint(PublicCollection indexed collection, address indexed owner, uint256 indexed id);
 
     PublicCollection public implementation;
     mapping(uint256 => PublicCollection) public collections;
     PublicCollection[] public allCollections;
-    uint256 public currentVersion;
+    uint256 public currentVersion = 0;
 
     constructor(PublicCollection _implementation) {
         implementation = _implementation;
@@ -40,7 +38,7 @@ contract PublicCollectionsRouter is Ownable {
         string memory metaUri,
         bytes memory data
     ) external {
-        require(allCollections.length > 1, "PublicCollectionsRouter: there are no collections to mint");
+        require(allCollections.length > 0, "PublicCollectionsRouter: there are no collections to mint");
         PublicCollection collection = collections[version];
         require(address(collection) != address(0), "PublicCollectionsRouter: unknown version");
         require(collection.tokensCount() == id, "PublicCollectionsRouter: wrong id");
@@ -57,7 +55,7 @@ contract PublicCollectionsRouter is Ownable {
         instance.initialize(name, symbol, currentVersion);
         collections[currentVersion] = instance;
         allCollections.push() = instance;
-        emit CollectionCreated(instance);
+        emit CollectionCreated(instance, currentVersion);
     }
 
     function changeImplementation(PublicCollection _implementation) external onlyOwner {
@@ -66,10 +64,10 @@ contract PublicCollectionsRouter is Ownable {
     }
 
     function predictDeterministicAddress(bytes32 salt) external view onlyOwner returns (address) {
-        return address(implementation).predictDeterministicAddress(salt, _msgSender());
+        return address(implementation).predictDeterministicAddress(salt, address(this));
     }
 
-    function idToMmint(uint256 version) external view returns (uint256) {
+    function idToMint(uint256 version) external view returns (uint256) {
         require(address(collections[version]) != address(0), "PublicCollectionsRouter: unknown version");
         return collections[version].tokensCount();
     }
@@ -97,19 +95,31 @@ contract PublicCollectionsRouter is Ownable {
         TokenData[][] memory res = new TokenData[][](counts.length);
 
         for (uint256 i = 0; i < counts.length; i++) {
-            if (current + counts[i] <= page * size) {
-                continue;
-            } else if (current >= page * size && current < (page + 1) * size) {
-                mask[i] = true;
-                uint256 collectionListSize = counts[i];
-                if (current + counts[i] > (page + 1) * size) {
-                    collectionListSize = resSize - current;
-                }
-                res[i] = new TokenData[](collectionListSize);
-                for (uint256 j = 0; j < collectionListSize; j++) {
-                    uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), j);
-                    res[i][j] = TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
-                    ind++;
+            if (counts[i] > 0) {
+                if (current >= page * size && current < (page + 1) * size) {
+                    mask[i] = true;
+                    uint256 collectionListSize = counts[i];
+                    if (current + counts[i] > (page + 1) * size) {
+                        collectionListSize = resSize - current;
+                    }
+                    res[i] = new TokenData[](collectionListSize);
+                    for (uint256 j = 0; j < collectionListSize; j++) {
+                        uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), j);
+                        res[i][j] = TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
+                        ind++;
+                    }
+                } else if (page * size >= current && page * size < current + counts[i]) {
+                    mask[i] = true;
+                    uint256 collectionListSize = counts[i];
+                    if (page * size > current) {
+                        collectionListSize = current + counts[i] - page * size;
+                    }
+                    res[i] = new TokenData[](collectionListSize);
+                    for (uint256 j = 0; j < collectionListSize; j++) {
+                        uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), counts[i] - collectionListSize + j);
+                        res[i][j] = TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
+                        ind++;
+                    }
                 }
             }
             current += counts[i];

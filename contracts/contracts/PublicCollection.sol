@@ -26,7 +26,7 @@ contract PublicCollection is ERC721EnumerableUpgradeable {
         string memory metaUri,
         bytes memory data
     ) external {
-        require(id == tokensCount, "");
+        require(id == tokensCount, "PublicCollection: wrong id");
         tokensCount++;
         _safeMint(to, id);
         tokenUris[id] = metaUri;
@@ -34,7 +34,7 @@ contract PublicCollection is ERC721EnumerableUpgradeable {
     }
 
     function burn(uint256 id) external {
-        require(ownerOf(id) == _msgSender(), "");
+        require(ownerOf(id) == _msgSender(), "PublicCollection: not owner of burning token");
         _burn(id);
     }
 
