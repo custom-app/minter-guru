@@ -1,16 +1,19 @@
 //
-//  MintFinishedSheet.swift
+//  NftInfo.swift
 //  CryptoInsta
 //
-//  Created by Lev Baklanov on 19.06.2022.
+//  Created by Lev Baklanov on 04.06.2022.
 //
 
 import SwiftUI
 
-struct MintFinishedSheet: View {
+struct NftInfoSheet: View {
     
     @EnvironmentObject
     var globalVm: GlobalViewModel
+    
+    @Binding
+    var nft: NftObject
     
     @State
     var textForShare: String? = nil
@@ -21,13 +24,13 @@ struct MintFinishedSheet: View {
             
             ScrollView {
                 VStack(spacing: 0) {
-                    Text("Minted!")
+                    Text("NFT")
                         .foregroundColor(Colors.mainBlack)
                         .font(.custom("rubik-bold", size: 28))
                         .padding(.top, 26)
                     
-                    if let image = globalVm.mintedImage {
-                        VStack(spacing: 10) {
+                    VStack(spacing: 10) {
+                        if let image = nft.image {
                             Image(uiImage: image)
                                 .resizable()
                                 .scaledToFit()
@@ -35,21 +38,32 @@ struct MintFinishedSheet: View {
                                 .cornerRadius(10)
                                 .frame(maxWidth: .infinity, maxHeight: 325)
                             
-                            Text(globalVm.mintedPictureName)
+                            Text(nft.meta?.name ?? "")
                                 .foregroundColor(Colors.mainBlack)
                                 .font(.custom("rubik-bold", size: 24))
                             
-                            let collection = globalVm.mintedPictureCollection
-                            Text(collection.isEmpty ? "#Public collection" : "#\(collection)")
-                                .foregroundColor(Colors.mainGrey)
-                                .font(.custom("rubik-bold", size: 18))
+                            if let collection = nft.collectionName {
+                                Text(collection.isEmpty ? "#Public collection" : "#\(collection)")
+                                    .foregroundColor(Colors.mainGrey)
+                                    .font(.custom("rubik-bold", size: 18))
+                            }
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                                .scaleEffect(1.5)
+                                .padding(100)
                         }
-                        .padding(25)
-                        .background(Colors.mainWhite)
-                        .cornerRadius(10)
-                        .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
-                        .padding(.horizontal, 26)
-                        .padding(.top, 25)
+                    }
+                    .padding(25)
+                    .background(Colors.mainWhite)
+                    .cornerRadius(10)
+                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                    .padding(.horizontal, 26)
+                    .padding(.top, 25)
+                    .onAppear {
+                        if nft.image == nil {
+                            globalVm.loadImage(nft: nft)
+                        }
                     }
                     
                     Button {
@@ -64,7 +78,23 @@ struct MintFinishedSheet: View {
                         Text("Watch on the OpenSea")
                             .foregroundColor(Colors.mainGreen)
                             .font(.custom("rubik-bold", size: 17))
-                            .padding(.top, 10)
+                            .padding(.top, 14)
+                    }
+                    
+                    if let imageLink = nft.meta?.image {
+                        Button {
+                            if let url = URL(string: Tools.ipfsLinkToHttp(ipfsLink: imageLink)),
+                               UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            } else {
+                                //TODO: show error alert
+                            }
+                        } label: {
+                            Text("Watch on the IPFS")
+                                .foregroundColor(Colors.mainGreen)
+                                .font(.custom("rubik-bold", size: 17))
+                                .padding(.top, 10)
+                        }
                     }
                     
                     Button {
@@ -79,23 +109,18 @@ struct MintFinishedSheet: View {
                                                        startPoint: .leading,
                                                        endPoint: .trailing))
                             .cornerRadius(32)
-                            .padding(.vertical, 25)
+                            .padding(.top, 25)
                             .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                     }
+                    .sheet(item: $textForShare,
+                           onDismiss: { textForShare = nil }) { text in
+                        ShareView(activityItems: [text])
+                            .ignoresSafeArea()
+                    }
                 }
-            }
-            .sheet(item: $textForShare,
-                   onDismiss: { textForShare = nil }) { text in
-                ShareView(activityItems: [text])
-                    .ignoresSafeArea()
             }
         }
         .background(Color.white.ignoresSafeArea())
     }
 }
 
-struct MintFinishedSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        MintFinishedSheet()
-    }
-}

@@ -174,7 +174,7 @@ class GlobalViewModel: ObservableObject {
         print("loading list")
         //TODO: unmock
         DispatchQueue.global(qos: .userInitiated).async {
-            let nft1 = NftObject(metaUrl: "ipfs://QmXFn9DnZQGxEjHbwbc4kyZUWX5GQepov1is8bVCnGm573")
+            let nft1 = NftObject(metaUrl: "ipfs://QmXFn9DnZQGxEjHbwbc4kyZUWX5GQepov1is8bVCnGm573", collectionName: "Collection1")
             let nft2 = NftObject(metaUrl: "ipfs://QmfDjV1hnYThocfbgsXZPdJbnHWdWVckZufmtQ87Sgncv1")
             let nft3 = NftObject(metaUrl: "ipfs://QmYrtUVi4DUM8KSCz3m8YH5mfGXaivd2hXhL7ZUMcaQ3r4")
             let nft4 = NftObject(metaUrl: "ipfs://QmUu1yosmZk3c3sR9XCPMzFj455eoJdJcKKh2Stp5xH5iM")
