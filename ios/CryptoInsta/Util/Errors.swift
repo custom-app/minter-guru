@@ -13,6 +13,7 @@ enum InternalError: Error {
     case responseConvertingError(description: String)
     case emptyCidError
     case invalidAddress(address: String)
+    case unsuccessfullСontractRead(description: String)
     case structParseError(description: String)
     case unsuccessfulСontractRead(description: String)
     case nilDataError

@@ -24,9 +24,8 @@ extension GlobalViewModel {
     }
     
     var isWrongChain: Bool {
-        let requiredChainId = Config.TESTING ? Constants.ChainId.PolygonTestnet : Constants.ChainId.Polygon
         if let chainId = session?.walletInfo?.chainId,
-           chainId != requiredChainId {
+           chainId != Constants.requiredChainId {
             return true
         }
         return false
@@ -119,8 +118,10 @@ extension GlobalViewModel: WalletConnectDelegate {
                     currentWallet = Wallets.bySession(session: session)
                 }
                 showConnectSheet = false
-                //TODO: load initial info here
-                loadNftList()
+                if !isWrongChain {
+                    loadNftList()
+                    getPublicTokensCount()
+                }
             }
         }
     }

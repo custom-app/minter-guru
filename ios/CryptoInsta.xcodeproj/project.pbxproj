@@ -9,8 +9,14 @@
 /* Begin PBXBuildFile section */
 		1108864C284ABE59002C4E5A /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864B284ABE59002C4E5A /* Tools.swift */; };
 		1108864E284AF497002C4E5A /* NftMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864D284AF497002C4E5A /* NftMeta.swift */; };
-		11088650284B123C002C4E5A /* NftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864F284B123C002C4E5A /* NftObject.swift */; };
+		11088650284B123C002C4E5A /* Nft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864F284B123C002C4E5A /* Nft.swift */; };
 		11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11088651284B244A002C4E5A /* NftInfoSheet.swift */; };
+		111629B9286365F50012B134 /* NftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629B8286365F50012B134 /* NftData.swift */; };
+		111629BB286379B80012B134 /* TxWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BA286379B80012B134 /* TxWorker.swift */; };
+		111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BC2863A0D20012B134 /* Web3Parser.swift */; };
+		111629BF2863A3520012B134 /* PublicCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BE2863A3520012B134 /* PublicCollectionData.swift */; };
+		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
+		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
 		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
 		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
 		11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11BE8CDF2855D4410088F261 /* WalletConnectSwift */; };
@@ -57,8 +63,14 @@
 /* Begin PBXFileReference section */
 		1108864B284ABE59002C4E5A /* Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
 		1108864D284AF497002C4E5A /* NftMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftMeta.swift; sourceTree = "<group>"; };
-		1108864F284B123C002C4E5A /* NftObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftObject.swift; sourceTree = "<group>"; };
+		1108864F284B123C002C4E5A /* Nft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nft.swift; sourceTree = "<group>"; };
 		11088651284B244A002C4E5A /* NftInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftInfoSheet.swift; sourceTree = "<group>"; };
+		111629B8286365F50012B134 /* NftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftData.swift; sourceTree = "<group>"; };
+		111629BA286379B80012B134 /* TxWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxWorker.swift; sourceTree = "<group>"; };
+		111629BC2863A0D20012B134 /* Web3Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Parser.swift; sourceTree = "<group>"; };
+		111629BE2863A3520012B134 /* PublicCollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCollectionData.swift; sourceTree = "<group>"; };
+		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
+		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
 		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
 		11BEBE54285A5C0100D056FA /* rubik-medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-medium.ttf"; sourceTree = "<group>"; };
 		11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-semibold.ttf"; sourceTree = "<group>"; };
@@ -148,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				11ED5A98284703C100F0D61D /* Info.plist */,
+				1154D500286273ED006C6E25 /* public_router_abi.json */,
 				11ED5A7E2846BC0E00F0D61D /* Util */,
 				11ED5A7B2846BB6E00F0D61D /* ViewModel */,
 				11ED5A7A2846BB6700F0D61D /* Model */,
@@ -187,7 +200,10 @@
 			children = (
 				11ED5A962847015300F0D61D /* Wallets.swift */,
 				1108864D284AF497002C4E5A /* NftMeta.swift */,
-				1108864F284B123C002C4E5A /* NftObject.swift */,
+				1108864F284B123C002C4E5A /* Nft.swift */,
+				111629B8286365F50012B134 /* NftData.swift */,
+				111629BE2863A3520012B134 /* PublicCollectionData.swift */,
+				111629C02863AAE50012B134 /* TokenData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -216,6 +232,8 @@
 				11DEE9362848501400B7E2E5 /* ImageWorker.swift */,
 				11A749682849A9F100387869 /* HttpRequester.swift */,
 				1108864B284ABE59002C4E5A /* Tools.swift */,
+				111629BA286379B80012B134 /* TxWorker.swift */,
+				111629BC2863A0D20012B134 /* Web3Parser.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -353,6 +371,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1154D501286273ED006C6E25 /* public_router_abi.json in Resources */,
 				11D2572C28444C7B0028E2B4 /* Preview Assets.xcassets in Resources */,
 				11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */,
 				11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */,
@@ -372,7 +391,8 @@
 				11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */,
 				11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */,
 				11DEE939284854DF00B7E2E5 /* Web3Worker.swift in Sources */,
-				11088650284B123C002C4E5A /* NftObject.swift in Sources */,
+				111629C12863AAE50012B134 /* TokenData.swift in Sources */,
+				11088650284B123C002C4E5A /* Nft.swift in Sources */,
 				11ED5AAA284710B400F0D61D /* AuthContainer.swift in Sources */,
 				11ED5AAE284710C800F0D61D /* GalleryContainer.swift in Sources */,
 				11ED5AA0284705F800F0D61D /* MainContainer.swift in Sources */,
@@ -387,6 +407,7 @@
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				1108864C284ABE59002C4E5A /* Tools.swift in Sources */,
+				111629BF2863A3520012B134 /* PublicCollectionData.swift in Sources */,
 				11F972A0285CED11000026FD /* Tip.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
 				11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */,
@@ -395,8 +416,10 @@
 				11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */,
 				11C9F993285FA7E100A27587 /* ShareView.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
+				111629B9286365F50012B134 /* NftData.swift in Sources */,
 				11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
+				111629BB286379B80012B134 /* TxWorker.swift in Sources */,
 				11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */,
 				11ED5A802846BCC600F0D61D /* Constants.swift in Sources */,
 				11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */,
@@ -405,6 +428,7 @@
 				11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */,
 				11F972A2285CEF6D000026FD /* FaucetScreen.swift in Sources */,
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
+				111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

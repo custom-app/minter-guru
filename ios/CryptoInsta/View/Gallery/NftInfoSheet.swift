@@ -13,7 +13,7 @@ struct NftInfoSheet: View {
     var globalVm: GlobalViewModel
     
     @Binding
-    var nft: NftObject
+    var nft: Nft
     
     @State
     var textForShare: String? = nil

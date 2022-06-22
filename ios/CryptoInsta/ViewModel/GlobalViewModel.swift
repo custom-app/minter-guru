@@ -9,10 +9,12 @@ import Foundation
 import SwiftUI
 import PhotosUI
 import WalletConnectSwift
+import BigInt
 
 class GlobalViewModel: ObservableObject {
     
-    let deepLinkDelay = 0.5
+    let deepLinkDelay = 0.25
+    let mintLabel = "mint"
     
     @Published
     var showConnectSheet = false
@@ -60,12 +62,13 @@ class GlobalViewModel: ObservableObject {
     var alert: IdentifiableAlert?
     
     var backgroundManager = BackgroundTasksManager.shared
-    
-    var web3 = Web3Worker(endpoint: Config.TESTING ?
-                          Config.PolygonEndpoints.Testnet : Config.PolygonEndpoints.Mainnet)
+    var web3 = Web3Worker(endpoint: Config.endpoint)
     
     @Published
-    var nftList: [NftObject] = []
+    var publicTokensCount = 0
+    
+    @Published
+    var nftList: [Nft] = []
     @Published
     var nftListLoaded = false
     
@@ -161,9 +164,9 @@ class GlobalViewModel: ObservableObject {
                             self.mintedPictureName = self.pictureName
                             self.pictureName = ""
                             self.mintedPictureCollection = self.pickedCollectionName
-                            self.showMintFinishedSheet = true
-                            self.mintInProgress = false
                         }
+                        self.publicMint(metaUrl: "ipfs://\(cid)",
+                                  nftData: NftData(name: self.mintedPictureName, createDate: Date().timestamp()))
                     }
                 }
             }
@@ -174,18 +177,7 @@ class GlobalViewModel: ObservableObject {
         print("loading list")
         //TODO: unmock
         DispatchQueue.global(qos: .userInitiated).async {
-            let nft1 = NftObject(metaUrl: "ipfs://QmXFn9DnZQGxEjHbwbc4kyZUWX5GQepov1is8bVCnGm573", collectionName: "Collection1")
-            let nft2 = NftObject(metaUrl: "ipfs://QmfDjV1hnYThocfbgsXZPdJbnHWdWVckZufmtQ87Sgncv1")
-            let nft3 = NftObject(metaUrl: "ipfs://QmYrtUVi4DUM8KSCz3m8YH5mfGXaivd2hXhL7ZUMcaQ3r4")
-            let nft4 = NftObject(metaUrl: "ipfs://QmUu1yosmZk3c3sR9XCPMzFj455eoJdJcKKh2Stp5xH5iM")
-            DispatchQueue.main.async { [self] in
-                withAnimation {
-                    self.nftList = [nft1, nft2, nft3, nft4]
-                }
-                DispatchQueue.global(qos: .userInitiated).async {
-                    self.loadNftMeta()
-                }
-            }
+                
         }
     }
     
@@ -213,7 +205,7 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func loadImage(nft: NftObject) {
+    func loadImage(nft: Nft) {
         DispatchQueue.global(qos: .userInitiated).async {
             if let meta = nft.meta, let url = URL(string: Tools.formFilebaseLink(filename: "\(meta.properties.imageName).jpg")) {
                 URLSession.shared.dataTask(with: url) { [self] data, response, error in
@@ -237,6 +229,106 @@ class GlobalViewModel: ObservableObject {
             } else {
                 //TODO: handle error
             }
+        }
+    }
+    
+    // Web3 calls
+    
+    func getPublicTokensCount() {
+        if let address = walletAccount {
+            web3.getPublicTokensCount(address: address) { [weak self] count, error in
+                if let error = error {
+                    print("get public tokens count error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got public tokens count: \(count)")
+                    withAnimation {
+                        self?.publicTokensCount = Int(count)
+                        if count == 0 {
+                            self?.nftListLoaded = true
+                        }
+                        self?.getPublicTokens(page: 0)
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPublicTokens(page: Int, size: Int = 1000) {
+        if let address = walletAccount {
+            web3.getPublicTokens(page: page, size: size, address: address) { [weak self] tokens, error in
+                if let error = error {
+                    print("get public tokens error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got public tokens count: \(tokens.count)")
+                    print("got public tokens: \(tokens)")
+                    withAnimation {
+                        self?.nftList = tokens
+                        self?.nftListLoaded = true
+                    }
+                }
+            }
+        }
+    }
+    
+    func publicMint(metaUrl: String, nftData: NftData) {
+        do {
+            let data = try JSONEncoder().encode(nftData)
+            guard let data = web3.mintData(version: BigUInt(Constants.currentVersion),
+                                           id: 0,
+                                           metaUrl: metaUrl,
+                                           data: data) else {
+                //TODO: handle error
+                return
+            }
+            prepareAndSendTx(data: data, label: mintLabel)
+        } catch {
+            print("Error encoding NftData: \(error)")
+            //TODO: handle error
+        }
+    }
+    
+    func prepareAndSendTx(data: String = "", label: String) {
+        guard let session = session,
+              let client = walletConnect?.client,
+              let from = walletAccount else {
+            //TODO: handle error
+            return
+        }
+        let tx = TxWorker.construct(from: from, data: data)
+        do {
+            try client.eth_sendTransaction(url: session.url,
+                                           transaction: tx) { [weak self] response in
+                DispatchQueue.main.async {
+                    self?.backgroundManager.finishSendTxBackgroundTask()
+                    //TODO: handle response
+                }
+                if let error = response.error {
+                    print("Got error response for \(label) tx: \(error)")
+                } else {
+                    do {
+                        let result = try response.result(as: String.self)
+                        print("Got response for \(label) tx: \(result)")
+                    } catch {
+                        print("Unexpected response type error: \(error)")
+                    }
+                }
+                if label == "mint" {
+                    DispatchQueue.main.async {
+                        self?.showMintFinishedSheet = true
+                        self?.mintInProgress = false
+                    }
+                }
+            }
+            print("sending tx: \(label)")
+            DispatchQueue.main.async {
+                self.backgroundManager.createSendTxBackgroundTask()
+                self.openWallet()
+            }
+        } catch {
+            print("error sending tx: \(error)")
+            //TODO: handle error
         }
     }
 }

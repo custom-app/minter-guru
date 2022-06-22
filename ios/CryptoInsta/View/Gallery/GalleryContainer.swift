@@ -13,7 +13,7 @@ struct GalleryContainer: View {
     var globalVm: GlobalViewModel
     
     @State
-    var selectedNft: NftObject?
+    var selectedNft: Nft?
     
     var body: some View {
         ScrollView(showsIndicators: true) {
@@ -25,7 +25,7 @@ struct GalleryContainer: View {
                 
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach($globalVm.nftList) { nft in
-                        let last = globalVm.nftList.last ?? NftObject(metaUrl: "")
+                        let last = globalVm.nftList.last ?? Nft.empty()
                         NftListView(nft: nft,
                                     selectedNft: $selectedNft,
                                     isLast: last == nft.wrappedValue)
@@ -52,10 +52,10 @@ struct GalleryContainer: View {
 struct NftListView: View {
     
     @Binding
-    var nft: NftObject
+    var nft: Nft
     
     @Binding
-    var selectedNft: NftObject?
+    var selectedNft: Nft?
     
     var isLast: Bool
     

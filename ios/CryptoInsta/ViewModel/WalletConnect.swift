@@ -27,8 +27,7 @@ class WalletConnect {
                                             url: URL(string: "https://google.com")!)
         let dAppInfo = Session.DAppInfo(peerId: UUID().uuidString,
                                         peerMeta: clientMeta,
-                                        chainId: Config.TESTING ? Constants.ChainId.PolygonTestnet :
-                                            Constants.ChainId.Polygon)
+                                        chainId: Constants.requiredChainId)
         client = Client(delegate: self, dAppInfo: dAppInfo)
 
         try! client.connect(to: wcUrl)
