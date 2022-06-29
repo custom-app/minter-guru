@@ -74,9 +74,9 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256 tokenId = tokensCount;
         _mint(_msgSender(), tokenId);
         address instance = address(implementation).cloneDeterministic(salt);
+        tokenCollections[tokenId] = PrivateCollection(instance);
         PrivateCollection(instance).initialize(name, symbol, this, tokenId, _msgSender(), data);
         tokensCount++;
-        ownedCollections[_msgSender()].add(bytes32(tokenId));
         emit CollectionPurchased(_msgSender(), instance, tokenId);
     }
 
@@ -125,7 +125,7 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256 total = ownedCollections[_msgSender()].length();
         require((total == 0 && page == 0) || page * size < total, "CollectionsAccessToken: out of bounds");
         uint256 resSize = size;
-        if (page * (size + 1) < total) {
+        if ((page + 1) * size > total) {
             resSize = total - page * size;
         }
         PrivateCollectionData[] memory res = new PrivateCollectionData[](resSize);
@@ -148,12 +148,14 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256 tokenId
     ) internal virtual override(ERC721) {
         super._afterTokenTransfer(from, to, tokenId);
-        if (from != address(0) && to != address(to) && !to.isContract()) {
+        if (from != address(0) && to != address(0) && !to.isContract()) {
             tokenCollections[tokenId].transferOwnership(to);
+        }
+        if (from != address(0)) {
             ownedCollections[from].remove(bytes32(tokenId));
-            if (!ownedCollections[to].contains(bytes32(tokenId))) {
-                ownedCollections[to].add(bytes32(tokenId));
-            }
+        }
+        if (to != address(0) && !ownedCollections[to].contains(bytes32(tokenId))) {
+            ownedCollections[to].add(bytes32(tokenId));
         }
     }
 }

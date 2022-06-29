@@ -1,17 +1,17 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Signer, BigNumber as BN } from "ethers";
+import { BigNumber as BN, Signer } from "ethers";
 // eslint-disable-next-line camelcase,node/no-missing-import
 import {
-  InstaToken,
-  // eslint-disable-next-line camelcase
-  InstaToken__factory,
-  // eslint-disable-next-line camelcase
-  PrivateCollection__factory,
   CollectionsAccessToken,
   // eslint-disable-next-line camelcase
   CollectionsAccessToken__factory,
+  InstaToken,
+  // eslint-disable-next-line camelcase
+  InstaToken__factory,
   PrivateCollection,
+  // eslint-disable-next-line camelcase
+  PrivateCollection__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
 
@@ -24,6 +24,7 @@ describe("Private collection", async () => {
   let accounts: Signer[];
   let accessTokenInstance: CollectionsAccessToken;
   let instaToken: InstaToken;
+  let boughtCollection: PrivateCollection;
 
   before(async () => {
     accounts = await ethers.getSigners();
@@ -58,21 +59,61 @@ describe("Private collection", async () => {
       .transfer(await accounts[4].getAddress(), BN.from(100));
   });
 
-  it("buy and mint should be successful", async () => {
-    const salt = "0x" + genRanHex(64);
-    const privateCollectionAddress =
-      await accessTokenInstance.predictDeterministicAddress(salt);
-    const purchaseTx = await accessTokenInstance.purchasePrivateCollection(
-      salt,
-      "tsst",
-      "tost"
-    );
-    expect(purchaseTx).to.emit("ERC20", "Transfer").withArgs(
-      await accounts[4].getAddress(), "0x", );
-    const collectionFactory = new PrivateCollection__factory(accounts[0]);
-    const privateCollection: PrivateCollection = collectionFactory.attach(
-      privateCollectionAddress
-    );
+  it("self collections should be empty before purchase", async () => {
+    const collections = await accessTokenInstance
+      .connect(accounts[4])
+      .getSelfCollections(BN.from(0), BN.from(10));
+    expect(collections).deep.eq([[], BN.from(0)]);
+  });
 
+  it("buy should be successful", async () => {
+    const salt = "0x" + genRanHex(64);
+    const collectionFactory = new PrivateCollection__factory(accounts[0]);
+    boughtCollection = collectionFactory.attach(
+      await accessTokenInstance.predictDeterministicAddress(salt)
+    );
+    const purchaseTx = await accessTokenInstance
+      .connect(accounts[4])
+      .purchasePrivateCollection(salt, "tsst", "tost", "0xaa");
+    expect(purchaseTx)
+      .to.emit("ERC20", "Transfer")
+      .withArgs(
+        await accounts[4].getAddress(),
+        "0x0000000000000000000000000000000000000000",
+        BN.from(100)
+      );
+    expect(purchaseTx)
+      .to.emit("PublicCollectionsRouter", "CollectionCreated")
+      .withArgs(boughtCollection.address, BN.from(0));
+  });
+
+  it("self collections should be not empty after purchase", async () => {
+    const collections = await accessTokenInstance
+      .connect(accounts[4])
+      .getSelfCollections(BN.from(0), BN.from(10));
+    expect(collections).deep.eq([
+      [[boughtCollection.address, "0xaa"]],
+      BN.from(1),
+    ]);
+  });
+
+  it("mint should be successful", async () => {
+    await boughtCollection
+      .connect(accounts[4])
+      .mint(await accounts[4].getAddress(), BN.from(0), "meta", "0x33");
+  });
+
+  it("get owned tokens should be successful", async () => {
+    const tokens = await boughtCollection
+      .connect(accounts[4])
+      .getSelfTokens(BN.from(0), BN.from(10));
+    expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]], BN.from(1)]);
+  });
+
+  it("get all tokens should be successful", async () => {
+    const tokens = await boughtCollection
+      .connect(accounts[0])
+      .getAllTokens(BN.from(0), BN.from(10));
+    expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]], BN.from(1)]);
   });
 });

@@ -38,7 +38,7 @@ contract MinterCollection is ERC721EnumerableUpgradeable {
         total = totalSupply();
         require((total == 0 && page == 0) || page * size < total, "MinterCollection: out of bounds");
         uint256 resSize = size;
-        if (page * (size + 1) < total) {
+        if ((page + 1) * size > total) {
             resSize = total - page * size;
         }
         res = new TokenData[](resSize);
@@ -63,7 +63,7 @@ contract MinterCollection is ERC721EnumerableUpgradeable {
         total = balanceOf(_msgSender());
         require((total == 0 && page == 0) || page * size < total, "MinterCollection: out of bounds");
         uint256 resSize = size;
-        if (page * (size + 1) < total) {
+        if ((page + 1) * size > total) {
             resSize = total - page * size;
         }
         res = new TokenData[](resSize);
