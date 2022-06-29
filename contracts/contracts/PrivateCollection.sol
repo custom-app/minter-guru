@@ -3,33 +3,34 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "./CollectionsAccessToken.sol";
+import "./MinterCollection.sol";
 
-contract PrivateCollection is ERC721EnumerableUpgradeable {
-    struct TokenData {
-        uint256 id;
-        string metaUri;
-        bytes data;
-    }
+/// @dev PrivateCollection - collection where only the owner can mint photos
+contract PrivateCollection is MinterCollection {
+    uint256 public accessTokenId;                      // access token id
+    CollectionsAccessToken public accessToken;         // Access token contract address
+    address public owner;                              // current owner. changed on access token transfers
+    bytes public data;                                 // collection additional data
 
-    uint256 public accessTokenId;
-    CollectionsAccessToken public accessToken;
-    address public owner;
-    uint256 public tokensCount;
-    bytes public data;
-
-    mapping(uint256 => string) public tokenUris;
-    mapping(uint256 => bytes) public tokenData;
-
+    /// @dev modifier for checking if call is from the access token contract
     modifier onlyAccessToken() {
         require(_msgSender() == address(accessToken), "");
         _;
     }
 
+    /// @dev modifier for checking if call is from the owner
     modifier onlyOwner() {
         require(_msgSender() == owner, "");
         _;
     }
 
+    /// @dev initialize function
+    /// @param name - name of the token
+    /// @param symbol - symbol of the token
+    /// @param _accessToken - access token contract address
+    /// @param _accessTokenId - access token id
+    /// @param _owner - collection creator
+    /// @param _data - additional collection data
     function initialize(
         string memory name,
         string memory symbol,
@@ -38,27 +39,35 @@ contract PrivateCollection is ERC721EnumerableUpgradeable {
         address _owner,
         bytes memory _data
     ) external initializer {
-        __ERC721_init(name, symbol);
+        __MinterCollection_init(name, symbol);
         accessTokenId = _accessTokenId;
         accessToken = _accessToken;
         owner = _owner;
         data = _data;
     }
 
+    /// @dev Mint function. Can called only by the owner
+    /// @param to - token receiver
+    /// @param id - token id
+    /// @param metaUri - metadata uri
+    /// @param _data - additional token data
     function mint(
         address to,
-        uint256 id
+        uint256 id,
+        string memory metaUri,
+        bytes memory _data
     ) external onlyOwner {
-        require(id == tokensCount, "");
-        _safeMint(to, id);
-        tokensCount++;
+        _mint(to, id, metaUri, _data);
     }
 
+    /// @dev burn function
+    /// @param id - token id
     function burn(uint256 id) external {
         require(ownerOf(id) == _msgSender(), "");
         _burn(id);
     }
 
+    /// @dev function for transferring all owned tokens in collection
     function transferOwnership(address to) external onlyAccessToken {
         uint256 ownerTokensCount = balanceOf(owner);
         for (uint256 i = 0; i < ownerTokensCount; i++) {
@@ -68,32 +77,7 @@ contract PrivateCollection is ERC721EnumerableUpgradeable {
         owner = to;
     }
 
-    function getSelfTokens(
-        uint256 page,
-        uint256 size
-    ) external view returns (TokenData[] memory, uint256) {
-        require(size <= 1000, "PrivateCollection: size must be 1000 or lower");
-        uint256 total = balanceOf(_msgSender());
-        require((total == 0 && page == 0) || page * size < total, "PrivateCollection: out of bounds");
-        uint256 resSize = size;
-        if (page * (size + 1) < total) {
-            resSize = total - page * size;
-        }
-        TokenData[] memory res = new TokenData[](resSize);
-        for (uint256 i = page * size; i < page * size + resSize; i++) {
-            uint256 tokenId = tokenOfOwnerByIndex(_msgSender(), i);
-            res[i - page * size] = TokenData(tokenId, tokenUris[tokenId], tokenData[tokenId]);
-        }
-        return (res, total);
-    }
-
-    /**
-     * @dev Returns the Uniform Resource Identifier (URI) for `tokenId` token.
-     */
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        return tokenUris[tokenId];
-    }
-
+    /// @dev callback implementation for updating collections sets in access token contract
     function _afterTokenTransfer(
         address from,
         address to,

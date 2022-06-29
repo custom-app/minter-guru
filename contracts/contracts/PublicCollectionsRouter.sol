@@ -5,33 +5,38 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "./PublicCollection.sol";
 
+/// @dev PublicCollectionsRouter is contract for minting photos to public collections
 contract PublicCollectionsRouter is Ownable {
     using Clones for address;
 
+    /// @dev PublicCollectionData - public collection data
     struct PublicCollectionData {
-        PublicCollection contractAddress;
-        uint256 version;
+        PublicCollection contractAddress;        // address of contract
+        uint256 version;                         // version
     }
 
-    struct TokenData {
-        uint256 id;
-        string metaUri;
-        bytes data;
-    }
-
+    /// @dev emitted when new public collection is cloned
     event CollectionCreated(PublicCollection indexed instance, uint256 indexed version);
 
+    /// @dev emitted when new photo is minted
     event PublicMint(PublicCollection indexed collection, address indexed owner, uint256 indexed id);
 
-    PublicCollection public implementation;
-    mapping(uint256 => PublicCollection) public collections;
-    PublicCollection[] public allCollections;
-    uint256 public currentVersion = 0;
+    PublicCollection public implementation;                        // public collection contract implementation for cloning
+    mapping(uint256 => PublicCollection) public collections;       // current public collections for each version
+    PublicCollection[] public allCollections;                      // list of all cloned collections
+    uint256 public currentVersion = 0;                             // current version
 
+    /// @dev constructor
+    /// @param _implementation - address of PublicCollection contract for cloning
     constructor(PublicCollection _implementation) {
         implementation = _implementation;
     }
 
+    /// @dev mint function
+    /// @param version - collection version
+    /// @param id - token id
+    /// @param metaUri - token metadata uri
+    /// @param data - additional data
     function mint(
         uint256 version,
         uint256 id,
@@ -46,6 +51,10 @@ contract PublicCollectionsRouter is Ownable {
         emit PublicMint(collection, _msgSender(), id);
     }
 
+    /// @dev function for creating collection clone
+    /// @param salt - salt value for cloning
+    /// @param name - name of the token
+    /// @param symbol - symbol of the token
     function createCollectionClone(
         bytes32 salt,
         string memory name,
@@ -58,41 +67,60 @@ contract PublicCollectionsRouter is Ownable {
         emit CollectionCreated(instance, currentVersion);
     }
 
-    function changeImplementation(PublicCollection _implementation) external onlyOwner {
+    /// @dev function for changing private collection implementation
+    /// @param _implementation - address of new instance of private collection
+    function setImplementation(PublicCollection _implementation) external onlyOwner {
         implementation = _implementation;
         currentVersion++;
     }
 
+    /// @dev function for prediction of address of new collection
+    /// @param salt - salt value for cloning
+    /// @return predicted address
     function predictDeterministicAddress(bytes32 salt) external view onlyOwner returns (address) {
         return address(implementation).predictDeterministicAddress(salt, address(this));
     }
 
+    /// @dev function for getting id for minting
+    /// @return id to mint
     function idToMint(uint256 version) external view returns (uint256) {
         require(address(collections[version]) != address(0), "PublicCollectionsRouter: unknown version");
         return collections[version].tokensCount();
     }
 
-    function totalTokens() public view returns (uint256) {
+    /// @dev function for calculating total amount of owned tokens in all collections
+    /// @return res - amount of owned tokens in all collections
+    function totalTokens() public view returns (uint256 res) {
         return _totalTokens(_tokenCounts());
     }
 
+    /// @dev function for retrieving token lists grouped by collection. It uses basic pagination method.
+    /// @param page - page number (starting from zero)
+    /// @param size - size of the page
+    /// @return collectionsRes - list of collections
+    /// @return tokensRes - list of lists of tokens
+    /// @return total - owned tokens count
     function getSelfPublicTokens(
         uint256 page,
         uint256 size
-    ) external view returns (PublicCollectionData[] memory, TokenData[][] memory, uint256) {
+    ) external view returns (
+        PublicCollectionData[] memory collectionsRes,
+        MinterCollection.TokenData[][] memory tokensRes,
+        uint256 total
+    ) {
         require(size <= 1000, "PublicCollectionsRouter: size must be 1000 or lower");
         uint256[] memory counts = _tokenCounts();
-        uint256 total = _totalTokens(counts);
-        require((total == 0 && page == 0) || page * size < total, "PublicCollectionsRouter: out of bounds");
+        uint256 _total = _totalTokens(counts);
+        require((total == 0 && page == 0) || page * size < _total, "PublicCollectionsRouter: out of bounds");
 
         bool[] memory mask = new bool[](counts.length);
         uint256 current = 0;
         uint256 ind = 0;
         uint256 resSize = size;
-        if ((page + 1) * size > total) {
-            resSize = total - page * size;
+        if ((page + 1) * size > _total) {
+            resSize = _total - page * size;
         }
-        TokenData[][] memory res = new TokenData[][](counts.length);
+        MinterCollection.TokenData[][] memory res = new MinterCollection.TokenData[][](counts.length);
 
         for (uint256 i = 0; i < counts.length; i++) {
             if (counts[i] > 0) {
@@ -102,10 +130,10 @@ contract PublicCollectionsRouter is Ownable {
                     if (current + counts[i] > (page + 1) * size) {
                         collectionListSize = resSize - current;
                     }
-                    res[i] = new TokenData[](collectionListSize);
+                    res[i] = new MinterCollection.TokenData[](collectionListSize);
                     for (uint256 j = 0; j < collectionListSize; j++) {
                         uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), j);
-                        res[i][j] = TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
+                        res[i][j] = MinterCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
                         ind++;
                     }
                 } else if (page * size >= current && page * size < current + counts[i]) {
@@ -114,55 +142,71 @@ contract PublicCollectionsRouter is Ownable {
                     if (page * size > current) {
                         collectionListSize = current + counts[i] - page * size;
                     }
-                    res[i] = new TokenData[](collectionListSize);
+                    res[i] = new MinterCollection.TokenData[](collectionListSize);
                     for (uint256 j = 0; j < collectionListSize; j++) {
                         uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), counts[i] - collectionListSize + j);
-                        res[i][j] = TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
+                        res[i][j] = MinterCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
                         ind++;
                     }
                 }
             }
             current += counts[i];
         }
-        return _filterSelfTokensResult(mask, res, total);
+        return _buildSelfTokensResult(mask, res, _total);
     }
 
-    function _totalTokens(uint256[] memory counts) internal pure returns (uint256) {
-        uint256 res = 0;
+    /// @dev function for calculating total amount of owned tokens in all collections
+    /// @return res - amount of owned tokens in all collections
+    function _totalTokens(uint256[] memory counts) internal pure returns (uint256 res) {
+        res = 0;
         for (uint256 i = 0; i < counts.length; i++) {
             res += counts[i];
         }
         return res;
     }
 
-    function _tokenCounts() internal view returns (uint256[] memory) {
-        uint256[] memory counts = new uint256[](allCollections.length);
+    /// @dev function for calculating total amount of owned tokens in each collection
+    /// @return counts - counts of owned tokens in all collection
+    function _tokenCounts() internal view returns (uint256[] memory counts) {
+        counts = new uint256[](allCollections.length);
         for (uint256 i = 0; i < counts.length; i++) {
             counts[i] = allCollections[i].balanceOf(_msgSender());
         }
         return counts;
     }
 
-    function _filterSelfTokensResult(
+    /// @dev function for building non empty groups (grouping is made by collection) of tokens
+    /// @param mask - list of bools indicating if group is empty
+    /// @param tokens - lists of grouped tokens
+    /// @param _total - total tokens
+    /// @return collectionsRes - list of collections
+    /// @return tokensRes - list of lists of tokens
+    /// @return total - owned tokens count
+    function _buildSelfTokensResult(
         bool[] memory mask,
-        TokenData[][] memory tokens,
+        MinterCollection.TokenData[][] memory tokens,
+        uint256 _total
+    ) internal view returns (
+        PublicCollectionData[] memory collectionsRes,
+        MinterCollection.TokenData[][] memory tokensRes,
         uint256 total
-    ) internal view returns (PublicCollectionData[] memory, TokenData[][] memory, uint256) {
+    ) {
         uint256 collectionsCount = 0;
         for (uint256 i = 0; i < mask.length; i++) {
             if (mask[i]) {
                 collectionsCount++;
             }
         }
-        PublicCollectionData[] memory collectionsRes = new PublicCollectionData[](collectionsCount);
-        TokenData[][] memory tokensRes = new TokenData[][](collectionsCount);
+        collectionsRes = new PublicCollectionData[](collectionsCount);
+        tokensRes = new MinterCollection.TokenData[][](collectionsCount);
         uint256 index = 0;
         for (uint256 i = 0; i < mask.length; i++) {
             if (mask[i]) {
                 collectionsRes[index] = PublicCollectionData(allCollections[i], allCollections[i].version());
                 tokensRes[index] = tokens[i];
+                index++;
             }
         }
-        return (collectionsRes, tokensRes, total);
+        return (collectionsRes, tokensRes, _total);
     }
 }
