@@ -122,6 +122,7 @@ contract InstaToken is AccessControl, ERC20 {
             transferFrom(from, address(this), toReturn);
             gameRewardSpent -= toReturn;
         }
+        burned += value - toReturn;
         _burn(from, value - toReturn);
     }
 

@@ -83,7 +83,7 @@ contract PublicCollectionsRouter is Ownable {
         require(size <= 1000, "PublicCollectionsRouter: size must be 1000 or lower");
         uint256[] memory counts = _tokenCounts();
         uint256 total = _totalTokens(counts);
-        require(page * size <= total, "PublicCollectionsRouter: out of bounds");
+        require((total == 0 && page == 0) || page * size < total, "PublicCollectionsRouter: out of bounds");
 
         bool[] memory mask = new bool[](counts.length);
         uint256 current = 0;
