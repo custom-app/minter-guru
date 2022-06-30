@@ -18,22 +18,15 @@
           "internalType": "contract PublicCollection",
           "name": "instance",
           "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "version",
+          "type": "uint256"
         }
       ],
       "name": "CollectionCreated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "contract PublicCollection",
-          "name": "instance",
-          "type": "address"
-        }
-      ],
-      "name": "CollectionDeprecated",
       "type": "event"
     },
     {
@@ -238,7 +231,7 @@
           "type": "uint256"
         }
       ],
-      "name": "idToMmint",
+      "name": "idToMint",
       "outputs": [
         {
           "internalType": "uint256",

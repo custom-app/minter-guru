@@ -10,4 +10,5 @@ import Foundation
 struct NftData: Codable {
     let name: String
     let createDate: Int64
+    let filebaseName: String?
 }

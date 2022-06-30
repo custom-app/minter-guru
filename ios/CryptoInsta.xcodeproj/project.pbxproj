@@ -28,6 +28,7 @@
 		11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */; };
 		11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */; };
 		11C9F993285FA7E100A27587 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F992285FA7E100A27587 /* ShareView.swift */; };
+		11CE41A728665D66000A15EA /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 11CE41A628665D66000A15EA /* web3swift */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
 		11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11D2572828444C7B0028E2B4 /* Assets.xcassets */; };
@@ -41,7 +42,6 @@
 		11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */; };
 		11ED5A802846BCC600F0D61D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A7F2846BCC600F0D61D /* Constants.swift */; };
 		11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A812846BD4000F0D61D /* Extensions.swift */; };
-		11ED5A892846C1E600F0D61D /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 11ED5A882846C1E600F0D61D /* web3swift */; };
 		11ED5A912846C5FD00F0D61D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A902846C5FD00F0D61D /* Config.swift */; };
 		11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A922846C7AE00F0D61D /* Colors.swift */; };
 		11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */; };
@@ -80,6 +80,7 @@
 		11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintProcessingScreen.swift; sourceTree = "<group>"; };
 		11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintFinishedSheet.swift; sourceTree = "<group>"; };
 		11C9F992285FA7E100A27587 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
+		11CE41A428665D32000A15EA /* web3swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = web3swift; path = ../../web3swift; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -120,7 +121,7 @@
 			files = (
 				11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */,
 				11A7496E2849CD6700387869 /* AWSSigner in Frameworks */,
-				11ED5A892846C1E600F0D61D /* web3swift in Frameworks */,
+				11CE41A728665D66000A15EA /* web3swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +242,7 @@
 		11ED5A852846BFFA00F0D61D /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				11CE41A428665D32000A15EA /* web3swift */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -320,9 +322,9 @@
 			);
 			name = CryptoInsta;
 			packageProductDependencies = (
-				11ED5A882846C1E600F0D61D /* web3swift */,
 				11A7496D2849CD6700387869 /* AWSSigner */,
 				11BE8CDF2855D4410088F261 /* WalletConnectSwift */,
+				11CE41A628665D66000A15EA /* web3swift */,
 			);
 			productName = CryptoInsta;
 			productReference = 11D2572128444C790028E2B4 /* CryptoInsta.app */;
@@ -353,9 +355,9 @@
 			);
 			mainGroup = 11D2571828444C790028E2B4;
 			packageReferences = (
-				11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */,
 				11A7496C2849CD6700387869 /* XCRemoteSwiftPackageReference "aws-signer-v4" */,
 				11BE8CDE2855D4410088F261 /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
+				11CE41A528665D65000A15EA /* XCRemoteSwiftPackageReference "web3swift" */,
 			);
 			productRefGroup = 11D2572228444C790028E2B4 /* Products */;
 			projectDirPath = "";
@@ -655,7 +657,7 @@
 				kind = branch;
 			};
 		};
-		11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */ = {
+		11CE41A528665D65000A15EA /* XCRemoteSwiftPackageReference "web3swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skywinder/web3swift";
 			requirement = {
@@ -676,9 +678,9 @@
 			package = 11BE8CDE2855D4410088F261 /* XCRemoteSwiftPackageReference "WalletConnectSwift" */;
 			productName = WalletConnectSwift;
 		};
-		11ED5A882846C1E600F0D61D /* web3swift */ = {
+		11CE41A628665D66000A15EA /* web3swift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 11ED5A872846C1E600F0D61D /* XCRemoteSwiftPackageReference "web3swift" */;
+			package = 11CE41A528665D65000A15EA /* XCRemoteSwiftPackageReference "web3swift" */;
 			productName = web3swift;
 		};
 /* End XCSwiftPackageProductDependency section */

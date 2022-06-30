@@ -65,7 +65,7 @@ struct NftListView: View {
                 selectedNft = nft
             } label: {
                 HStack {
-                    Text(nft.meta?.name ?? "Unnamed image")
+                    Text(nft.data.name)
                         .foregroundColor(Colors.mainGreen)
                         .font(.custom("rubik-bold", size: 17))
                     Spacer()

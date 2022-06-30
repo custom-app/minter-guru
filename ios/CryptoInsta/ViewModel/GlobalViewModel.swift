@@ -133,7 +133,9 @@ class GlobalViewModel: ObservableObject {
                                            properties: MetaProperties(
                                             id: "1",
                                             imageName: filename))
-                        self.uploadMetaToIpfs(meta: meta, filename: "\(filename)_meta.json")
+                        self.uploadMetaToIpfs(meta: meta,
+                                              filename: "\(filename)_meta.json",
+                                              filebaseImageName: "\(filename).jpg")
                     }
                 }
             }
@@ -147,7 +149,7 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func uploadMetaToIpfs(meta: NftMeta, filename: String) {
+    func uploadMetaToIpfs(meta: NftMeta, filename: String, filebaseImageName: String) {
         print("uploading meta to ipfs")
         DispatchQueue.global(qos: .userInitiated).async { [self] in
             HttpRequester.shared.uploadMetaToFilebase(meta: meta, filename: filename) { cid, error in
@@ -166,7 +168,9 @@ class GlobalViewModel: ObservableObject {
                             self.mintedPictureCollection = self.pickedCollectionName
                         }
                         self.publicMint(metaUrl: "ipfs://\(cid)",
-                                  nftData: NftData(name: self.mintedPictureName, createDate: Date().timestamp()))
+                                  nftData: NftData(name: self.mintedPictureName,
+                                                   createDate: Date().timestamp(),
+                                                   filebaseName: filebaseImageName))
                     }
                 }
             }
@@ -181,33 +185,64 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func loadNftMeta() {
-        for nft in nftList {
-            if let url = URL(string: Tools.ipfsLinkToHttp(ipfsLink: nft.metaUrl)) {
-                HttpRequester.shared.loadMeta(url: url) { [self] meta, error in
-                    if error != nil {
-                        //TODO: handle error
-                        print("error getting meta: \(error)")
-                    } else if let meta = meta {
-                        DispatchQueue.main.async {
-                            if let index = self.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                                withAnimation {
-                                    self.nftList[index].meta = meta
-                                }
+    func loadNftMeta(nft: Nft, loadImageAfter: Bool = false) {
+        if let url = URL(string: Tools.ipfsLinkToHttp(ipfsLink: nft.metaUrl)) {
+            HttpRequester.shared.loadMeta(url: url) { [self] meta, error in
+                if error != nil {
+                    //TODO: handle error
+                    print("error getting meta: \(error)")
+                } else if let meta = meta {
+                    DispatchQueue.main.async {
+                        if let index = self.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                            withAnimation {
+                                self.nftList[index].meta = meta
+                            }
+                            if loadImageAfter {
+                                self.loadImageFromIpfs(meta: meta, tokenId: nft.id)
                             }
                         }
-                    } else {
-                        //should never happen
-                        print("got nil meta w/o error")
                     }
+                } else {
+                    //should never happen
+                    print("got nil meta w/o error")
                 }
             }
         }
     }
     
-    func loadImage(nft: Nft) {
+    func loadImageFromIpfs(meta: NftMeta, tokenId: Int) {
+        print("loading image from ipfs")
         DispatchQueue.global(qos: .userInitiated).async {
-            if let meta = nft.meta, let url = URL(string: Tools.formFilebaseLink(filename: "\(meta.properties.imageName).jpg")) {
+            if let url = URL(string: meta.httpImageLink()) {
+                URLSession.shared.dataTask(with: url) { [self] data, response, error in
+                    print("got image response: \(error)")
+                    guard error == nil, let data = data else {
+                        //TODO: handle error
+                        return
+                    }
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        print("searching index")
+                        if let index = self.nftList.firstIndex(where: { $0.id == tokenId}) {
+                            print("index found")
+                            withAnimation {
+                                self.nftList[index].image = image
+                            }
+                        }
+                    }
+                }
+                .resume()
+            } else {
+                //TODO: handle error
+            }
+        }
+    }
+    
+    func loadImageFromFilebase(nft: Nft) {
+        print("loading image from filebase")
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let filebaseName = nft.data.filebaseName,
+                let url = URL(string: Tools.formFilebaseLink(filename: filebaseName)) {
                 URLSession.shared.dataTask(with: url) { [self] data, response, error in
                     print("got image response: \(error)")
                     guard error == nil, let data = data else {
@@ -261,11 +296,12 @@ class GlobalViewModel: ObservableObject {
                     print("get public tokens error: \(error)")
                     //TODO: handle error?
                 } else {
-                    print("got public tokens count: \(tokens.count)")
                     print("got public tokens: \(tokens)")
-                    withAnimation {
-                        self?.nftList = tokens
-                        self?.nftListLoaded = true
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self?.nftList = tokens
+                            self?.nftListLoaded = true
+                        }
                     }
                 }
             }
@@ -276,7 +312,7 @@ class GlobalViewModel: ObservableObject {
         do {
             let data = try JSONEncoder().encode(nftData)
             guard let data = web3.mintData(version: BigUInt(Constants.currentVersion),
-                                           id: 0,
+                                           id: 1,
                                            metaUrl: metaUrl,
                                            data: data) else {
                 //TODO: handle error

@@ -125,7 +125,7 @@ class Web3Worker: ObservableObject {
                         transactionOptions: options)!
                     let result = try tx.call()
                     
-                    print("Got public tokens response:\n\(result)")
+//                    print("Got public tokens response:\n\(result)")
                     if let success = result["_success"] as? Bool, !success {
                         DispatchQueue.main.async {
                             onResult([], InternalError.unsuccessfullСontractRead(description: "get public tokens: \(result)"))
@@ -133,8 +133,7 @@ class Web3Worker: ObservableObject {
                     } else {
                         let collections = result["0"] as! [[AnyObject]]
                         let tokens = result["1"] as! [[[AnyObject]]]
-                        print("tokens: \(tokens)")
-                        print("token: \(tokens[0])")
+//                        print("tokens: \(tokens)")
                         let collectionsData = try parser.parsePublicCollections(collections: collections)
                         let tokensData = try parser.parseTokens(tokens: tokens)
                         var nfts: [Nft] = []

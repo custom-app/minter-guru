@@ -26,7 +26,9 @@ struct Nft: Identifiable, Equatable {
         return Nft(id: 0,
                    metaUrl: "",
                    contractAddress: "",
-                   data: NftData(name: "", createDate: 0),
+                   data: NftData(name: "",
+                                 createDate: 0,
+                                 filebaseName: nil),
                    isPublicCollection: false)
     }
 }

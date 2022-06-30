@@ -65,8 +65,15 @@ struct NftInfoSheet: View {
                     .padding(.horizontal, 26)
                     .padding(.top, 25)
                     .onAppear {
-                        if nft.image == nil {
-                            globalVm.loadImage(nft: nft)
+                        if nft.meta == nil {
+                            var loadImageFromIpfs = false
+                            if nft.image == nil && nft.data.filebaseName == nil {
+                                loadImageFromIpfs = true
+                            }
+                            globalVm.loadNftMeta(nft: nft, loadImageAfter: loadImageFromIpfs)
+                        }
+                        if let filebaseName = nft.data.filebaseName, !filebaseName.isEmpty, nft.image == nil {
+                            globalVm.loadImageFromFilebase(nft: nft)
                         }
                     }
                     
