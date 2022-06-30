@@ -10,6 +10,7 @@ import SwiftUI
 import PhotosUI
 import WalletConnectSwift
 import BigInt
+import Combine
 
 class GlobalViewModel: ObservableObject {
     
@@ -71,6 +72,11 @@ class GlobalViewModel: ObservableObject {
     var nftList: [Nft] = []
     @Published
     var nftListLoaded = false
+    
+    private var observingTokensCount = false
+    private var countRequestTimer: AnyCancellable?
+    private let countUpdateInterval: Double = 1
+    private var lastTokensCount: Int?
     
     var isPassBought: Bool {
         return true
@@ -270,6 +276,7 @@ class GlobalViewModel: ObservableObject {
     // Web3 calls
     
     func getPublicTokensCount() {
+        print("requesting tokens count")
         if let address = walletAccount {
             web3.getPublicTokensCount(address: address) { [weak self] count, error in
                 if let error = error {
@@ -277,12 +284,19 @@ class GlobalViewModel: ObservableObject {
                     //TODO: handle error?
                 } else {
                     print("got public tokens count: \(count)")
-                    withAnimation {
-                        self?.publicTokensCount = Int(count)
-                        if count == 0 {
-                            self?.nftListLoaded = true
+                    if let observing = self?.observingTokensCount, let lastCount = self?.lastTokensCount, observing {
+                        if count > lastCount {
+                            self?.getPublicTokens(page: 0)
                         }
-                        self?.getPublicTokens(page: 0)
+                    } else {
+                        withAnimation {
+                            self?.publicTokensCount = Int(count)
+                            if count == 0 {
+                                self?.nftListLoaded = true
+                            }
+                            self?.lastTokensCount = Int(count)
+                            self?.getPublicTokens(page: 0)
+                        }
                     }
                 }
             }
@@ -302,6 +316,13 @@ class GlobalViewModel: ObservableObject {
                             self?.nftList = tokens
                             self?.nftListLoaded = true
                         }
+                        if let observing = self?.observingTokensCount,
+                            let lastCount = self?.lastTokensCount,
+                           observing && tokens.count > lastCount {
+                            self?.stopObservingTokensCount()
+                            self?.showMintFinishedSheet = true
+                            self?.mintInProgress = false
+                        }
                     }
                 }
             }
@@ -312,7 +333,7 @@ class GlobalViewModel: ObservableObject {
         do {
             let data = try JSONEncoder().encode(nftData)
             guard let data = web3.mintData(version: BigUInt(Constants.currentVersion),
-                                           id: 1,
+                                           id: 3,
                                            metaUrl: metaUrl,
                                            data: data) else {
                 //TODO: handle error
@@ -351,10 +372,8 @@ class GlobalViewModel: ObservableObject {
                     }
                 }
                 if label == "mint" {
-                    DispatchQueue.main.async {
-                        self?.showMintFinishedSheet = true
-                        self?.mintInProgress = false
-                    }
+                    //TODO: handle error
+                    self?.startObservingTokensCount()
                 }
             }
             print("sending tx: \(label)")
@@ -366,5 +385,23 @@ class GlobalViewModel: ObservableObject {
             print("error sending tx: \(error)")
             //TODO: handle error
         }
+    }
+    
+    func startObservingTokensCount() {
+        countRequestTimer?.cancel()
+        observingTokensCount = true
+        countRequestTimer = Timer.publish(every: countUpdateInterval,
+                              tolerance: countUpdateInterval/2,
+                              on: .main,
+                              in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.getPublicTokensCount()
+        }
+    }
+    
+    func stopObservingTokensCount() {
+        observingTokensCount = false
+        countRequestTimer?.cancel()
     }
 }
