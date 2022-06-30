@@ -148,4 +148,104 @@ describe("PublicCollectionRouter single version", async () => {
   });
 });
 
-describe("PublicCollectionRouter multiple versions", async () => {});
+describe("PublicCollectionRouter multiple versions", async () => {
+  let accounts: Signer[];
+  let collectionV1: PublicCollection;
+  let collectionV2: PublicCollection;
+  let router: PublicCollectionsRouter;
+
+  before(async () => {
+    accounts = await ethers.getSigners();
+    const factory = new PublicCollection__factory(accounts[0]);
+    const impl: PublicCollection = await factory.deploy();
+
+    const routerFactory = new PublicCollectionsRouter__factory(accounts[0]);
+    router = await routerFactory.deploy(impl.address);
+  });
+
+  it("create clone should be successful", async () => {
+    const salt = "0x" + genRanHex(64);
+    const collectionAddress: string = await router
+      .connect(accounts[0])
+      .predictDeterministicAddress(salt);
+    const factory = new PublicCollection__factory(accounts[0]);
+    await router
+      .connect(accounts[0])
+      .createCollectionClone(salt, "test", "TEST");
+    collectionV1 = factory.attach(collectionAddress);
+  });
+
+  it("set implementation and clone should be successful", async () => {
+    const factory = new PublicCollection__factory(accounts[0]);
+    const implV2: PublicCollection = await factory.deploy();
+    await router.setImplementation(implV2.address);
+    const salt = "0x" + genRanHex(64);
+    const collectionAddress: string = await router
+      .connect(accounts[0])
+      .predictDeterministicAddress(salt);
+    await router
+      .connect(accounts[0])
+      .createCollectionClone(salt, "test", "TEST");
+    collectionV2 = factory.attach(collectionAddress);
+  });
+
+  it("mint should be successful", async () => {
+    const txV1 = await router
+      .connect(accounts[1])
+      .mint(BN.from(0), BN.from(0), "kek", "0x10");
+    expect(txV1)
+      .to.emit("PublicCollectionsRouter", "PublicMint")
+      .withArgs(
+        collectionV1.address,
+        await accounts[1].getAddress(),
+        BN.from(0)
+      );
+
+    const txV2 = await router
+      .connect(accounts[1])
+      .mint(BN.from(1), BN.from(0), "kekes", "0x20");
+    expect(txV2)
+      .to.emit("PublicCollectionsRouter", "PublicMint")
+      .withArgs(
+        collectionV2.address,
+        await accounts[1].getAddress(),
+        BN.from(0)
+      );
+  });
+
+  it("full token list should be correct", async () => {
+    await checkCollectionsList(
+      router,
+      accounts[1],
+      0,
+      20,
+      [
+        [collectionV1.address, BN.from(0)],
+        [collectionV2.address, BN.from(1)],
+      ],
+      [[[BN.from(0), "kek", "0x10"]], [[BN.from(0), "kekes", "0x20"]]],
+      2
+    );
+  });
+
+  it("two lists should be correct", async () => {
+    await checkCollectionsList(
+      router,
+      accounts[1],
+      0,
+      1,
+      [[collectionV1.address, BN.from(0)]],
+      [[[BN.from(0), "kek", "0x10"]]],
+      2
+    );
+    await checkCollectionsList(
+      router,
+      accounts[1],
+      1,
+      1,
+      [[collectionV2.address, BN.from(1)]],
+      [[[BN.from(0), "kekes", "0x20"]]],
+      2
+    );
+  });
+});
