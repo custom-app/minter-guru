@@ -63,7 +63,7 @@ describe("Private collection", async () => {
     const collections = await accessTokenInstance
       .connect(accounts[4])
       .getSelfCollections(BN.from(0), BN.from(10));
-    expect(collections).deep.eq([[], BN.from(0)]);
+    expect(collections).deep.eq([[], []]);
   });
 
   it("buy should be successful", async () => {
@@ -93,7 +93,7 @@ describe("Private collection", async () => {
       .getSelfCollections(BN.from(0), BN.from(10));
     expect(collections).deep.eq([
       [[boughtCollection.address, "0xaa"]],
-      BN.from(1),
+      [BN.from(0)],
     ]);
   });
 
@@ -115,5 +115,22 @@ describe("Private collection", async () => {
       .connect(accounts[0])
       .getAllTokens(BN.from(0), BN.from(10));
     expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]], BN.from(1)]);
+  });
+
+  it("self collections should be not empty after mint", async () => {
+    const collections = await accessTokenInstance
+      .connect(accounts[4])
+      .getSelfCollections(BN.from(0), BN.from(10));
+    expect(collections).deep.eq([
+      [[boughtCollection.address, "0xaa"]],
+      [BN.from(1)],
+    ]);
+  });
+
+  it("self tokens should be not empty after mint", async () => {
+    const tokens = await accessTokenInstance
+      .connect(accounts[4])
+      .getSelfTokens([BN.from(0)], [BN.from(0)], [BN.from(10)]);
+    expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]]]);
   });
 });

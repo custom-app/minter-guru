@@ -117,10 +117,13 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
     }
 
     /// @dev function for retrieving collections list
+    /// @param page - page number (starting from zero)
+    /// @param size - size of the page
+    /// @return collection list and owned tokens count for each collection
     function getSelfCollections(
         uint256 page,
         uint256 size
-    ) external view returns (PrivateCollectionData[] memory, uint256) {
+    ) external view returns (PrivateCollectionData[] memory, uint256[] memory) {
         require(size <= 1000, "CollectionsAccessToken: size must be 1000 or lower");
         uint256 total = ownedCollections[_msgSender()].length();
         require((total == 0 && page == 0) || page * size < total, "CollectionsAccessToken: out of bounds");
@@ -129,11 +132,51 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
             resSize = total - page * size;
         }
         PrivateCollectionData[] memory res = new PrivateCollectionData[](resSize);
+        uint256[] memory counts = new uint256[](resSize);
         for (uint256 i = page * size; i < page * size + resSize; i++) {
             uint256 tokenId = uint256(ownedCollections[_msgSender()].at(i));
             res[i - page * size] = PrivateCollectionData(tokenCollections[tokenId], tokenCollections[tokenId].data());
+            counts[i - page*size] = tokenCollections[tokenId].balanceOf(_msgSender());
         }
-        return (res, total);
+        return (res, counts);
+    }
+
+    /// @dev function for retrieving token lists
+    /// @param ids - ids of tokens
+    /// @param pages - page numbers (starting from zero)
+    /// @param sizes - sizes of the pages
+    /// @return owned token lists
+    function getSelfTokens(
+        uint256[] calldata ids,
+        uint256[] calldata pages,
+        uint256[] calldata sizes
+    ) external view returns (MinterCollection.TokenData[][] memory) {
+        require(ids.length <= 1000, "CollectionsAccessToken: collections quantity must be 1000 or lower");
+        require(ids.length == pages.length && pages.length == sizes.length, "CollectionsAccessToken: lengths unmatch");
+        MinterCollection.TokenData[][] memory res = new MinterCollection.TokenData[][](ids.length);
+        uint256 realSize = 0;
+        uint256[] memory resSizes = new uint256[](ids.length);
+        for (uint256 i = 0; i < ids.length; i++) {
+            require(address(tokenCollections[ids[i]]) != address(0), "CollectionsAccessToken: collection doesn't exist");
+            uint256 total = tokenCollections[ids[i]].balanceOf(_msgSender());
+            require((total == 0 && pages[i] == 0) || pages[i] * sizes[i] < total, "CollectionsAccessToken: out of bounds");
+            resSizes[i] = sizes[i];
+            if ((pages[i] + 1) * sizes[i] > total) {
+                resSizes[i] = total - pages[i] * sizes[i];
+            }
+            realSize += resSizes[i];
+            res[i] = new MinterCollection.TokenData[](resSizes[i]);
+        }
+        require(realSize <= 1000, "CollectionsAccessToken: tokens quantity must be 1000 or lower");
+        for (uint256 i = 0; i < ids.length; i++) {
+            PrivateCollection collection = tokenCollections[ids[i]];
+            for (uint256 j = pages[i] * sizes[i]; j < pages[i] * sizes[i] + resSizes[i]; j++) {
+                uint256 tokenId = collection.tokenOfOwnerByIndex(_msgSender(), j);
+                res[i][j - pages[i] * sizes[i]] = MinterCollection.TokenData(tokenId,
+                    collection.tokenUris(tokenId), collection.tokenData(tokenId));
+            }
+        }
+        return res;
     }
 
     /// @dev inheritance conflict solving

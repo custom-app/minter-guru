@@ -84,6 +84,6 @@ contract PrivateCollection is MinterCollection {
         uint256 tokenId
     ) internal virtual override {
         super._afterTokenTransfer(from, to, tokenId);
-        accessToken.updateCollectionIndex(from, to, tokenId);
+        accessToken.updateCollectionIndex(from, to, accessTokenId);
     }
 }
