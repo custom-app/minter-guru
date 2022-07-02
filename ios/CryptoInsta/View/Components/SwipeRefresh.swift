@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PullToRefreshView: View {
+struct SwipeRefresh: View {
     private static let minRefreshTimeInterval = TimeInterval(0.2)
     private static let triggerHeight = CGFloat(90)
     private static let indicatorHeight = CGFloat(60)

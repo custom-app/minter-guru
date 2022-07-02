@@ -18,7 +18,7 @@ struct GalleryContainer: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
-                PullToRefreshView(bg: .black.opacity(0), fg: .black) {
+                SwipeRefresh(bg: .black.opacity(0), fg: .black) {
                     globalVm.refreshNfts()
                 }
                 

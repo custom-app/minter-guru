@@ -15,12 +15,17 @@ struct MintContainer: View {
     @State
     var showPhotoPicker = false
     
+    @State
+    var creatingNewCollection = false
+    
+    @State
+    var newCollectionName = ""
     
     var body: some View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
                 
-                PullToRefreshView(bg: .black.opacity(0), fg: .black) {
+                SwipeRefresh(bg: .black.opacity(0), fg: .black) {
                     if globalVm.mintInProgress {
                         globalVm.refreshNfts()
                     } else {
@@ -156,12 +161,74 @@ struct MintContainer: View {
                         CollectionMenu()
                             .padding(.top, 10)
                         
-                        
                         if globalVm.pickedPrivateCollection {
-                            Text("Choose a Private Collection")
-                                .foregroundColor(Colors.mainGrey)
-                                .font(.custom("rubik-bold", size: 17))
-                                .padding(.top, 25)
+                            VStack(spacing: 0) {
+                                HStack(spacing: 10) {
+                                    Text(creatingNewCollection ? "Enter collection name" : "Select a Private collection")
+                                        .foregroundColor(Colors.mainGrey)
+                                        .font(.custom("rubik-bold", size: 16))
+                                    
+                                    Button {
+                                        if creatingNewCollection {
+                                            withAnimation {
+                                                creatingNewCollection = false
+                                            }
+                                        } else {
+                                            withAnimation {
+                                                creatingNewCollection = true
+                                            }
+                                        }
+                                    } label: {
+                                        Text(creatingNewCollection ? "Cancel" : "Create")
+                                            .foregroundColor(Colors.mainGreen)
+                                            .font(.custom("rubik-bold", size: 16))
+                                    }
+                                }
+                                if creatingNewCollection {
+                                    ZStack {
+                                        TextField("", text: $newCollectionName)
+                                            .font(.custom("rubik-bold", size: 17))
+                                            .placeholder(when: newCollectionName.isEmpty) {
+                                                HStack {
+                                                    Text("New collection's name")
+                                                        .font(.custom("rubik-bold", size: 17))
+                                                        .foregroundColor(Colors.mainGrey)
+                                                    Spacer()
+                                                }
+                                            }
+                                            .foregroundColor(Colors.mainBlack)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                            .padding(.horizontal, 14)
+                                            .padding(.vertical, 13)
+                                            .padding(.trailing, 35)
+                                            .background(Colors.mainWhite)
+                                            .cornerRadius(32)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 32)
+                                                    .stroke(Colors.mainGreen, lineWidth: 2)
+                                            )
+                                            .overlay(
+                                                HStack {
+                                                    Spacer()
+                                                    Button {
+
+                                                    } label: {
+                                                        Image("ic_ok")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 24, height: 24)
+                                                    }
+                                                    .padding(.trailing, 16)
+                                                }
+                                            )
+                                            .padding(.horizontal, 26)
+                                            .padding(.top, 25)
+//                                        }
+                                    }
+                                }
+                            }
+                            .padding(.top, 25)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
