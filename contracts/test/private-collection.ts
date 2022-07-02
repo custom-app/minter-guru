@@ -3,15 +3,15 @@ import { ethers } from "hardhat";
 import { BigNumber as BN, Signer } from "ethers";
 // eslint-disable-next-line camelcase,node/no-missing-import
 import {
-  CollectionsAccessToken,
+  MinterGuruCollectionsAccessToken,
   // eslint-disable-next-line camelcase
-  CollectionsAccessToken__factory,
-  InstaToken,
+  MinterGuruCollectionsAccessToken__factory,
+  MinterGuruToken,
   // eslint-disable-next-line camelcase
-  InstaToken__factory,
-  PrivateCollection,
+  MinterGuruToken__factory,
+  MinterGuruPrivateCollection,
   // eslint-disable-next-line camelcase
-  PrivateCollection__factory,
+  MinterGuruPrivateCollection__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
 
@@ -22,17 +22,19 @@ const genRanHex = (size: number) =>
 
 describe("Private collection", async () => {
   let accounts: Signer[];
-  let accessTokenInstance: CollectionsAccessToken;
-  let instaToken: InstaToken;
-  let boughtCollection: PrivateCollection;
+  let accessTokenInstance: MinterGuruCollectionsAccessToken;
+  let instaToken: MinterGuruToken;
+  let boughtCollection: MinterGuruPrivateCollection;
 
   before(async () => {
     accounts = await ethers.getSigners();
 
-    const collectionFactory = new PrivateCollection__factory(accounts[0]);
+    const collectionFactory = new MinterGuruPrivateCollection__factory(
+      accounts[0]
+    );
     const privateCollection = await collectionFactory.deploy();
 
-    const instaTokenFactory = new InstaToken__factory(accounts[0]);
+    const instaTokenFactory = new MinterGuruToken__factory(accounts[0]);
     instaToken = await instaTokenFactory.deploy(
       BN.from(10000),
       BN.from(3000),
@@ -43,7 +45,9 @@ describe("Private collection", async () => {
       await accounts[3].getAddress()
     );
 
-    const accessTokenFactory = new CollectionsAccessToken__factory(accounts[0]);
+    const accessTokenFactory = new MinterGuruCollectionsAccessToken__factory(
+      accounts[0]
+    );
     accessTokenInstance = await accessTokenFactory.deploy(
       "test",
       "test",
@@ -68,7 +72,9 @@ describe("Private collection", async () => {
 
   it("buy should be successful", async () => {
     const salt = "0x" + genRanHex(64);
-    const collectionFactory = new PrivateCollection__factory(accounts[0]);
+    const collectionFactory = new MinterGuruPrivateCollection__factory(
+      accounts[0]
+    );
     boughtCollection = collectionFactory.attach(
       await accessTokenInstance.predictDeterministicAddress(salt)
     );
@@ -132,5 +138,23 @@ describe("Private collection", async () => {
       .connect(accounts[4])
       .getSelfTokens([BN.from(0)], [BN.from(0)], [BN.from(10)]);
     expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]]]);
+  });
+
+  it("mint without id should be successful", async () => {
+    await boughtCollection
+      .connect(accounts[4])
+      .mintWithoutId(await accounts[4].getAddress(), "meta2", "0x3322");
+  });
+
+  it("self tokens should be correct after second", async () => {
+    const tokens = await accessTokenInstance
+      .connect(accounts[4])
+      .getSelfTokens([BN.from(0)], [BN.from(0)], [BN.from(10)]);
+    expect(tokens).deep.eq([
+      [
+        [BN.from(0), "meta", "0x33"],
+        [BN.from(1), "meta2", "0x3322"],
+      ],
+    ]);
   });
 });

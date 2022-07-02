@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
-import "./MinterCollection.sol";
+import "./MinterGuruBaseCollection.sol";
 
-/// @dev PublicCollection - collection where everyone can mint their photos
-contract PublicCollection is MinterCollection {
+/// @dev MinterGuruPublicCollection - collection where everyone can mint their photos
+contract MinterGuruPublicCollection is MinterGuruBaseCollection {
     uint256 public version;  // contract version
 
     /// @dev Initialize function
@@ -33,6 +33,20 @@ contract PublicCollection is MinterCollection {
         bytes memory data
     ) external {
         _mint(to, id, metaUri, data);
+    }
+
+    /// @dev Mint function without id. Equivalent to mint(to, tokensCount(), metaUri, _data)
+    /// @param to - token receiver
+    /// @param metaUri - metadata uri
+    /// @param _data - additional token data
+    function mintWithoutId(
+        address to,
+        string memory metaUri,
+        bytes memory _data
+    ) external returns (uint256) {
+        uint256 id = tokensCount;
+        _mint(to, id, metaUri, _data);
+        return id;
     }
 
     /// @dev burn function

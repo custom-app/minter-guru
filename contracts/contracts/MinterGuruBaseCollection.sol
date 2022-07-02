@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 
 /// @dev MinterCollection is the base contract with token list getter implementations
-contract MinterCollection is ERC721EnumerableUpgradeable {
+contract MinterGuruBaseCollection is ERC721EnumerableUpgradeable {
     /// @dev TokenData - struct with basic token data
     struct TokenData {
         uint256 id;             // token id

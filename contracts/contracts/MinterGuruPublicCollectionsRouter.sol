@@ -3,32 +3,32 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
-import "./PublicCollection.sol";
+import "./MinterGuruPublicCollection.sol";
 
-/// @dev PublicCollectionsRouter is contract for minting photos to public collections
-contract PublicCollectionsRouter is Ownable {
+/// @dev MinterGuruPublicCollectionsRouter is contract for minting photos to public collections
+contract MinterGuruPublicCollectionsRouter is Ownable {
     using Clones for address;
 
     /// @dev PublicCollectionData - public collection data
     struct PublicCollectionData {
-        PublicCollection contractAddress;        // address of contract
+        MinterGuruPublicCollection contractAddress;        // address of contract
         uint256 version;                         // version
     }
 
     /// @dev emitted when new public collection is cloned
-    event CollectionCreated(PublicCollection indexed instance, uint256 indexed version);
+    event CollectionCreated(MinterGuruPublicCollection indexed instance, uint256 indexed version);
 
     /// @dev emitted when new photo is minted
-    event PublicMint(PublicCollection indexed collection, address indexed owner, uint256 indexed id);
+    event PublicMint(MinterGuruPublicCollection indexed collection, address indexed owner, uint256 indexed id);
 
-    PublicCollection public implementation;                        // public collection contract implementation for cloning
-    mapping(uint256 => PublicCollection) public collections;       // current public collections for each version
-    PublicCollection[] public allCollections;                      // list of all cloned collections
+    MinterGuruPublicCollection public implementation;                        // public collection contract implementation for cloning
+    mapping(uint256 => MinterGuruPublicCollection) public collections;       // current public collections for each version
+    MinterGuruPublicCollection[] public allCollections;                      // list of all cloned collections
     uint256 public currentVersion = 0;                             // current version
 
     /// @dev constructor
     /// @param _implementation - address of PublicCollection contract for cloning
-    constructor(PublicCollection _implementation) {
+    constructor(MinterGuruPublicCollection _implementation) {
         implementation = _implementation;
     }
 
@@ -44,10 +44,25 @@ contract PublicCollectionsRouter is Ownable {
         bytes memory data
     ) external {
         require(allCollections.length > 0, "PublicCollectionsRouter: there are no collections to mint");
-        PublicCollection collection = collections[version];
+        MinterGuruPublicCollection collection = collections[version];
         require(address(collection) != address(0), "PublicCollectionsRouter: unknown version");
-        require(collection.tokensCount() == id, "PublicCollectionsRouter: wrong id");
         collection.mint(_msgSender(), id, metaUri, data);
+        emit PublicMint(collection, _msgSender(), id);
+    }
+
+    /// @dev mint function. Equivalent to mint(version, collections[version].tokensCount(), metaUri, data)
+    /// @param version - collection version
+    /// @param metaUri - token metadata uri
+    /// @param data - additional data
+    function mintWithoutId(
+        uint256 version,
+        string memory metaUri,
+        bytes memory data
+    ) external {
+        require(allCollections.length > 0, "PublicCollectionsRouter: there are no collections to mint");
+        MinterGuruPublicCollection collection = collections[version];
+        require(address(collection) != address(0), "PublicCollectionsRouter: unknown version");
+        uint256 id = collection.mintWithoutId(_msgSender(), metaUri, data);
         emit PublicMint(collection, _msgSender(), id);
     }
 
@@ -60,7 +75,7 @@ contract PublicCollectionsRouter is Ownable {
         string memory name,
         string memory symbol
     ) external onlyOwner {
-        PublicCollection instance = PublicCollection(address(implementation).cloneDeterministic(salt));
+        MinterGuruPublicCollection instance = MinterGuruPublicCollection(address(implementation).cloneDeterministic(salt));
         instance.initialize(name, symbol, currentVersion);
         collections[currentVersion] = instance;
         allCollections.push() = instance;
@@ -69,7 +84,7 @@ contract PublicCollectionsRouter is Ownable {
 
     /// @dev function for changing private collection implementation
     /// @param _implementation - address of new instance of private collection
-    function setImplementation(PublicCollection _implementation) external onlyOwner {
+    function setImplementation(MinterGuruPublicCollection _implementation) external onlyOwner {
         implementation = _implementation;
         currentVersion++;
     }
@@ -105,7 +120,7 @@ contract PublicCollectionsRouter is Ownable {
         uint256 size
     ) external view returns (
         PublicCollectionData[] memory collectionsRes,
-        MinterCollection.TokenData[][] memory tokensRes,
+        MinterGuruBaseCollection.TokenData[][] memory tokensRes,
         uint256 total
     ) {
         require(size <= 1000, "PublicCollectionsRouter: size must be 1000 or lower");
@@ -120,7 +135,7 @@ contract PublicCollectionsRouter is Ownable {
         if ((page + 1) * size > _total) {
             resSize = _total - page * size;
         }
-        MinterCollection.TokenData[][] memory res = new MinterCollection.TokenData[][](counts.length);
+        MinterGuruBaseCollection.TokenData[][] memory res = new MinterGuruBaseCollection.TokenData[][](counts.length);
 
         for (uint256 i = 0; i < counts.length; i++) {
             if (counts[i] > 0) {
@@ -130,10 +145,10 @@ contract PublicCollectionsRouter is Ownable {
                     if (current + counts[i] > (page + 1) * size) {
                         collectionListSize = resSize - current;
                     }
-                    res[i] = new MinterCollection.TokenData[](collectionListSize);
+                    res[i] = new MinterGuruBaseCollection.TokenData[](collectionListSize);
                     for (uint256 j = 0; j < collectionListSize; j++) {
                         uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), j);
-                        res[i][j] = MinterCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
+                        res[i][j] = MinterGuruBaseCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
                         ind++;
                     }
                 } else if (page * size >= current && page * size < current + counts[i]) {
@@ -142,10 +157,10 @@ contract PublicCollectionsRouter is Ownable {
                     if (page * size > current) {
                         collectionListSize = current + counts[i] - page * size;
                     }
-                    res[i] = new MinterCollection.TokenData[](collectionListSize);
+                    res[i] = new MinterGuruBaseCollection.TokenData[](collectionListSize);
                     for (uint256 j = 0; j < collectionListSize; j++) {
                         uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), counts[i] - collectionListSize + j);
-                        res[i][j] = MinterCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
+                        res[i][j] = MinterGuruBaseCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
                         ind++;
                     }
                 }
@@ -184,11 +199,11 @@ contract PublicCollectionsRouter is Ownable {
     /// @return total - owned tokens count
     function _buildSelfTokensResult(
         bool[] memory mask,
-        MinterCollection.TokenData[][] memory tokens,
+        MinterGuruBaseCollection.TokenData[][] memory tokens,
         uint256 _total
     ) internal view returns (
         PublicCollectionData[] memory collectionsRes,
-        MinterCollection.TokenData[][] memory tokensRes,
+        MinterGuruBaseCollection.TokenData[][] memory tokensRes,
         uint256 total
     ) {
         uint256 collectionsCount = 0;
@@ -198,7 +213,7 @@ contract PublicCollectionsRouter is Ownable {
             }
         }
         collectionsRes = new PublicCollectionData[](collectionsCount);
-        tokensRes = new MinterCollection.TokenData[][](collectionsCount);
+        tokensRes = new MinterGuruBaseCollection.TokenData[][](collectionsCount);
         uint256 index = 0;
         for (uint256 i = 0; i < mask.length; i++) {
             if (mask[i]) {

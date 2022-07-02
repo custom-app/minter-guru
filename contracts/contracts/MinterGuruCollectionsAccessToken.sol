@@ -6,31 +6,31 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-import "./InstaToken.sol";
-import "./PrivateCollection.sol";
+import "./MinterGuruToken.sol";
+import "./MinterGuruPrivateCollection.sol";
 
-/// @dev CollectionsAccessToken contract has 3 main functions
+/// @dev MinterGuruCollectionsAccessToken contract has 3 main functions
 /// 1. Factory of private collections.
 /// 2. Access control for private collections. Owner of access token of collection is owner of collection and vice versa.
 /// 3. Getter function for owned private collections or private collections with at least one owned item.
-contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
+contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
     using Clones for address;
     using Address for address;
     using EnumerableSet for EnumerableSet.Bytes32Set;
 
     /// @dev PrivateCollectionData - struct for collections list getter
     struct PrivateCollectionData {
-        PrivateCollection contractAddress;    // collection contract address
-        bytes data;                           // additional meta data of collection
+        MinterGuruPrivateCollection contractAddress;    // collection contract address
+        bytes data;                                   // additional meta data of collection
     }
 
     /// @dev CollectionPurchased - emitted when collection is purchased
     event CollectionPurchased(address indexed owner, address indexed collection, uint256 indexed tokenId);
 
-    mapping(uint256 => PrivateCollection) public tokenCollections;              // mapping from access token id to collection
+    mapping(uint256 => MinterGuruPrivateCollection) public tokenCollections;      // mapping from access token id to collection
     uint256 public tokensCount;                                                 // count of collection
-    PrivateCollection public implementation;                                    // collection contract implementation for cloning
-    InstaToken public token;                                                    // token contract address
+    MinterGuruPrivateCollection public implementation;                            // collection contract implementation for cloning
+    MinterGuruToken public token;                                                 // token contract address
     uint256 public collectionPrice;                                             // price of collection
     mapping(address => EnumerableSet.Bytes32Set) private ownedCollections;      // sets of owned collections or collections in which at least one token owned
 
@@ -49,8 +49,8 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
     constructor(
         string memory name,
         string memory symbol,
-        InstaToken _token,
-        PrivateCollection _implementation,
+        MinterGuruToken _token,
+        MinterGuruPrivateCollection _implementation,
         uint256 _collectionPrice
     ) ERC721(name, symbol) {
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -74,8 +74,8 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256 tokenId = tokensCount;
         _mint(_msgSender(), tokenId);
         address instance = address(implementation).cloneDeterministic(salt);
-        tokenCollections[tokenId] = PrivateCollection(instance);
-        PrivateCollection(instance).initialize(name, symbol, this, tokenId, _msgSender(), data);
+        tokenCollections[tokenId] = MinterGuruPrivateCollection(instance);
+        MinterGuruPrivateCollection(instance).initialize(name, symbol, this, tokenId, _msgSender(), data);
         tokensCount++;
         emit CollectionPurchased(_msgSender(), instance, tokenId);
     }
@@ -94,7 +94,7 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
 
     /// @dev function for changing private collection implementation
     /// @param _implementation - address of new instance of private collection
-    function setImplementation(PrivateCollection _implementation) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setImplementation(MinterGuruPrivateCollection _implementation) external onlyRole(DEFAULT_ADMIN_ROLE) {
         implementation = _implementation;
     }
 
@@ -150,10 +150,10 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256[] calldata ids,
         uint256[] calldata pages,
         uint256[] calldata sizes
-    ) external view returns (MinterCollection.TokenData[][] memory) {
+    ) external view returns (MinterGuruBaseCollection.TokenData[][] memory) {
         require(ids.length <= 1000, "CollectionsAccessToken: collections quantity must be 1000 or lower");
         require(ids.length == pages.length && pages.length == sizes.length, "CollectionsAccessToken: lengths unmatch");
-        MinterCollection.TokenData[][] memory res = new MinterCollection.TokenData[][](ids.length);
+        MinterGuruBaseCollection.TokenData[][] memory res = new MinterGuruBaseCollection.TokenData[][](ids.length);
         uint256 realSize = 0;
         uint256[] memory resSizes = new uint256[](ids.length);
         for (uint256 i = 0; i < ids.length; i++) {
@@ -165,14 +165,14 @@ contract CollectionsAccessToken is ERC721Enumerable, AccessControl {
                 resSizes[i] = total - pages[i] * sizes[i];
             }
             realSize += resSizes[i];
-            res[i] = new MinterCollection.TokenData[](resSizes[i]);
+            res[i] = new MinterGuruBaseCollection.TokenData[](resSizes[i]);
         }
         require(realSize <= 1000, "CollectionsAccessToken: tokens quantity must be 1000 or lower");
         for (uint256 i = 0; i < ids.length; i++) {
-            PrivateCollection collection = tokenCollections[ids[i]];
+            MinterGuruPrivateCollection collection = tokenCollections[ids[i]];
             for (uint256 j = pages[i] * sizes[i]; j < pages[i] * sizes[i] + resSizes[i]; j++) {
                 uint256 tokenId = collection.tokenOfOwnerByIndex(_msgSender(), j);
-                res[i][j - pages[i] * sizes[i]] = MinterCollection.TokenData(tokenId,
+                res[i][j - pages[i] * sizes[i]] = MinterGuruBaseCollection.TokenData(tokenId,
                     collection.tokenUris(tokenId), collection.tokenData(tokenId));
             }
         }

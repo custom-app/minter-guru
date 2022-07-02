@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract InstaToken is AccessControl, ERC20 {
+contract MinterGuruToken is AccessControl, ERC20 {
     /// @dev VestingRecord - struct with vesting
     struct VestingRecord {
         address receiver;                    // receiver of vesting tokens

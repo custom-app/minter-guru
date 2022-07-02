@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract Faucet is AccessControl {
+contract MinterGuruFaucet is AccessControl {
     bytes32 constant FAUCET_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000001;
 
     uint256 public totalLimit;

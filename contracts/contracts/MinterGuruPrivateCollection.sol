@@ -2,15 +2,15 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
-import "./CollectionsAccessToken.sol";
-import "./MinterCollection.sol";
+import "./MinterGuruCollectionsAccessToken.sol";
+import "./MinterGuruBaseCollection.sol";
 
-/// @dev PrivateCollection - collection where only the owner can mint photos
-contract PrivateCollection is MinterCollection {
-    uint256 public accessTokenId;                      // access token id
-    CollectionsAccessToken public accessToken;         // Access token contract address
-    address public owner;                              // current owner. changed on access token transfers
-    bytes public data;                                 // collection additional data
+/// @dev MinterGuruPrivateCollection - collection where only the owner can mint photos
+contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
+    uint256 public accessTokenId;                              // access token id
+    MinterGuruCollectionsAccessToken public accessToken;         // Access token contract address
+    address public owner;                                      // current owner. changed on access token transfers
+    bytes public data;                                         // collection additional data
 
     /// @dev modifier for checking if call is from the access token contract
     modifier onlyAccessToken() {
@@ -34,7 +34,7 @@ contract PrivateCollection is MinterCollection {
     function initialize(
         string memory name,
         string memory symbol,
-        CollectionsAccessToken _accessToken,
+        MinterGuruCollectionsAccessToken _accessToken,
         uint256 _accessTokenId,
         address _owner,
         bytes memory _data
@@ -58,6 +58,20 @@ contract PrivateCollection is MinterCollection {
         bytes memory _data
     ) external onlyOwner {
         _mint(to, id, metaUri, _data);
+    }
+
+    /// @dev Mint function without id. Can called only by the owner. Equivalent to mint(to, tokensCount(), metaUri, _data)
+    /// @param to - token receiver
+    /// @param metaUri - metadata uri
+    /// @param _data - additional token data
+    function mintWithoutId(
+        address to,
+        string memory metaUri,
+        bytes memory _data
+    ) external onlyOwner returns (uint256) {
+        uint256 id = tokensCount;
+        _mint(to, id, metaUri, _data);
+        return id;
     }
 
     /// @dev burn function

@@ -3,12 +3,12 @@ import { ethers } from "hardhat";
 import { Signer, BigNumber as BN } from "ethers";
 // eslint-disable-next-line camelcase,node/no-missing-import
 import {
-  PublicCollection,
+  MinterGuruPublicCollection,
   // eslint-disable-next-line camelcase
-  PublicCollection__factory,
-  PublicCollectionsRouter,
+  MinterGuruPublicCollection__factory,
+  MinterGuruPublicCollectionsRouter,
   // eslint-disable-next-line camelcase
-  PublicCollectionsRouter__factory,
+  MinterGuruPublicCollectionsRouter__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
 
@@ -18,7 +18,7 @@ const genRanHex = (size: number) =>
     .join("");
 
 const checkCollectionsList = async (
-  router: PublicCollectionsRouter,
+  router: MinterGuruPublicCollectionsRouter,
   account: Signer,
   page: number,
   size: number,
@@ -36,15 +36,17 @@ const checkCollectionsList = async (
 
 describe("PublicCollectionRouter single version", async () => {
   let accounts: Signer[];
-  let collection: PublicCollection;
-  let router: PublicCollectionsRouter;
+  let collection: MinterGuruPublicCollection;
+  let router: MinterGuruPublicCollectionsRouter;
 
   before(async () => {
     accounts = await ethers.getSigners();
-    const factory = new PublicCollection__factory(accounts[0]);
-    const impl: PublicCollection = await factory.deploy();
+    const factory = new MinterGuruPublicCollection__factory(accounts[0]);
+    const impl: MinterGuruPublicCollection = await factory.deploy();
 
-    const routerFactory = new PublicCollectionsRouter__factory(accounts[0]);
+    const routerFactory = new MinterGuruPublicCollectionsRouter__factory(
+      accounts[0]
+    );
     router = await routerFactory.deploy(impl.address);
   });
 
@@ -53,7 +55,7 @@ describe("PublicCollectionRouter single version", async () => {
     const collectionAddress: string = await router
       .connect(accounts[0])
       .predictDeterministicAddress(salt);
-    const factory = new PublicCollection__factory(accounts[0]);
+    const factory = new MinterGuruPublicCollection__factory(accounts[0]);
     const cloneTx = await router
       .connect(accounts[0])
       .createCollectionClone(salt, "test", "TEST");
@@ -150,16 +152,18 @@ describe("PublicCollectionRouter single version", async () => {
 
 describe("PublicCollectionRouter multiple versions", async () => {
   let accounts: Signer[];
-  let collectionV1: PublicCollection;
-  let collectionV2: PublicCollection;
-  let router: PublicCollectionsRouter;
+  let collectionV1: MinterGuruPublicCollection;
+  let collectionV2: MinterGuruPublicCollection;
+  let router: MinterGuruPublicCollectionsRouter;
 
   before(async () => {
     accounts = await ethers.getSigners();
-    const factory = new PublicCollection__factory(accounts[0]);
-    const impl: PublicCollection = await factory.deploy();
+    const factory = new MinterGuruPublicCollection__factory(accounts[0]);
+    const impl: MinterGuruPublicCollection = await factory.deploy();
 
-    const routerFactory = new PublicCollectionsRouter__factory(accounts[0]);
+    const routerFactory = new MinterGuruPublicCollectionsRouter__factory(
+      accounts[0]
+    );
     router = await routerFactory.deploy(impl.address);
   });
 
@@ -168,7 +172,7 @@ describe("PublicCollectionRouter multiple versions", async () => {
     const collectionAddress: string = await router
       .connect(accounts[0])
       .predictDeterministicAddress(salt);
-    const factory = new PublicCollection__factory(accounts[0]);
+    const factory = new MinterGuruPublicCollection__factory(accounts[0]);
     await router
       .connect(accounts[0])
       .createCollectionClone(salt, "test", "TEST");
@@ -176,8 +180,8 @@ describe("PublicCollectionRouter multiple versions", async () => {
   });
 
   it("set implementation and clone should be successful", async () => {
-    const factory = new PublicCollection__factory(accounts[0]);
-    const implV2: PublicCollection = await factory.deploy();
+    const factory = new MinterGuruPublicCollection__factory(accounts[0]);
+    const implV2: MinterGuruPublicCollection = await factory.deploy();
     await router.setImplementation(implV2.address);
     const salt = "0x" + genRanHex(64);
     const collectionAddress: string = await router
@@ -189,10 +193,10 @@ describe("PublicCollectionRouter multiple versions", async () => {
     collectionV2 = factory.attach(collectionAddress);
   });
 
-  it("mint should be successful", async () => {
+  it("mint wihtout id should be successful", async () => {
     const txV1 = await router
       .connect(accounts[1])
-      .mint(BN.from(0), BN.from(0), "kek", "0x10");
+      .mintWithoutId(BN.from(0), "kek", "0x10");
     expect(txV1)
       .to.emit("PublicCollectionsRouter", "PublicMint")
       .withArgs(
