@@ -48,10 +48,11 @@ task("transfer", "Transfer ERC20 tokens")
     const multiplier = hre.ethers.BigNumber.from(10).pow(
       hre.ethers.BigNumber.from(18)
     );
-    await instance.transfer(
-      args.to,
-      hre.ethers.BigNumber.from(value).mul(multiplier)
-    );
+    console.log("sending ", value, "of ", args.contract, " to ", args.to);
+    const tx = await instance
+      .connect(accounts[1])
+      .transfer(args.to, hre.ethers.BigNumber.from(value).mul(multiplier));
+    console.log("transfer txid: ", tx.hash);
   });
 
 // You need to export an object to set up your config
