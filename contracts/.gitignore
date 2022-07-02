@@ -9,3 +9,6 @@ cache
 artifacts
 
 .mumbai-secret
+.mumbai-liquidity-secret
+.mumbai-vesting-secret
+.mumbai-events-secret

@@ -93,7 +93,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         address _liquidityAdmin,
         address _vestingAdmin,
         address _gameRewardAdmin
-    ) ERC20("", "") {
+    ) ERC20("MinterGuru", "MIGU") {
         require(_totalLimit == _liquidityAmount + _vestingAmount + _gameRewardAmount, ": wrong limits");
         totalLimit = _totalLimit;
         liquidityTotalAmount = _liquidityAmount;
