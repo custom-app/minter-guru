@@ -16,32 +16,46 @@ struct GalleryContainer: View {
     var selectedNft: Nft?
     
     var body: some View {
-        ScrollView(showsIndicators: true) {
-            VStack(spacing: 0) {
-                Text("Nft Album")
-                    .foregroundColor(Colors.mainBlack)
-                    .font(.custom("rubik-bold", size: 28))
-                    .padding(.top, 10)
-                
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach($globalVm.nftList) { nft in
-                        let last = globalVm.nftList.last ?? Nft.empty()
-                        NftListView(nft: nft,
-                                    selectedNft: $selectedNft,
-                                    isLast: last == nft.wrappedValue)
-                    }
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: true) {
+                PullToRefreshView(bg: .black.opacity(0), fg: .black) {
+                    globalVm.refreshNfts()
                 }
-                .padding(20)
-                .background(Colors.mainWhite)
-                .cornerRadius(30, corners: [.topLeft, .bottomRight])
-                .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
-                .padding(.top, 25)
-                .padding(.horizontal, 26)
-                .sheet(item: $selectedNft,
-                       onDismiss: { selectedNft = nil }) { nft in
-                    if let index = globalVm.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
-                        NftInfoSheet(nft: $globalVm.nftList[index])
+                
+                if globalVm.refreshingNfts {
+                    VStack {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                } else {
+                    VStack(spacing: 0) {
+                        Text("Nft Album")
+                            .foregroundColor(Colors.mainBlack)
+                            .font(.custom("rubik-bold", size: 28))
+                            .padding(.top, 10)
+                        
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach($globalVm.nftList) { nft in
+                                let last = globalVm.nftList.last ?? Nft.empty()
+                                NftListView(nft: nft,
+                                            selectedNft: $selectedNft,
+                                            isLast: last == nft.wrappedValue)
+                            }
+                        }
+                        .padding(20)
+                        .background(Colors.mainWhite)
+                        .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                        .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                        .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                        .padding(.top, 25)
+                        .padding(.horizontal, 26)
+                        .sheet(item: $selectedNft,
+                               onDismiss: { selectedNft = nil }) { nft in
+                            if let index = globalVm.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
+                                NftInfoSheet(nft: $globalVm.nftList[index])
+                            }
+                        }
                     }
                 }
             }

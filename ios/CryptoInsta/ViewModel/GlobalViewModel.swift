@@ -78,6 +78,9 @@ class GlobalViewModel: ObservableObject {
     private let countUpdateInterval: Double = 1
     private var lastTokensCount: Int?
     
+    @Published
+    var refreshingNfts = false
+    
     var isPassBought: Bool {
         return true
     }
@@ -119,6 +122,11 @@ class GlobalViewModel: ObservableObject {
                            name: String,
                            quality: Double = 0.85) {
         if let address = walletAccount, address.count > 2 {
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.mintInProgress = true
+                }
+            }
             print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 guard let data = image.jpegData(compressionQuality: quality) else {
@@ -315,6 +323,7 @@ class GlobalViewModel: ObservableObject {
                         withAnimation {
                             self?.nftList = tokens
                             self?.nftListLoaded = true
+                            self?.refreshingNfts = false
                         }
                         if let observing = self?.observingTokensCount,
                             let lastCount = self?.lastTokensCount,
@@ -403,5 +412,14 @@ class GlobalViewModel: ObservableObject {
     func stopObservingTokensCount() {
         observingTokensCount = false
         countRequestTimer?.cancel()
+    }
+    
+    func refreshNfts() {
+        DispatchQueue.main.async {
+            withAnimation {
+                self.refreshingNfts = true
+            }
+        }
+        getPublicTokens(page: 0)
     }
 }

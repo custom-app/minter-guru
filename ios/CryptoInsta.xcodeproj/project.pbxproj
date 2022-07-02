@@ -17,6 +17,7 @@
 		111629BF2863A3520012B134 /* PublicCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BE2863A3520012B134 /* PublicCollectionData.swift */; };
 		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
+		1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */; };
 		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
 		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
 		11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11BE8CDF2855D4410088F261 /* WalletConnectSwift */; };
@@ -71,6 +72,7 @@
 		111629BE2863A3520012B134 /* PublicCollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCollectionData.swift; sourceTree = "<group>"; };
 		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
+		1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeRefresh.swift; sourceTree = "<group>"; };
 		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
 		11BEBE54285A5C0100D056FA /* rubik-medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-medium.ttf"; sourceTree = "<group>"; };
 		11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-semibold.ttf"; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				11F9729D285CE738000026FD /* SheetStroke.swift */,
 				11F9729F285CED11000026FD /* Tip.swift */,
 				11C9F992285FA7E100A27587 /* ShareView.swift */,
+				1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
 				111629BB286379B80012B134 /* TxWorker.swift in Sources */,
+				1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */,
 				11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */,
 				11ED5A802846BCC600F0D61D /* Constants.swift in Sources */,
 				11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */,

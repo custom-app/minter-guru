@@ -20,6 +20,14 @@ struct MintContainer: View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
                 
+                PullToRefreshView(bg: .black.opacity(0), fg: .black) {
+                    if globalVm.mintInProgress {
+                        globalVm.refreshNfts()
+                    } else {
+                        
+                    }
+                }
+                
                 if globalVm.mintInProgress {
                     MintProcessingScreen(containerSize: geometry.size)
                 } else {
@@ -192,9 +200,6 @@ struct MintContainer: View {
                                         title: "Empty name",
                                         message: "Please enter picture name")
                                     return
-                                }
-                                withAnimation {
-                                    globalVm.mintInProgress = true
                                 }
                                 globalVm.uploadImageToIpfs(image: image, name: globalVm.pictureName)
                             } label: {
