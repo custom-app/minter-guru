@@ -7,8 +7,6 @@ import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 import fs from "fs";
-// eslint-disable-next-line node/no-missing-import,camelcase
-import { ERC20__factory } from "./typechain";
 
 dotenv.config();
 
@@ -35,25 +33,6 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
     console.log(account.address);
   }
 });
-
-task("transfer", "Transfer ERC20 tokens")
-  .addParam("contract", "Token contract address")
-  .addParam("to", "Tokens receiver")
-  .addParam("value", "Value to transfer")
-  .setAction(async (args, hre) => {
-    const accounts = await hre.ethers.getSigners();
-    const factory = new ERC20__factory(accounts[0]);
-    const instance = factory.attach(args.contract);
-    const value = Number(args.value);
-    const multiplier = hre.ethers.BigNumber.from(10).pow(
-      hre.ethers.BigNumber.from(18)
-    );
-    console.log("sending ", value, "of ", args.contract, " to ", args.to);
-    const tx = await instance
-      .connect(accounts[1])
-      .transfer(args.to, hre.ethers.BigNumber.from(value).mul(multiplier));
-    console.log("transfer txid: ", tx.hash);
-  });
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
