@@ -176,6 +176,37 @@ class Web3Worker: ObservableObject {
         }
     }
     
+    func getPrivateCollectionPrice(onResult: @escaping (BigUInt, Error?) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            do {
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
+                options.gasLimit = .automatic
+                let tx = accessTokenContractWeb3.read(
+                    "collectionPrice",
+                    extraData: Data(),
+                    transactionOptions: options)!
+                let result = try tx.call()
+                
+                print("Got collection price response:\n\(result)")
+                if let success = result["_success"] as? Bool, !success {
+                    DispatchQueue.main.async {
+                        onResult(0, InternalError.unsuccessfullСontractRead(description: "get collection price: \(result)"))
+                    }
+                } else {
+                    let price = result["0"] as! BigUInt
+                    DispatchQueue.main.async {
+                        onResult(price, nil)
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    onResult(0, error)
+                }
+            }
+        }
+    }
+    
     func mintData(version: BigUInt, id: BigUInt, metaUrl: String, data: Data) -> String? {
         return encodeFunctionData(contract: routerContract,
                                   method: "mint",

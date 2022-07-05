@@ -121,6 +121,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                 if !isWrongChain {
                     loadNftList()
                     getPublicTokensCount()
+                    getPrivateCollectionPrice()
                 }
             }
         }

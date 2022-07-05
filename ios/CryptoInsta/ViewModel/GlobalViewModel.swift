@@ -67,6 +67,8 @@ class GlobalViewModel: ObservableObject {
     
     @Published
     var publicTokensCount = 0
+    @Published
+    var privateCollectionPrice: BigUInt = 0
     
     @Published
     var nftList: [Nft] = []
@@ -351,6 +353,21 @@ class GlobalViewModel: ObservableObject {
         } catch {
             print("Error encoding NftData: \(error)")
             //TODO: handle error
+        }
+    }
+    
+    func getPrivateCollectionPrice() {
+        print("requesting private collection price")
+        web3.getPrivateCollectionPrice() { [weak self] price, error in
+            if let error = error {
+                print("get private collection price: \(error)")
+                //TODO: handle error?
+            } else {
+                print("got private collection price: \(price)")
+                withAnimation {
+                    self?.privateCollectionPrice = price
+                }
+            }
         }
     }
     
