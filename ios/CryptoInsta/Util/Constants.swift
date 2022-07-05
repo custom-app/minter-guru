@@ -36,7 +36,17 @@ struct Constants {
     
     struct RouterContract {
         static let Mainnet = ""
-        static let Testnet = "0x2DCf712Fcba49b834Ad42615F28330E09047b69c"
+        static let Testnet = "0xe68b53F733DC34d2470F62F19558AB931EFECF71"
+    }
+    
+    struct AccessTokenContract {
+        static let Mainnet = ""
+        static let Testnet = "0xCC542dE6962f13F7DA5F5e75F71097F714403dbC"
+    }
+    
+    struct MinterContract {
+        static let Mainnet = ""
+        static let Testnet = "0x2484574280a261c21a29E428A0Dc438E5b593087"
     }
     
     static var routerAddress: String {
@@ -44,6 +54,22 @@ struct Constants {
             return RouterContract.Testnet
         } else {
             return RouterContract.Mainnet
+        }
+    }
+    
+    static var accessTokenAddress: String {
+        if Config.TESTING {
+            return AccessTokenContract.Testnet
+        } else {
+            return AccessTokenContract.Mainnet
+        }
+    }
+    
+    static var minterAddress: String {
+        if Config.TESTING {
+            return MinterContract.Testnet
+        } else {
+            return MinterContract.Mainnet
         }
     }
 }

@@ -17,6 +17,10 @@ class Web3Worker: ObservableObject {
     private let parser: Web3Parser
     private let routerContract: EthereumContract
     private let routerContractWeb3: web3.web3contract
+    private let accessTokenContract: EthereumContract
+    private let accessTokenContractWeb3: web3.web3contract
+    private let minterContract: EthereumContract
+    private let minterContractWeb3: web3.web3contract
     
     init(endpoint: String) {
         let chainId = BigUInt(Constants.requiredChainId)
@@ -24,9 +28,17 @@ class Web3Worker: ObservableObject {
                                                          network: Networks.Custom(networkID: chainId))!)
         parser = Web3Parser()
         let routerPath = Bundle.main.path(forResource: "public_router_abi", ofType: "json")!
+        let accessTokenPath = Bundle.main.path(forResource: "access_token_abi", ofType: "json")!
+        let minterTokenPath = Bundle.main.path(forResource: "migu_token_abi", ofType: "json")!
         let routerAbi = try! String(contentsOfFile: routerPath)
+        let accessTokenAbi = try! String(contentsOfFile: accessTokenPath)
+        let minterAbi = try! String(contentsOfFile: minterTokenPath)
         routerContract = EthereumContract(routerAbi)!
         routerContractWeb3 = web3.contract(routerAbi, at: EthereumAddress(Constants.routerAddress)!, abiVersion: 2)!
+        accessTokenContract = EthereumContract(accessTokenAbi)!
+        accessTokenContractWeb3 = web3.contract(accessTokenAbi, at: EthereumAddress(Constants.accessTokenAddress)!, abiVersion: 2)!
+        minterContract = EthereumContract(minterAbi)!
+        minterContractWeb3 = web3.contract(minterAbi, at: EthereumAddress(Constants.minterAddress)!, abiVersion: 2)!
     }
     
     func getBalance(address: String, onResult: @escaping (Double, Error?) -> ()) {
@@ -169,6 +181,14 @@ class Web3Worker: ObservableObject {
                                   method: "mint",
                                   parameters: [version as AnyObject,
                                                id as AnyObject,
+                                               metaUrl as AnyObject,
+                                               data as AnyObject])?.toHexString(withPrefix: true)
+    }
+    
+    func mintWithoutIdData(version: BigUInt, metaUrl: String, data: Data) -> String? {
+        return encodeFunctionData(contract: routerContract,
+                                  method: "mintWithoutId",
+                                  parameters: [version as AnyObject,
                                                metaUrl as AnyObject,
                                                data as AnyObject])?.toHexString(withPrefix: true)
     }

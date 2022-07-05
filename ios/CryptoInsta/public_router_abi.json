@@ -2,7 +2,7 @@
     {
       "inputs": [
         {
-          "internalType": "contract PublicCollection",
+          "internalType": "contract MinterGuruPublicCollection",
           "name": "_implementation",
           "type": "address"
         }
@@ -15,7 +15,7 @@
       "inputs": [
         {
           "indexed": true,
-          "internalType": "contract PublicCollection",
+          "internalType": "contract MinterGuruPublicCollection",
           "name": "instance",
           "type": "address"
         },
@@ -53,7 +53,7 @@
       "inputs": [
         {
           "indexed": true,
-          "internalType": "contract PublicCollection",
+          "internalType": "contract MinterGuruPublicCollection",
           "name": "collection",
           "type": "address"
         },
@@ -84,25 +84,12 @@
       "name": "allCollections",
       "outputs": [
         {
-          "internalType": "contract PublicCollection",
+          "internalType": "contract MinterGuruPublicCollection",
           "name": "",
           "type": "address"
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "contract PublicCollection",
-          "name": "_implementation",
-          "type": "address"
-        }
-      ],
-      "name": "changeImplementation",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -116,7 +103,7 @@
       "name": "collections",
       "outputs": [
         {
-          "internalType": "contract PublicCollection",
+          "internalType": "contract MinterGuruPublicCollection",
           "name": "",
           "type": "address"
         }
@@ -178,7 +165,7 @@
         {
           "components": [
             {
-              "internalType": "contract PublicCollection",
+              "internalType": "contract MinterGuruPublicCollection",
               "name": "contractAddress",
               "type": "address"
             },
@@ -188,8 +175,8 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct PublicCollectionsRouter.PublicCollectionData[]",
-          "name": "",
+          "internalType": "struct MinterGuruPublicCollectionsRouter.PublicCollectionData[]",
+          "name": "collectionsRes",
           "type": "tuple[]"
         },
         {
@@ -210,13 +197,13 @@
               "type": "bytes"
             }
           ],
-          "internalType": "struct PublicCollectionsRouter.TokenData[][]",
-          "name": "",
+          "internalType": "struct MinterGuruBaseCollection.TokenData[][]",
+          "name": "tokensRes",
           "type": "tuple[][]"
         },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "total",
           "type": "uint256"
         }
       ],
@@ -247,7 +234,7 @@
       "name": "implementation",
       "outputs": [
         {
-          "internalType": "contract PublicCollection",
+          "internalType": "contract MinterGuruPublicCollection",
           "name": "",
           "type": "address"
         }
@@ -279,6 +266,29 @@
         }
       ],
       "name": "mint",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "version",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "metaUri",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "mintWithoutId",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -323,12 +333,25 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "contract MinterGuruPublicCollection",
+          "name": "_implementation",
+          "type": "address"
+        }
+      ],
+      "name": "setImplementation",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "totalTokens",
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "res",
           "type": "uint256"
         }
       ],

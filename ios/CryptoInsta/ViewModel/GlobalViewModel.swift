@@ -341,10 +341,9 @@ class GlobalViewModel: ObservableObject {
     func publicMint(metaUrl: String, nftData: NftData) {
         do {
             let data = try JSONEncoder().encode(nftData)
-            guard let data = web3.mintData(version: BigUInt(Constants.currentVersion),
-                                           id: 3,
-                                           metaUrl: metaUrl,
-                                           data: data) else {
+            guard let data = web3.mintWithoutIdData(version: BigUInt(Constants.currentVersion),
+                                                    metaUrl: metaUrl,
+                                                    data: data) else {
                 //TODO: handle error
                 return
             }

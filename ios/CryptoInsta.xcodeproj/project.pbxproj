@@ -18,6 +18,8 @@
 		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
 		1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */; };
+		1196D3EC2870D06000EF6F63 /* access_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EB2870D06000EF6F63 /* access_token_abi.json */; };
+		1196D3F02870D15F00EF6F63 /* migu_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */; };
 		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
 		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
 		11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11BE8CDF2855D4410088F261 /* WalletConnectSwift */; };
@@ -73,6 +75,8 @@
 		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
 		1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeRefresh.swift; sourceTree = "<group>"; };
+		1196D3EB2870D06000EF6F63 /* access_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = access_token_abi.json; sourceTree = "<group>"; };
+		1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = migu_token_abi.json; sourceTree = "<group>"; };
 		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
 		11BEBE54285A5C0100D056FA /* rubik-medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-medium.ttf"; sourceTree = "<group>"; };
 		11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-semibold.ttf"; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 			children = (
 				11ED5A98284703C100F0D61D /* Info.plist */,
 				1154D500286273ED006C6E25 /* public_router_abi.json */,
+				1196D3EB2870D06000EF6F63 /* access_token_abi.json */,
+				1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */,
 				11ED5A7E2846BC0E00F0D61D /* Util */,
 				11ED5A7B2846BB6E00F0D61D /* ViewModel */,
 				11ED5A7A2846BB6700F0D61D /* Model */,
@@ -376,9 +382,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1196D3F02870D15F00EF6F63 /* migu_token_abi.json in Resources */,
 				1154D501286273ED006C6E25 /* public_router_abi.json in Resources */,
 				11D2572C28444C7B0028E2B4 /* Preview Assets.xcassets in Resources */,
 				11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */,
+				1196D3EC2870D06000EF6F63 /* access_token_abi.json in Resources */,
 				11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */,
 				11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */,
 				11BEBE58285A5C0200D056FA /* rubik-medium.ttf in Resources */,
