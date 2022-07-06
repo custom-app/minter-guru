@@ -69,6 +69,10 @@ class GlobalViewModel: ObservableObject {
     var publicTokensCount = 0
     @Published
     var privateCollectionPrice: BigUInt = 0
+    @Published
+    var minterBalance: BigUInt = 0
+    @Published
+    var loadedMinterBalance = false
     
     @Published
     var nftList: [Nft] = []
@@ -360,12 +364,30 @@ class GlobalViewModel: ObservableObject {
         print("requesting private collection price")
         web3.getPrivateCollectionPrice() { [weak self] price, error in
             if let error = error {
-                print("get private collection price: \(error)")
+                print("get private collection price error: \(error)")
                 //TODO: handle error?
             } else {
                 print("got private collection price: \(price)")
                 withAnimation {
                     self?.privateCollectionPrice = price
+                }
+            }
+        }
+    }
+    
+    func getMinterBalance() {
+        if let address = walletAccount {
+            print("requesting minter balance")
+            web3.getMinterBalance(address: address) { [weak self] balance, error in
+                if let error = error {
+                    print("get minter balance error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got minter balance: \(balance)")
+                    withAnimation {
+                        self?.minterBalance = balance
+                        self?.loadedMinterBalance = true
+                    }
                 }
             }
         }

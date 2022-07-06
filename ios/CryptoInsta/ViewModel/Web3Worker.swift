@@ -207,6 +207,43 @@ class Web3Worker: ObservableObject {
         }
     }
     
+    func getMinterBalance(address: String, onResult: @escaping (BigUInt, Error?) -> ()) {
+        if let walletAddress = EthereumAddress(address) {
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                do {
+                    var options = TransactionOptions.defaultOptions
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+                    let parameters: [AnyObject] = [walletAddress as AnyObject]
+                    let tx = accessTokenContractWeb3.read(
+                        "balanceOf",
+                        parameters: parameters,
+                        extraData: Data(),
+                        transactionOptions: options)!
+                    let result = try tx.call()
+                    
+                    print("Got minter balance response:\n\(result)")
+                    if let success = result["_success"] as? Bool, !success {
+                        DispatchQueue.main.async {
+                            onResult(0, InternalError.unsuccessfullСontractRead(description: "get minter balance: \(result)"))
+                        }
+                    } else {
+                        let balance = result["0"] as! BigUInt
+                        DispatchQueue.main.async {
+                            onResult(balance, nil)
+                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        onResult(0, error)
+                    }
+                }
+            }
+        } else {
+            onResult(0, InternalError.invalidAddress(address: address))
+        }
+    }
+    
     func mintData(version: BigUInt, id: BigUInt, metaUrl: String, data: Data) -> String? {
         return encodeFunctionData(contract: routerContract,
                                   method: "mint",

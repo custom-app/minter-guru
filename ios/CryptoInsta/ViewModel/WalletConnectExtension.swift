@@ -122,6 +122,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                     loadNftList()
                     getPublicTokensCount()
                     getPrivateCollectionPrice()
+                    getMinterBalance()
                 }
             }
         }
