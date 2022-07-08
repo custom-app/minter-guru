@@ -1,19 +1,22 @@
 package service
 
 import (
+	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"log"
+	"math/big"
 	"sync"
 )
 
-type config struct {
+type Config struct {
 	lock                         *sync.RWMutex
 	mainCfg, credsCfg, mergedCfg *viper.Viper
 }
 
-func newConfig(path string) (*config, error) {
-	res := &config{
+func NewConfig(path string) (*Config, error) {
+	res := &Config{
 		lock: &sync.RWMutex{},
 	}
 	res.mainCfg = viper.New()
@@ -31,7 +34,7 @@ func newConfig(path string) (*config, error) {
 	return res, nil
 }
 
-func (c *config) loadConfigs() error {
+func (c *Config) loadConfigs() error {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 	credsPath := c.mainCfg.GetString("credentials_path")
@@ -56,14 +59,78 @@ func (c *config) loadConfigs() error {
 	return nil
 }
 
-func (c *config) getTokenKey() string {
+func (c *Config) getTokenKey() string {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 	return c.mergedCfg.GetString("token_key")
 }
 
-func (c *config) getPort() int {
+func (c *Config) getPort() int {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 	return c.mergedCfg.GetInt("port")
+}
+
+func (c *Config) getPgSource() string {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.mergedCfg.GetString("pg_source")
+}
+
+func (c *Config) getChainId() *big.Int {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return big.NewInt(c.mergedCfg.GetInt64("chain_id"))
+}
+
+func (c *Config) GetRPCUrl() string {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.mergedCfg.GetString("rpc_url")
+}
+
+func (c *Config) getFaucetPrivateKey() *ecdsa.PrivateKey {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	faucetKey, err := crypto.HexToECDSA(c.mergedCfg.GetString("faucet.private_key"))
+	if err != nil {
+		log.Panicln("parse private key failed")
+		return nil
+	}
+	return faucetKey
+}
+
+func (c *Config) getFaucetValue() *big.Int {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return big.NewInt(c.mergedCfg.GetInt64("faucet.value"))
+}
+
+func (c *Config) getMinterGuruTokenPrivateKey() *ecdsa.PrivateKey {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	privateKey, err := crypto.HexToECDSA(c.mergedCfg.GetString("minter_guru_token.private_key"))
+	if err != nil {
+		log.Panicln("parse private key failed")
+		return nil
+	}
+	return privateKey
+}
+
+func (c *Config) getMinterGuruTokenAddress() string {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.mergedCfg.GetString("minter_guru_token.address")
+}
+
+func (c *Config) getMinterGuruTwitterEventId() *big.Int {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return big.NewInt(c.mergedCfg.GetInt64("minter_guru_token.event_id"))
+}
+
+func (c *Config) getMinterGuruTwitterDailyLimit() int {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.mergedCfg.GetInt("minter_guru_token.twitter_daily_limit")
 }

@@ -1,0 +1,5 @@
+{
+  "port": 7000,
+  "chain_id": 80001,
+  "credentials_path": "/creds"
+}

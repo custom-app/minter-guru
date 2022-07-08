@@ -217,6 +217,27 @@ contract MinterGuruToken is AccessControl, ERC20 {
         emit GameEventCreated(id, value, start, finish, thresholds, values);
     }
 
+    /// @dev Check if there is enough supply for batch of the receivers
+    /// @param id - id of GameEvent
+    /// @param receiversCount - quantity of the receivers of the tokens
+    function canMint(
+        uint256 id,
+        uint256 receiversCount
+    ) external view returns (uint256) {
+        GameEvent memory ev = currentEvents[id];
+        if (ev.value == 0) {
+            return 0;
+        }
+        for (uint256 i = 0; i < receiversCount; i++) {
+            uint256 value = _calcGamingReward(ev);
+            ev.currentSupply += value;
+            if (ev.currentSupply == ev.value) {
+                return i + 1;
+            }
+        }
+        return receiversCount;
+    }
+
     /// @dev Mint GameEvent reward tokens
     /// @param id - id of GameEvent
     /// @param to - receiver of tokens
@@ -225,17 +246,20 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 id,
         address to
     ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
-        GameEvent storage ev = currentEvents[id];
-        require(ev.value > 0, "");
-        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "");
-        uint256 value = _calcGamingReward(ev);
-        _sendTokens(to, value);
-        gameRewardSpent += value;
-        ev.currentSupply += value;
-        if (ev.currentSupply == ev.value) {
-            delete currentEvents[id];
-            emit GameEventFinished(id);
-        }
+        address[] memory receivers = new address[](1);
+        receivers[0] = to;
+        _mintGamingReward(id, receivers);
+    }
+
+    /// @dev Mint GameEvent reward tokens for batch of addresses
+    /// @param id - id of GameEvent
+    /// @param receivers - receivers of tokens
+    /// Emits a GameEventFinished event if supply fully minted
+    function mintGamingAwardForMultiple(
+        uint256 id,
+        address[] calldata receivers
+    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
+        _mintGamingReward(id, receivers);
     }
 
     /// @dev Finish event. Only for expired events in which not full supply was distributed
@@ -261,10 +285,28 @@ contract MinterGuruToken is AccessControl, ERC20 {
         return _calcGamingReward(ev);
     }
 
+    function _mintGamingReward(uint256 id, address[] memory receivers) internal {
+        GameEvent storage ev = currentEvents[id];
+        require(ev.value > 0, "");
+        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "");
+        for (uint256 i = 0; i < receivers.length; i++) {
+            address to = receivers[i];
+            uint256 value = _calcGamingReward(ev);
+            _sendTokens(to, value);
+            gameRewardSpent += value;
+            ev.currentSupply += value;
+            if (ev.currentSupply == ev.value) {
+                require(i == receivers.length - 1, "MinterGuruToken: supply finished");
+                delete currentEvents[id];
+                emit GameEventFinished(id);
+            }
+        }
+    }
+
     /// @dev Calculate pending reward for GameEvent helper function
     /// @param ev - GameEvent to check
     /// @return expected reward
-    function _calcGamingReward(GameEvent storage ev) internal view returns (uint256) {
+    function _calcGamingReward(GameEvent memory ev) internal view returns (uint256) {
         if ((10 * (block.timestamp - ev.start)) / (ev.finish - ev.start) < 2) {
             return _findGamingReward(ev, PERCENT_MULTIPLIER);
         }
@@ -302,9 +344,9 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @param percent - percent to check
     /// @return expected reward
     function _findGamingReward(
-        GameEvent storage ev,
+        GameEvent memory ev,
         uint256 percent
-    ) internal view returns (uint256) {
+    ) internal pure returns (uint256) {
         for (uint256 i = 0; i < ev.thresholds.length; i++) {
             if (percent < ev.thresholds[i]) {
                 return ev.values[i];

@@ -5,10 +5,41 @@ import (
 	"encoding/json"
 	"github.com/go-kit/kit/endpoint"
 	"net/http"
+	"regexp"
+	"time"
 )
+
+var addressRegExp = regexp.MustCompile("^0x[a-fA-F\\d]{40}$")
+
+type TokenData struct {
+	Token     string `json:"token"`
+	ExpiresAt int64  `json:"expiresAt"`
+}
+
+type User struct {
+	Address string `json:"address"`
+	Id      int64  `json:"id"`
+}
+
+type Transaction struct {
+	Id string `json:"id"`
+}
+
+type TwitterReward struct {
+	Id          int64        `json:"id"`
+	CreatedAt   int64        `json:"createdAt"`
+	Transaction *Transaction `json:"transaction"`
+}
 
 type AuthMessageRequest struct {
 	Address string `json:"address"`
+}
+
+func (a *AuthMessageRequest) Validate() *ErrorResponse {
+	if !addressRegExp.MatchString(a.Address) {
+		return WithDetail(ValidationFailed, "address")
+	}
+	return nil
 }
 
 type AuthMessageResponse struct {
@@ -20,17 +51,27 @@ type AuthRequest struct {
 	Signature string `json:"signature"`
 }
 
+func (a *AuthRequest) Validate() *ErrorResponse {
+	if !addressRegExp.MatchString(a.Address) {
+		return WithDetail(ValidationFailed, "address")
+	}
+	if len(a.Signature) < 1 {
+		return WithDetail(ValidationFailed, "signature")
+	}
+	return nil
+}
+
 type AuthResponse struct {
 	User        *User      `json:"user"`
 	AccessToken *TokenData `json:"accessToken"`
 }
 
-type FaucetRecordsResponse struct {
-	Records []*FaucetRecord `json:"records"`
+type TwitterRewardsResponse struct {
+	Records []*TwitterReward `json:"records"`
 }
 
-type FaucetResponse struct {
-	Record *FaucetRecord `json:"record"`
+type ApplyForTwitterRewardResponse struct {
+	Record *TwitterReward `json:"record"`
 }
 
 type ErrorResponse struct {
@@ -76,6 +117,8 @@ func makeAuthMessageEndpoint(s MinterGuruService) endpoint.Endpoint {
 		if !ok {
 			return ParseFailed, nil
 		}
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
 		res, e := s.GetAuthMessage(ctx, req.Address)
 		if e != nil {
 			return e, nil
@@ -90,6 +133,8 @@ func makeAuthEndpoint(s MinterGuruService) endpoint.Endpoint {
 		if !ok {
 			return ParseFailed, nil
 		}
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
 		res, e := s.Auth(ctx, req.Address, req.Signature)
 		if e != nil {
 			return e, nil
@@ -98,9 +143,23 @@ func makeAuthEndpoint(s MinterGuruService) endpoint.Endpoint {
 	}
 }
 
-func makeGetFaucetRecordsEndpoint(s MinterGuruService) endpoint.Endpoint {
+func makeGetTwitterRewardsEndpoint(s MinterGuruService) endpoint.Endpoint {
 	return func(ctx context.Context, _ interface{}) (response interface{}, err error) {
-		res, e := s.GetFaucetRecords(ctx, ctx.Value("userId").(int64))
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		res, e := s.GetTwitterRewards(ctx, ctx.Value("userId").(int64))
+		if e != nil {
+			return e, nil
+		}
+		return res, nil
+	}
+}
+
+func makeApplyForTwitterRewardsEndpoint(s MinterGuruService) endpoint.Endpoint {
+	return func(ctx context.Context, _ interface{}) (response interface{}, err error) {
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		res, e := s.ApplyForTwitterReward(ctx, ctx.Value("userId").(int64))
 		if e != nil {
 			return e, nil
 		}
@@ -110,6 +169,8 @@ func makeGetFaucetRecordsEndpoint(s MinterGuruService) endpoint.Endpoint {
 
 func makeFaucetEndpoint(s MinterGuruService) endpoint.Endpoint {
 	return func(ctx context.Context, _ interface{}) (response interface{}, err error) {
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
 		res, e := s.Faucet(ctx, ctx.Value("userId").(int64))
 		if e != nil {
 			return e, nil
