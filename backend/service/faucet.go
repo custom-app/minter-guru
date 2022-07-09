@@ -104,7 +104,7 @@ func (s *MinterGuruServiceImpl) Faucet(ctx context.Context, userId int64) (*Tran
 		}
 		// language=PostgreSQL
 		if _, err := tx.Exec(ctx, `INSERT INTO faucet_transactions VALUES ($1,$2,$3)`,
-			user.Id, time.Now().UnixMilli(), t.Hash().Hex()); err != nil {
+			user.Id, Now().UnixMilli(), t.Hash().Hex()); err != nil {
 			return nil, false, checkAndLogDatabaseError(err)
 		}
 		return &Transaction{

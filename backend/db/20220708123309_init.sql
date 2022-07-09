@@ -5,7 +5,7 @@ SELECT 'up SQL query';
 CREATE TABLE public.auth_messages
 (
     address    VARCHAR(42) NOT NULL,
-    code       CHAR(135)   NOT NULL,
+    code       CHAR(136)   NOT NULL,
     created_at BIGINT      NOT NULL
 );
 

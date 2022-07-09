@@ -22,7 +22,7 @@ const (
 var authLock = &sync.Mutex{}
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(Now().UnixNano())
 }
 
 func (s *MinterGuruServiceImpl) GetAuthMessage(ctx context.Context, address string) (string, *ErrorResponse) {
@@ -34,7 +34,7 @@ func (s *MinterGuruServiceImpl) GetAuthMessage(ctx context.Context, address stri
 		// language=PostgreSQL
 		if _, err := tx.Exec(ctx, `insert into auth_messages values($1,$2,$3) 
 			on conflict on constraint auth_messages_pkey do update set code=$2,created_at=$3`,
-			addr, msg, time.Now().UnixMilli()); err != nil {
+			addr, msg, Now().UnixMilli()); err != nil {
 			return nil, false, checkAndLogDatabaseError(err)
 		}
 		return msg, true, nil
@@ -62,7 +62,7 @@ func (s *MinterGuruServiceImpl) loadSignatureCode(ctx context.Context, tx pgx.Tx
 	if err := dropReq.Scan(&code, &createdAt); err != nil {
 		return "", checkAndLogDatabaseError(err)
 	}
-	if createdAt+codeLifetime.Milliseconds() < time.Now().UnixMilli() {
+	if createdAt+codeLifetime.Milliseconds() < Now().UnixMilli() {
 		return "", CodeExpired
 	}
 	return code, nil
@@ -94,7 +94,7 @@ func verifySignature(code, address, signature string) *ErrorResponse {
 func (s *MinterGuruServiceImpl) findOrCreateUserWithAddress(
 	ctx context.Context, tx pgx.Tx, address string) (*User, *ErrorResponse) {
 	// language=PostgreSQL
-	res, err := tx.Query(ctx, `select id,address from users where address=$1`, strings.ToLower(address))
+	res, err := tx.Query(ctx, `SELECT id,address FROM users WHERE address=$1`, strings.ToLower(address))
 	if err != nil {
 		return nil, checkAndLogDatabaseError(err)
 	}
@@ -108,7 +108,7 @@ func (s *MinterGuruServiceImpl) findOrCreateUserWithAddress(
 	}
 	res.Close()
 	// language=PostgreSQL
-	insertRes := tx.QueryRow(ctx, `insert into users values(default,$1)`, address)
+	insertRes := tx.QueryRow(ctx, `INSERT INTO users VALUES(DEFAULT,$1) RETURNING id`, address)
 	user := &User{
 		Address: address,
 	}
@@ -142,7 +142,7 @@ func (s *MinterGuruServiceImpl) Auth(ctx context.Context, address string, signat
 		if e != nil {
 			return nil, false, e
 		}
-		expiresAt := time.Now().AddDate(0, 0, 7)
+		expiresAt := Now().AddDate(0, 0, 7)
 		token, err := s.createToken(c.Id, expiresAt)
 		if err != nil {
 			return nil, false, InternalError

@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/custom-app/crypto-insta/backend/contracts/migu_token"
+	"github.com/custom-app/minter-guru/backend/contracts/migu_token"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -18,6 +18,12 @@ import (
 	"strings"
 	"time"
 )
+
+var nowFunc = time.Now
+
+func Now() time.Time {
+	return nowFunc()
+}
 
 type MinterGuruService interface {
 	GetAuthMessage(context.Context, string) (string, *ErrorResponse)
@@ -156,7 +162,7 @@ func (s *MinterGuruServiceImpl) makeTxOperation(
 	res, needCommit, e := fn(ctx, tx)
 	if needCommit {
 		if err := tx.Commit(ctx); err != nil {
-			return "nil", checkAndLogDatabaseError(err)
+			return nil, checkAndLogDatabaseError(err)
 		}
 	}
 	if e != nil {
@@ -181,7 +187,7 @@ func (s *MinterGuruServiceImpl) doPeriodJobs() {
 }
 
 func toNext() (time.Time, time.Duration) {
-	now := time.Now()
+	now := Now()
 	next := now.Add(5 * time.Minute)
 	res := truncate(next, 5*time.Minute)
 	return res, res.Sub(now)

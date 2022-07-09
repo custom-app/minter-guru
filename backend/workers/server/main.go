@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/custom-app/crypto-insta/backend/service"
+	"github.com/custom-app/minter-guru/backend/service"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"os"

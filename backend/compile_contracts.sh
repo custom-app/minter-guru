@@ -37,7 +37,10 @@ abigen --abi build/MinterGuruCollectionsAccessToken.sol/MinterGuruCollectionsAcc
 
 mkdir -p migu_token
 jq ".abi" build/MinterGuruToken.sol/MinterGuruToken.json > build/MinterGuruToken.sol/MinterGuruToken.abi
+jq ".bytecode" build/MinterGuruToken.sol/MinterGuruToken.json > build/MinterGuruToken.sol/MinterGuruToken.bin
+sed -i 's/"//g' build/MinterGuruToken.sol/MinterGuruToken.bin
 abigen --abi build/MinterGuruToken.sol/MinterGuruToken.abi \
+  --bin build/MinterGuruToken.sol/MinterGuruToken.bin \
   --pkg migu_token \
   --type MinterGuruToken \
   --out migu_token/migu_token.go

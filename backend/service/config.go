@@ -2,6 +2,7 @@ package service
 
 import (
 	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -20,13 +21,16 @@ func NewConfig(path string) (*Config, error) {
 		lock: &sync.RWMutex{},
 	}
 	res.mainCfg = viper.New()
-	res.mainCfg.WatchConfig()
 	res.mainCfg.AddConfigPath(path)
 	if err := res.mainCfg.ReadInConfig(); err != nil {
 		return nil, err
 	}
+	if err := res.loadConfigs(); err != nil {
+		return nil, err
+	}
 	res.mainCfg.WatchConfig()
 	res.mainCfg.OnConfigChange(func(in fsnotify.Event) {
+		log.Println("main config changed")
 		if err := res.loadConfigs(); err != nil {
 			log.Println("failed to load configs on change", err)
 		}
@@ -45,6 +49,7 @@ func (c *Config) loadConfigs() error {
 	}
 	c.credsCfg.WatchConfig()
 	c.credsCfg.OnConfigChange(func(in fsnotify.Event) {
+		log.Println("creds config changed")
 		if err := c.loadConfigs(); err != nil {
 			log.Println("failed to load configs on change", err)
 		}
@@ -106,15 +111,20 @@ func (c *Config) getFaucetValue() *big.Int {
 	return big.NewInt(c.mergedCfg.GetInt64("faucet.value"))
 }
 
-func (c *Config) getMinterGuruTokenPrivateKey() *ecdsa.PrivateKey {
+func (c *Config) getMinterGuruTokenGamingRewardTransactor() *bind.TransactOpts {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
-	privateKey, err := crypto.HexToECDSA(c.mergedCfg.GetString("minter_guru_token.private_key"))
+	privateKey, err := crypto.HexToECDSA(c.mergedCfg.GetString("minter_guru_token.gaming_reward_admin_private_key"))
 	if err != nil {
-		log.Panicln("parse private key failed")
+		log.Panicln("parse private key failed", err)
 		return nil
 	}
-	return privateKey
+	opts, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(c.mergedCfg.GetInt64("chain_id")))
+	if err != nil {
+		log.Panicln("build transactor failed", err)
+		return nil
+	}
+	return opts
 }
 
 func (c *Config) getMinterGuruTokenAddress() string {

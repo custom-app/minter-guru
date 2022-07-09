@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/jackc/pgx/v4"
 	"log"
@@ -18,7 +17,7 @@ func (s *MinterGuruServiceImpl) ApplyForTwitterReward(ctx context.Context,
 	twitterLock.Lock()
 	defer twitterLock.Unlock()
 	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
-		now := time.Now().UnixMilli()
+		now := Now().UnixMilli()
 		// language=PostgreSQL
 		row := tx.QueryRow(ctx, `SELECT COUNT(*) FROM twitter_rewards WHERE user_id=$1 AND created_at>=$2`,
 			userId, now)
@@ -118,12 +117,8 @@ func (s *MinterGuruServiceImpl) mintBatchRewards(ids []int64, addresses []common
 	if count < int64(len(addresses)) {
 		ids, addresses = ids[:count], addresses[:count]
 	}
-	opts, err := bind.NewKeyedTransactorWithChainID(s.cfg.getMinterGuruTokenPrivateKey(), s.cfg.getChainId())
-	if err != nil {
-		log.Println("build transactor failed", err)
-		return
-	}
-	tx, err := s.tokenInstance.MintGamingAwardForMultiple(opts, eventId, addresses)
+	tx, err := s.tokenInstance.MintGamingAwardForMultiple(
+		s.cfg.getMinterGuruTokenGamingRewardTransactor(), eventId, addresses)
 	if err != nil {
 		log.Println("mint gaming reward failed", err)
 		return
