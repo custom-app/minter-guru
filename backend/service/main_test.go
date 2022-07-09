@@ -100,9 +100,6 @@ var (
 		common.HexToAddress(addresses[4]): {
 			Balance: big.NewInt(1e15).Mul(big.NewInt(1e15), big.NewInt(1e15)),
 		},
-		common.HexToAddress(addresses[5]): {
-			Balance: big.NewInt(1e15).Mul(big.NewInt(1e15), big.NewInt(1e15)),
-		},
 	}
 )
 

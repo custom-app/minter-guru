@@ -89,7 +89,7 @@ ALTER TABLE public.faucet_transactions
     OWNER TO minter;
 
 ALTER TABLE public.faucet_transactions
-    ADD CONSTRAINT faucet_transactions_pkey PRIMARY KEY (txid);
+    ADD CONSTRAINT faucet_transactions_pkey PRIMARY KEY (user_id);
 
 ALTER TABLE public.faucet_transactions
     ADD CONSTRAINT faucet_transactions_user_fkey FOREIGN KEY (user_id) REFERENCES public.users (id);
