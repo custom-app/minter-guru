@@ -49,7 +49,10 @@ const config: HardhatUserConfig = {
   },
   networks: {
     mumbai: {
-      url: "https://matic-mumbai.chainstacklabs.com",
+      url: "https://matic.getblock.io/testnet/",
+      httpHeaders: {
+        "x-api-key": process.env.POLYGON_MUMBAI_GETBLOCK_APIKEY!,
+      },
       accounts: [
         mumbaiPrivateKey,
         mumbaiLiquidityPrivateKey,
