@@ -8,6 +8,7 @@
 import Foundation
 import CommonCrypto
 import web3swift
+import BigInt
 
 class Tools {
     
@@ -39,5 +40,9 @@ class Tools {
     
     static func cidFromIpfsLink(_ ipfsLink: String) -> String {
         ipfsLink.replacingOccurrences(of: "ipfs://", with: "")
+    }
+    
+    static func formatUint256(_ count: BigUInt, decimals: Int = 2) -> String {
+        return Web3.Utils.formatToEthereumUnits(count, toUnits: .eth, decimals: decimals)!
     }
 }

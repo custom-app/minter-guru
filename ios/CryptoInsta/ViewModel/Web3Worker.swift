@@ -215,7 +215,7 @@ class Web3Worker: ObservableObject {
                     options.gasPrice = .automatic
                     options.gasLimit = .automatic
                     let parameters: [AnyObject] = [walletAddress as AnyObject]
-                    let tx = accessTokenContractWeb3.read(
+                    let tx = minterContractWeb3.read(
                         "balanceOf",
                         parameters: parameters,
                         extraData: Data(),
