@@ -15,6 +15,9 @@ jobs:
       - name: Build contracts
         run: ./compile_contracts.sh
         working-directory: backend
+      - name: Test backend
+        run: go test ./service/... -test.v -cfg configs/test -migrate db -rootdb host=localhost port=1338 user=postgres password=1337 dbname=postgres sslmode=disable
+        working-directory: backend
       - name: Build container
         run: docker build -t minter-guru-dev-server --build-arg env=master backend/
   update:
