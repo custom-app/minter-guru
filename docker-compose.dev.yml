@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  dev-server:
+    image: minter-guru-dev-server:latest
+    volumes:
+      - ~/dev-logs:/logs
+      - ~/.dev-creds:/creds
+    ports:
+      - "127.0.0.1:7000:7000"
+    restart: unless-stopped
+  dev-postgres:
+    image: postgres:13
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+    env_file: ~/.pg_dev_env
+    restart: unless-stopped
+  dev-migration-job:
+    build:
+      context: .
+      dockerfile: migrate.Dockerfile
+    env_file: ~/.pg_dev_env
+    depends_on:
+      - dev-postgres
+
+volumes:
+  dev_postgres_data:
