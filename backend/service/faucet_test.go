@@ -7,10 +7,15 @@ import (
 	"path/filepath"
 	"regexp"
 	"testing"
+	"time"
 )
 
+func faucetNow() time.Time {
+	return time.UnixMilli(1633104919718)
+}
+
 func TestFaucet(t *testing.T) {
-	NowWrap(t, authNow, func(t *testing.T) {
+	NowWrap(t, faucetNow, func(t *testing.T) {
 		GooseWrap(t, filepath.Join("tests", "faucet"), func(t *testing.T) {
 			ServiceWithBlockchainWrap(t, func(t *testing.T,
 				sim *backends.SimulatedBackend, impl *MinterGuruServiceImpl) {
@@ -58,7 +63,7 @@ func testFaucetAlreadyGot(_ *backends.SimulatedBackend, impl *MinterGuruServiceI
 }
 
 func TestFaucetErrors(t *testing.T) {
-	NowWrap(t, authNow, func(t *testing.T) {
+	NowWrap(t, faucetNow, func(t *testing.T) {
 		GooseWrap(t, filepath.Join("tests", "faucet"), func(t *testing.T) {
 			ServiceWithBlockchainWrap(t, func(t *testing.T,
 				sim *backends.SimulatedBackend, impl *MinterGuruServiceImpl) {

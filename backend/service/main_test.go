@@ -186,7 +186,7 @@ func ServiceWithBlockchainAndTokenWrap(t *testing.T,
 		return
 	}
 	multiplier := big.NewInt(0).Exp(big.NewInt(10), big.NewInt(18), nil)
-	_, _, tokenInstance, err := migu_token.DeployMinterGuruToken(
+	_, tx, tokenInstance, err := migu_token.DeployMinterGuruToken(
 		deployerOpts,
 		backend,
 		big.NewInt(0).Mul(big.NewInt(10000), multiplier),
@@ -202,11 +202,21 @@ func ServiceWithBlockchainAndTokenWrap(t *testing.T,
 		return
 	}
 	backend.Commit()
+	rec, err := backend.TransactionReceipt(context.Background(), tx.Hash())
+	if err != nil {
+		t.Errorf("transaction receipt failed: %s", err)
+		return
+	}
+	block, err := backend.BlockByNumber(context.Background(), rec.BlockNumber)
+	if err != nil {
+		t.Errorf("get block failed: %s", err)
+		return
+	}
 	if _, err := tokenInstance.CreateEvent(
 		cfg.getMinterGuruTokenGamingRewardTransactor(),
 		big.NewInt(100),
-		big.NewInt(time.Now().Unix()),
-		big.NewInt(time.Now().Add(time.Hour).Unix()),
+		big.NewInt(int64(block.Time())),
+		big.NewInt(int64(block.Time())+3600*24),
 		[]*big.Int{
 			big.NewInt(5000),
 			big.NewInt(20000),

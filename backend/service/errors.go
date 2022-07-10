@@ -43,6 +43,11 @@ var (
 		Message: "twitter limit reached",
 		Detail:  "",
 	}
+	TwitterEventClosed = &ErrorResponse{
+		Code:    400,
+		Message: "twitter event closed",
+		Detail:  "",
+	}
 	InternalError = &ErrorResponse{
 		Code:    500,
 		Message: "internal error",

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/jackc/pgx/v4"
 	"log"
@@ -14,13 +15,16 @@ var twitterLock = &sync.RWMutex{}
 
 func (s *MinterGuruServiceImpl) ApplyForTwitterReward(ctx context.Context,
 	userId int64) (*TwitterReward, *ErrorResponse) {
+	if !s.cfg.getMinterGuruTwitterEventOpen() {
+		return nil, TwitterEventClosed
+	}
 	twitterLock.Lock()
 	defer twitterLock.Unlock()
 	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
-		now := Now().UnixMilli()
+		now := Now()
 		// language=PostgreSQL
 		row := tx.QueryRow(ctx, `SELECT COUNT(*) FROM twitter_rewards WHERE user_id=$1 AND created_at>=$2`,
-			userId, now)
+			userId, now.AddDate(0, 0, -1).UnixMilli())
 		var count int
 		if err := row.Scan(&count); err != nil {
 			return nil, false, checkAndLogDatabaseError(err)
@@ -29,9 +33,9 @@ func (s *MinterGuruServiceImpl) ApplyForTwitterReward(ctx context.Context,
 			return nil, false, TwitterLimitReached
 		}
 		// language=PostgreSQL
-		row = tx.QueryRow(ctx, `INSERT INTO twitter_rewards VALUES (DEFAULT,$1,$2)`, userId, now)
+		row = tx.QueryRow(ctx, `INSERT INTO twitter_rewards VALUES (DEFAULT,$1,$2) RETURNING id`, userId, now.UnixMilli())
 		res := &TwitterReward{
-			CreatedAt: now,
+			CreatedAt: now.UnixMilli(),
 		}
 		if err := row.Scan(&res.Id); err != nil {
 			return nil, false, checkAndLogDatabaseError(err)
@@ -104,7 +108,10 @@ func getRecordsToMint(ctx context.Context, tx pgx.Tx, now time.Time) ([]int64, [
 
 func (s *MinterGuruServiceImpl) mintBatchRewards(ids []int64, addresses []common.Address) {
 	eventId := s.cfg.getMinterGuruTwitterEventId()
-	canMintCount, err := s.tokenInstance.CanMint(nil, eventId, big.NewInt(int64(len(addresses))))
+	gamingRewardAdminTransactor := s.cfg.getMinterGuruTokenGamingRewardTransactor()
+	canMintCount, err := s.tokenInstance.CanMint(&bind.CallOpts{
+		From: gamingRewardAdminTransactor.From,
+	}, eventId, big.NewInt(int64(len(addresses))))
 	if err != nil {
 		log.Println("can mint call failed", err)
 		return
@@ -118,7 +125,7 @@ func (s *MinterGuruServiceImpl) mintBatchRewards(ids []int64, addresses []common
 		ids, addresses = ids[:count], addresses[:count]
 	}
 	tx, err := s.tokenInstance.MintGamingAwardForMultiple(
-		s.cfg.getMinterGuruTokenGamingRewardTransactor(), eventId, addresses)
+		gamingRewardAdminTransactor, eventId, addresses)
 	if err != nil {
 		log.Println("mint gaming reward failed", err)
 		return

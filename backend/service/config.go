@@ -133,10 +133,16 @@ func (c *Config) getMinterGuruTokenAddress() string {
 	return c.mergedCfg.GetString("minter_guru_token.address")
 }
 
+func (c *Config) getMinterGuruTwitterEventOpen() bool {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.mergedCfg.GetBool("minter_guru_token.twitter_event_open")
+}
+
 func (c *Config) getMinterGuruTwitterEventId() *big.Int {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
-	return big.NewInt(c.mergedCfg.GetInt64("minter_guru_token.event_id"))
+	return big.NewInt(c.mergedCfg.GetInt64("minter_guru_token.twitter_event_id"))
 }
 
 func (c *Config) getMinterGuruTwitterDailyLimit() int {
