@@ -1,4 +1,4 @@
-name: MASTER CI
+name: DEV CI
 on:
   push:
     branches:
@@ -9,7 +9,14 @@ jobs:
     runs-on: [ self-hosted, dev ]
     steps:
       - uses: actions/checkout@v2
-      - name: Get contract depths
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: contracts/node_modules
+          key: ${{ runner.os }}-dev-node-${{ hashFiles('contracts/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-dev-node
+      - name: Get contract dependencies
         run: yarn --frozen-lockfile
         working-directory: contracts
       - name: Build contracts
