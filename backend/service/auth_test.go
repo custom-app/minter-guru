@@ -26,7 +26,7 @@ func TestAuthMessage(t *testing.T) {
 					return
 				}
 				if !regexp.MustCompile(fmt.Sprintf("^Hello, %s! Please, sign this message with random "+
-					"param [0-9]{10} to use MinterGuru application!$", addresses[5])).MatchString(msg) {
+					"param [0-9]{10} to use MinterGuru application!$", addresses[5])).MatchString(msg.Message) {
 					t.Errorf("auth message unmatch: %s", msg)
 				}
 			})
@@ -44,7 +44,7 @@ func TestAuthMessageReplace(t *testing.T) {
 					return
 				}
 				if !regexp.MustCompile(fmt.Sprintf("^Hello, %s! Please, sign this message with random "+
-					"param [0-9]{10} to use MinterGuru application!$", addresses[1])).MatchString(msg) {
+					"param [0-9]{10} to use MinterGuru application!$", addresses[1])).MatchString(msg.Message) {
 					t.Errorf("auth message unmatch: %s", msg)
 				}
 			})

@@ -25,7 +25,7 @@ func init() {
 	rand.Seed(Now().UnixNano())
 }
 
-func (s *MinterGuruServiceImpl) GetAuthMessage(ctx context.Context, address string) (string, *ErrorResponse) {
+func (s *MinterGuruServiceImpl) GetAuthMessage(ctx context.Context, address string) (*AuthMessageResponse, *ErrorResponse) {
 	authLock.Lock()
 	defer authLock.Unlock()
 	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
@@ -37,12 +37,14 @@ func (s *MinterGuruServiceImpl) GetAuthMessage(ctx context.Context, address stri
 			addr, msg, Now().UnixMilli()); err != nil {
 			return nil, false, checkAndLogDatabaseError(err)
 		}
-		return msg, true, nil
+		return &AuthMessageResponse{
+			Message: msg,
+		}, true, nil
 	})
 	if e != nil {
-		return "", e
+		return nil, e
 	}
-	return res.(string), nil
+	return res.(*AuthMessageResponse), nil
 }
 
 func (s *MinterGuruServiceImpl) loadSignatureCode(ctx context.Context, tx pgx.Tx, address string) (string, *ErrorResponse) {
