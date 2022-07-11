@@ -18,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: migrate.Dockerfile
+      args:
+        env: dev
     env_file: ~/.pg_dev_env
     depends_on:
       - dev-postgres
