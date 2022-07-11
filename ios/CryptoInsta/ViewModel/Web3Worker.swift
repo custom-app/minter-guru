@@ -244,6 +244,120 @@ class Web3Worker: ObservableObject {
         }
     }
     
+    func getPrivateCollectionsGlobalCount(address: String, onResult: @escaping (BigUInt, Error?) -> ()) {
+        if let walletAddress = EthereumAddress(address) {
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                do {
+                    var options = TransactionOptions.defaultOptions
+                    options.from = walletAddress
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+                    let tx = accessTokenContractWeb3.read(
+                        "tokensCount",
+                        extraData: Data(),
+                        transactionOptions: options)!
+                    let result = try tx.call()
+                    
+                    print("Got private collections count response:\n\(result)")
+                    if let success = result["_success"] as? Bool, !success {
+                        DispatchQueue.main.async {
+                            onResult(0, InternalError.unsuccessfullСontractRead(description: "get private collections count: \(result)"))
+                        }
+                    } else {
+                        let count = result["0"] as! BigUInt
+                        DispatchQueue.main.async {
+                            onResult(count, nil)
+                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        onResult(0, error)
+                    }
+                }
+            }
+        } else {
+            onResult(0, InternalError.invalidAddress(address: address))
+        }
+    }
+    
+    func getPrivateCollectionsCount(address: String, onResult: @escaping (BigUInt, Error?) -> ()) {
+        if let walletAddress = EthereumAddress(address) {
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                do {
+                    var options = TransactionOptions.defaultOptions
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+                    let parameters: [AnyObject] = [walletAddress as AnyObject]
+                    let tx = accessTokenContractWeb3.read(
+                        "balanceOf",
+                        parameters: parameters,
+                        extraData: Data(),
+                        transactionOptions: options)!
+                    let result = try tx.call()
+                    
+                    print("Got private collections count response:\n\(result)")
+                    if let success = result["_success"] as? Bool, !success {
+                        DispatchQueue.main.async {
+                            onResult(0, InternalError.unsuccessfullСontractRead(description: "get private collections count: \(result)"))
+                        }
+                    } else {
+                        let balance = result["0"] as! BigUInt
+                        DispatchQueue.main.async {
+                            onResult(balance, nil)
+                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        onResult(0, error)
+                    }
+                }
+            }
+        } else {
+            onResult(0, InternalError.invalidAddress(address: address))
+        }
+    }
+    
+    func getPrivateCollections(page: Int, size: Int = 1000, address: String, onResult: @escaping ([PrivateCollection], Error?) -> ()) {
+        if let walletAddress = EthereumAddress(address) {
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                do {
+                    var options = TransactionOptions.defaultOptions
+                    options.from = walletAddress
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+                    let parameters: [AnyObject] = [
+                        BigUInt(page) as AnyObject,
+                        BigUInt(size) as AnyObject
+                    ]
+                    let tx = accessTokenContractWeb3.read(
+                        "getSelfCollections",
+                        parameters: parameters,
+                        extraData: Data(),
+                        transactionOptions: options)!
+                    let result = try tx.call()
+                    
+                    print("Got private collections response:\n\(result)")
+                    if let success = result["_success"] as? Bool, !success {
+                        DispatchQueue.main.async {
+                            onResult([], InternalError.unsuccessfullСontractRead(description: "get private collections: \(result)"))
+                        }
+                    } else {
+                        let collectionsData = result["0"] as! [[AnyObject]]
+                        let counts = result["1"] as! [AnyObject]
+                        let collections = try parser.parsePrivateCollections(collections: collectionsData, counts: counts)
+                        onResult(collections, nil)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        onResult([], error)
+                    }
+                }
+            }
+        } else {
+            onResult([], InternalError.invalidAddress(address: address))
+        }
+    }
+    
     func mintData(version: BigUInt, id: BigUInt, metaUrl: String, data: Data) -> String? {
         return encodeFunctionData(contract: routerContract,
                                   method: "mint",
@@ -258,6 +372,15 @@ class Web3Worker: ObservableObject {
                                   method: "mintWithoutId",
                                   parameters: [version as AnyObject,
                                                metaUrl as AnyObject,
+                                               data as AnyObject])?.toHexString(withPrefix: true)
+    }
+    
+    func purchasePrivateCollectionData(salt: Data, name: String, symbol: String, data: Data) -> String? {
+        return encodeFunctionData(contract: accessTokenContract,
+                                  method: "purchasePrivateCollection",
+                                  parameters: [salt as AnyObject,
+                                               name as AnyObject,
+                                               symbol as AnyObject,
                                                data as AnyObject])?.toHexString(withPrefix: true)
     }
     

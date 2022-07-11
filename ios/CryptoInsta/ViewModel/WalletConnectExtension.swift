@@ -123,6 +123,8 @@ extension GlobalViewModel: WalletConnectDelegate {
                     getPublicTokensCount()
                     getPrivateCollectionPrice()
                     getMinterBalance()
+                    getPrivateCollectionsCount()
+                    getPrivateCollections()
                 }
             }
         }

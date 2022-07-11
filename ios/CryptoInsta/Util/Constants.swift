@@ -36,17 +36,17 @@ struct Constants {
     
     struct RouterContract {
         static let Mainnet = ""
-        static let Testnet = "0xe68b53F733DC34d2470F62F19558AB931EFECF71"
+        static let Testnet = "0x86F246ed3ff1A5D1e2752A4957e3047fc6CFD4b3"
     }
     
     struct AccessTokenContract {
         static let Mainnet = ""
-        static let Testnet = "0xCC542dE6962f13F7DA5F5e75F71097F714403dbC"
+        static let Testnet = "0x000DD16649b811000c1B5320087abA4be54067Ed"
     }
     
     struct MinterContract {
         static let Mainnet = ""
-        static let Testnet = "0x2484574280a261c21a29E428A0Dc438E5b593087"
+        static let Testnet = "0xbE4e7319234bF56c18dE2CEa057c3dB330A2b76C"
     }
     
     static var routerAddress: String {

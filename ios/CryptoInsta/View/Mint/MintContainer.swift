@@ -21,6 +21,9 @@ struct MintContainer: View {
     @State
     var newCollectionName = ""
     
+    @State
+    var showCreateCollectionSheet = false
+    
     var body: some View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
@@ -178,6 +181,7 @@ struct MintContainer: View {
                                                 creatingNewCollection = true
                                             }
                                         }
+                                        showCreateCollectionSheet = true
                                     } label: {
                                         Text(creatingNewCollection ? "Cancel" : "Create")
                                             .foregroundColor(Colors.mainGreen)
@@ -233,7 +237,7 @@ struct MintContainer: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 10) {
                                     ForEach(globalVm.privateCollections, id: \.self) { collection in
-                                        Text("#\(collection)")
+                                        Text("#\(collection.data.name)")
                                             .foregroundColor(Colors.mainGreen)
                                             .font(.custom("rubik-bold", size: 16))
                                             .padding(.vertical, 8)
@@ -242,11 +246,11 @@ struct MintContainer: View {
                                             .cornerRadius(30)
                                             .overlay(RoundedRectangle(cornerRadius: 30)
                                                 .stroke(Colors.mainGreen, lineWidth: 2)
-                                                .opacity(collection == globalVm.pickedCollectionName ? 1 : 0))
+                                                .opacity(collection.data.name == globalVm.pickedCollectionName ? 1 : 0))
                                             .onTapGesture {
-                                                if collection != globalVm.pickedCollectionName {
+                                                if collection.data.name != globalVm.pickedCollectionName {
                                                     withAnimation {
-                                                        globalVm.pickedCollectionName = collection
+                                                        globalVm.pickedCollectionName = collection.data.name
                                                     }
                                                 }
                                             }
@@ -295,6 +299,13 @@ struct MintContainer: View {
                         MintFinishedSheet()
                             .environmentObject(globalVm)
                     }
+                
+                Rectangle()
+                    .frame(height: 0)
+                    .sheet(isPresented: $showCreateCollectionSheet) {
+                        CollectionConstructor()
+                            .environmentObject(globalVm)
+                    }
             }
             .padding(.top, 0.1)
         }
@@ -338,8 +349,8 @@ struct CollectionMenu: View {
                         withAnimation {
                             globalVm.pickedPrivateCollection = true
                         }
-                        if globalVm.pickedCollectionName == "" {
-                            globalVm.pickedCollectionName = globalVm.privateCollections[0]
+                        if globalVm.pickedCollectionName == "" && globalVm.privateCollections.count > 0 {
+                            globalVm.pickedCollectionName = globalVm.privateCollections[0].data.name
                         }
                     }
                 }

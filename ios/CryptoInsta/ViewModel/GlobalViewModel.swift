@@ -16,6 +16,7 @@ class GlobalViewModel: ObservableObject {
     
     let deepLinkDelay = 0.25
     let mintLabel = "mint"
+    let purchaseCollectionLabel = "purchase_collection"
     
     @Published
     var showConnectSheet = false
@@ -57,7 +58,9 @@ class GlobalViewModel: ObservableObject {
     @Published
     var mintedPictureCollection = ""
     @Published
-    var privateCollections = ["Collection1", "Name", "Some collection name", "Kekes", "Roflan collection"]
+    var privateCollections: [PrivateCollection] = []
+    @Published
+    var privateCollectionsLoaded = false
     
     @Published
     var alert: IdentifiableAlert?
@@ -67,6 +70,8 @@ class GlobalViewModel: ObservableObject {
     
     @Published
     var publicTokensCount = 0
+    @Published
+    var privateCollectionsCount = 0
     @Published
     var privateCollectionPrice: BigUInt = 0
     @Published
@@ -353,10 +358,31 @@ class GlobalViewModel: ObservableObject {
                 //TODO: handle error
                 return
             }
-            prepareAndSendTx(data: data, label: mintLabel)
+            prepareAndSendTx(to: Constants.routerAddress, data: data, label: mintLabel)
         } catch {
             print("Error encoding NftData: \(error)")
             //TODO: handle error
+        }
+    }
+    
+    func purchaseCollection(collectionData: PrivateCollectionData) {
+        if let address = walletAccount {
+            do {
+                let data = try JSONEncoder().encode(collectionData)
+                let salt = Tools.sha256(data: (address + "\(Date())").data(using: .utf8)!)
+                print("salt len: \(salt.count)")
+                guard let data = web3.purchasePrivateCollectionData(salt: salt,
+                                                                    name: collectionData.name,
+                                                                    symbol: "",
+                                                                    data: data) else {
+                    //TODO: handle error
+                    return
+                }
+                prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
+            } catch {
+                print("Error encoding PrivatecollectionData: \(error)")
+                //TODO: handle error
+            }
         }
     }
     
@@ -393,14 +419,54 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func prepareAndSendTx(data: String = "", label: String) {
+    func getPrivateCollectionsCount() {
+        if let address = walletAccount {
+            web3.getPrivateCollectionsCount(address: address) { [weak self] count, error in
+                if let error = error {
+                    print("get private collections count error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("get private collections count: \(count)")
+                    withAnimation {
+                        self?.privateCollectionsCount = Int(count)
+                        if count == 0 {
+                            self?.privateCollectionsLoaded = true
+                        } else {
+                            self?.getPrivateCollections()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPrivateCollections(page: Int = 0, size: Int = 1000) {
+        if let address = walletAccount {
+            web3.getPrivateCollections(page: page, size: size, address: address) { [weak self] collections, error in
+                if let error = error {
+                    print("get private collections error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("get private collections: \(collections)")
+                    DispatchQueue.main.async {
+                        withAnimation {
+                            self?.privateCollections = collections
+                            self?.privateCollectionsLoaded = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func prepareAndSendTx(to: String, data: String = "", label: String) {
         guard let session = session,
               let client = walletConnect?.client,
               let from = walletAccount else {
             //TODO: handle error
             return
         }
-        let tx = TxWorker.construct(from: from, data: data)
+        let tx = TxWorker.construct(from: from, to: to, data: data)
         do {
             try client.eth_sendTransaction(url: session.url,
                                            transaction: tx) { [weak self] response in

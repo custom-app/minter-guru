@@ -14,7 +14,7 @@
 		111629B9286365F50012B134 /* NftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629B8286365F50012B134 /* NftData.swift */; };
 		111629BB286379B80012B134 /* TxWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BA286379B80012B134 /* TxWorker.swift */; };
 		111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BC2863A0D20012B134 /* Web3Parser.swift */; };
-		111629BF2863A3520012B134 /* PublicCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BE2863A3520012B134 /* PublicCollectionData.swift */; };
+		111629BF2863A3520012B134 /* PublicCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BE2863A3520012B134 /* PublicCollection.swift */; };
 		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
 		1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */; };
@@ -28,6 +28,9 @@
 		11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE56285A5C0100D056FA /* rubik-regular.ttf */; };
 		11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE57285A5C0200D056FA /* rubik-bold.ttf */; };
 		11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */; };
+		11C562F1287B8E9A0028F885 /* PrivateCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C562F0287B8E9A0028F885 /* PrivateCollection.swift */; };
+		11C6D894287C7B6800CE0950 /* PrivateCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */; };
+		11C6D896287C9FA100CE0950 /* CollectionConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C6D895287C9FA100CE0950 /* CollectionConstructor.swift */; };
 		11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */; };
 		11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */; };
 		11C9F993285FA7E100A27587 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F992285FA7E100A27587 /* ShareView.swift */; };
@@ -71,7 +74,7 @@
 		111629B8286365F50012B134 /* NftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftData.swift; sourceTree = "<group>"; };
 		111629BA286379B80012B134 /* TxWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxWorker.swift; sourceTree = "<group>"; };
 		111629BC2863A0D20012B134 /* Web3Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Parser.swift; sourceTree = "<group>"; };
-		111629BE2863A3520012B134 /* PublicCollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCollectionData.swift; sourceTree = "<group>"; };
+		111629BE2863A3520012B134 /* PublicCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCollection.swift; sourceTree = "<group>"; };
 		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
 		1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeRefresh.swift; sourceTree = "<group>"; };
@@ -83,6 +86,9 @@
 		11BEBE56285A5C0100D056FA /* rubik-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-regular.ttf"; sourceTree = "<group>"; };
 		11BEBE57285A5C0200D056FA /* rubik-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-bold.ttf"; sourceTree = "<group>"; };
 		11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSheet.swift; sourceTree = "<group>"; };
+		11C562F0287B8E9A0028F885 /* PrivateCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCollection.swift; sourceTree = "<group>"; };
+		11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCollectionData.swift; sourceTree = "<group>"; };
+		11C6D895287C9FA100CE0950 /* CollectionConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionConstructor.swift; sourceTree = "<group>"; };
 		11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintProcessingScreen.swift; sourceTree = "<group>"; };
 		11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintFinishedSheet.swift; sourceTree = "<group>"; };
 		11C9F992285FA7E100A27587 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
@@ -211,8 +217,10 @@
 				1108864D284AF497002C4E5A /* NftMeta.swift */,
 				1108864F284B123C002C4E5A /* Nft.swift */,
 				111629B8286365F50012B134 /* NftData.swift */,
-				111629BE2863A3520012B134 /* PublicCollectionData.swift */,
+				111629BE2863A3520012B134 /* PublicCollection.swift */,
 				111629C02863AAE50012B134 /* TokenData.swift */,
+				11C562F0287B8E9A0028F885 /* PrivateCollection.swift */,
+				11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -272,6 +280,7 @@
 				11ED5AAB284710BE00F0D61D /* MintContainer.swift */,
 				11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */,
 				11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */,
+				11C6D895287C9FA100CE0950 /* CollectionConstructor.swift */,
 			);
 			path = Mint;
 			sourceTree = "<group>";
@@ -412,6 +421,7 @@
 				11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */,
 				11D2572728444C790028E2B4 /* ContentView.swift in Sources */,
 				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
+				11C562F1287B8E9A0028F885 /* PrivateCollection.swift in Sources */,
 				11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */,
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
 				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
@@ -420,7 +430,7 @@
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				1108864C284ABE59002C4E5A /* Tools.swift in Sources */,
-				111629BF2863A3520012B134 /* PublicCollectionData.swift in Sources */,
+				111629BF2863A3520012B134 /* PublicCollection.swift in Sources */,
 				11F972A0285CED11000026FD /* Tip.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
 				11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */,
@@ -430,6 +440,7 @@
 				11C9F993285FA7E100A27587 /* ShareView.swift in Sources */,
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
 				111629B9286365F50012B134 /* NftData.swift in Sources */,
+				11C6D896287C9FA100CE0950 /* CollectionConstructor.swift in Sources */,
 				11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
 				111629BB286379B80012B134 /* TxWorker.swift in Sources */,
@@ -443,6 +454,7 @@
 				11F972A2285CEF6D000026FD /* FaucetScreen.swift in Sources */,
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 				111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */,
+				11C6D894287C7B6800CE0950 /* PrivateCollectionData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ import WalletConnectSwift
 class TxWorker {
     
     static func construct(from: String,
-                          to: String = Constants.routerAddress,
+                          to: String,
                           data: String = "",
                           value: String = "0x0") -> Client.Transaction {
         return Client.Transaction(from: from,
