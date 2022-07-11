@@ -26,7 +26,7 @@ jobs:
         run: go test -c ./service -o service_test
         working-directory: backend
       - name: Run tests
-        run: ./service_test -test.v -cfg configs/test -migrate db -rootdb host=localhost port=1338 user=postgres password=1337 dbname=postgres sslmode=disable
+        run: ./service_test -test.v -cfg configs/test -migrate db -rootdb "host=localhost port=1338 user=postgres password=1337 dbname=postgres sslmode=disable"
         working-directory: backend
       - name: Build container
         run: docker build -t minter-guru-dev-server --build-arg env=master backend/
