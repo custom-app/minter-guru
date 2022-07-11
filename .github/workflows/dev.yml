@@ -36,8 +36,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Migrate postgres
-        run: docker-compose -f docker-compose.dev.yml up -d dev-postgres |
-          sleep 3s |
-          docker-compose -f docker-compose.dev.yml up --build --exit-code-from dev-migration-job dev-migration-job
+        run: docker-compose -f docker-compose.dev.yml up --build --exit-code-from dev-migration-job dev-migration-job
       - name: Update compose
         run: docker-compose -f docker-compose.master.yml up -d dev-server
