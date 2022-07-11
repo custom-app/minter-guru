@@ -41,3 +41,7 @@ jobs:
         run: ./check_migration.sh dev && docker logs minter-guru-dev-migration-job-1
       - name: Update compose
         run: docker-compose -f docker-compose.dev.yml up -d dev-server
+      - name: Move nginx config
+        run: sudo mv frontend/nginx/minter_guru_api_dev.conf /etc/nginx/conf.d
+      - name: Restart nginx
+        run: sudo nginx -s reload
