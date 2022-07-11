@@ -26,7 +26,7 @@ func Now() time.Time {
 }
 
 type MinterGuruService interface {
-	GetAuthMessage(context.Context, string) (string, *ErrorResponse)
+	GetAuthMessage(context.Context, string) (*AuthMessageResponse, *ErrorResponse)
 	Auth(context.Context, string, string) (*AuthResponse, *ErrorResponse)
 	Faucet(context.Context, int64) (*Transaction, *ErrorResponse)
 	ApplyForTwitterReward(context.Context, int64) (*TwitterReward, *ErrorResponse)
@@ -102,7 +102,7 @@ func (s *MinterGuruServiceImpl) Start(ctx context.Context) error {
 	twitterRouter.Handle("/get_records", getTwitterRewardsHandler)
 	twitterRouter.Handle("", applyForTwitterRewardHandler)
 
-	router.Handle("/faucet", faucetHandler)
+	router.Methods(http.MethodPost).Subrouter().Handle("/faucet", faucetHandler)
 
 	s.server = &http.Server{
 		Handler: router,
