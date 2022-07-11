@@ -38,6 +38,6 @@ jobs:
       - name: Migrate postgres
         run: docker-compose -f docker-compose.dev.yml up --build -d dev-migration-job
       - name: Check migration
-        run: ./check_migration.sh && docker logs minter-guru-dev-migration-job-1
+        run: ./check_migration.sh dev && docker logs minter-guru-dev-migration-job-1
       - name: Update compose
         run: docker-compose -f docker-compose.dev.yml up -d dev-server
