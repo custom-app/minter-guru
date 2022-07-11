@@ -7,22 +7,41 @@ import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 import fs from "fs";
+import { HttpNetworkUserConfig } from "hardhat/types/config";
 
 dotenv.config();
 
-const mumbaiPrivateKey = fs.readFileSync(".mumbai-secret").toString().trim();
-const mumbaiLiquidityPrivateKey = fs
-  .readFileSync(".mumbai-liquidity-secret")
-  .toString()
-  .trim();
-const mumbaiVestingPrivateKey = fs
-  .readFileSync(".mumbai-vesting-secret")
-  .toString()
-  .trim();
-const mumbaiEventsPrivateKey = fs
-  .readFileSync(".mumbai-events-secret")
-  .toString()
-  .trim();
+const mumbaiAccounts: string[] = [];
+if (fs.existsSync(".mumbai-secret")) {
+  mumbaiAccounts.push(fs.readFileSync(".mumbai-secret").toString().trim());
+}
+if (fs.existsSync(".mumbai-liquidity-secret")) {
+  mumbaiAccounts.push(
+    fs.readFileSync(".mumbai-liquidity-secret").toString().trim()
+  );
+}
+if (fs.existsSync(".mumbai-vesting-secret")) {
+  mumbaiAccounts.push(
+    fs.readFileSync(".mumbai-vesting-secret").toString().trim()
+  );
+}
+if (fs.existsSync(".mumbai-events-secret")) {
+  mumbaiAccounts.push(
+    fs.readFileSync(".mumbai-events-secret").toString().trim()
+  );
+}
+const mumbaiConfig: HttpNetworkUserConfig = {
+  url: "https://matic-mumbai.chainstacklabs.com/",
+  chainId: 80001,
+  accounts: mumbaiAccounts,
+};
+if (process.env.POLYGON_MUMBAI_GETBLOCK_APIKEY) {
+  mumbaiConfig.url = "https://matic.getblock.io/testnet/";
+  mumbaiConfig.httpHeaders = {
+    "x-api-key": process.env.POLYGON_MUMBAI_GETBLOCK_APIKEY,
+  };
+}
+console.log("mumbai cfg:", mumbaiConfig);
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -48,19 +67,7 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    mumbai: {
-      url: "https://matic.getblock.io/testnet/",
-      httpHeaders: {
-        "x-api-key": process.env.POLYGON_MUMBAI_GETBLOCK_APIKEY!,
-      },
-      accounts: [
-        mumbaiPrivateKey,
-        mumbaiLiquidityPrivateKey,
-        mumbaiVestingPrivateKey,
-        mumbaiEventsPrivateKey,
-      ],
-      chainId: 80001,
-    },
+    mumbai: mumbaiConfig,
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
