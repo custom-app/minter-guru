@@ -29,7 +29,7 @@ jobs:
         run: ./service_test -test.v -cfg configs/test -migrate db -rootdb "host=localhost port=1338 user=postgres password=1337 dbname=postgres sslmode=disable"
         working-directory: backend
       - name: Build container
-        run: docker build -t minter-guru-dev-server --build-arg env=master backend/
+        run: docker build -t minter-guru-dev-server --build-arg env=dev backend/
   update:
     runs-on: [ self-hosted, dev ]
     needs: [ build_backend ]
