@@ -14,6 +14,7 @@ import Combine
 
 class GlobalViewModel: ObservableObject {
     
+    //TODO: move to consts
     let deepLinkDelay = 0.25
     let mintLabel = "mint"
     let purchaseCollectionLabel = "purchase_collection"
@@ -61,6 +62,10 @@ class GlobalViewModel: ObservableObject {
     var privateCollections: [PrivateCollection] = []
     @Published
     var privateCollectionsLoaded = false
+    @Published
+    var purchasingInProgress = false
+    @Published
+    var purchaseFinished = false
     
     @Published
     var alert: IdentifiableAlert?
@@ -84,10 +89,15 @@ class GlobalViewModel: ObservableObject {
     @Published
     var nftListLoaded = false
     
-    private var observingTokensCount = false
-    private var countRequestTimer: AnyCancellable?
-    private let countUpdateInterval: Double = 1
-    private var lastTokensCount: Int?
+    private let updateInterval: Double = 1
+    
+    private var observingNftsCount = false
+    private var nftsRequestTimer: AnyCancellable?
+    private var lastNftsCount: Int?
+    
+    private var observingCollectionsCount = false
+    private var collectionsRequestTimer: AnyCancellable?
+    private var lastCollectionsCount: Int?
     
     @Published
     var refreshingNfts = false
@@ -202,14 +212,6 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func loadNftList() {
-        print("loading list")
-        //TODO: unmock
-        DispatchQueue.global(qos: .userInitiated).async {
-                
-        }
-    }
-    
     func loadNftMeta(nft: Nft, loadImageAfter: Bool = false) {
         if let url = URL(string: Tools.ipfsLinkToHttp(ipfsLink: nft.metaUrl)) {
             HttpRequester.shared.loadMeta(url: url) { [self] meta, error in
@@ -303,8 +305,9 @@ class GlobalViewModel: ObservableObject {
                     //TODO: handle error?
                 } else {
                     print("got public tokens count: \(count)")
-                    if let observing = self?.observingTokensCount, let lastCount = self?.lastTokensCount, observing {
+                    if let observing = self?.observingNftsCount, let lastCount = self?.lastNftsCount, observing {
                         if count > lastCount {
+                            self?.nftsRequestTimer?.cancel()
                             self?.getPublicTokens(page: 0)
                         }
                     } else {
@@ -313,7 +316,6 @@ class GlobalViewModel: ObservableObject {
                             if count == 0 {
                                 self?.nftListLoaded = true
                             }
-                            self?.lastTokensCount = Int(count)
                             self?.getPublicTokens(page: 0)
                         }
                     }
@@ -336,8 +338,8 @@ class GlobalViewModel: ObservableObject {
                             self?.nftListLoaded = true
                             self?.refreshingNfts = false
                         }
-                        if let observing = self?.observingTokensCount,
-                            let lastCount = self?.lastTokensCount,
+                        if let observing = self?.observingNftsCount,
+                            let lastCount = self?.lastNftsCount,
                            observing && tokens.count > lastCount {
                             self?.stopObservingTokensCount()
                             self?.showMintFinishedSheet = true
@@ -370,13 +372,15 @@ class GlobalViewModel: ObservableObject {
             do {
                 let data = try JSONEncoder().encode(collectionData)
                 let salt = Tools.sha256(data: (address + "\(Date())").data(using: .utf8)!)
-                print("salt len: \(salt.count)")
                 guard let data = web3.purchasePrivateCollectionData(salt: salt,
                                                                     name: collectionData.name,
                                                                     symbol: "",
                                                                     data: data) else {
                     //TODO: handle error
                     return
+                }
+                withAnimation {
+                    self.purchasingInProgress = true
                 }
                 prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
             } catch {
@@ -427,12 +431,19 @@ class GlobalViewModel: ObservableObject {
                     //TODO: handle error?
                 } else {
                     print("get private collections count: \(count)")
-                    withAnimation {
-                        self?.privateCollectionsCount = Int(count)
-                        if count == 0 {
-                            self?.privateCollectionsLoaded = true
-                        } else {
+                    if let observing = self?.observingCollectionsCount, let lastCount = self?.lastCollectionsCount, observing {
+                        if count > lastCount {
+                            self?.collectionsRequestTimer?.cancel()
                             self?.getPrivateCollections()
+                        }
+                    } else {
+                        withAnimation {
+                            self?.privateCollectionsCount = Int(count)
+                            if count == 0 {
+                                self?.privateCollectionsLoaded = true
+                            } else {
+                                self?.getPrivateCollections()
+                            }
                         }
                     }
                 }
@@ -452,6 +463,15 @@ class GlobalViewModel: ObservableObject {
                         withAnimation {
                             self?.privateCollections = collections
                             self?.privateCollectionsLoaded = true
+                        }
+                        if let observing = self?.observingCollectionsCount,
+                            let lastCount = self?.lastCollectionsCount,
+                           observing && collections.count > lastCount {
+                            print("stopping observing")
+                            self?.stopObservingPrivateCollections()
+                            self?.purchaseFinished = true
+                            self?.purchasingInProgress = false
+                            self?.getMinterBalance()
                         }
                     }
                 }
@@ -483,10 +503,14 @@ class GlobalViewModel: ObservableObject {
                     } catch {
                         print("Unexpected response type error: \(error)")
                     }
-                }
-                if label == "mint" {
-                    //TODO: handle error
-                    self?.startObservingTokensCount()
+                    switch label {
+                    case self?.mintLabel:
+                        self?.startObservingTokensCount()
+                    case self?.purchaseCollectionLabel:
+                        self?.startObservingPrivateCollections()
+                    default:
+                        print("unknown tx label: \(label)")
+                    }
                 }
             }
             print("sending tx: \(label)")
@@ -501,10 +525,11 @@ class GlobalViewModel: ObservableObject {
     }
     
     func startObservingTokensCount() {
-        countRequestTimer?.cancel()
-        observingTokensCount = true
-        countRequestTimer = Timer.publish(every: countUpdateInterval,
-                              tolerance: countUpdateInterval/2,
+        nftsRequestTimer?.cancel()
+        observingNftsCount = true
+        lastNftsCount = nftList.count
+        nftsRequestTimer = Timer.publish(every: updateInterval,
+                              tolerance: updateInterval/2,
                               on: .main,
                               in: .common)
             .autoconnect()
@@ -514,8 +539,27 @@ class GlobalViewModel: ObservableObject {
     }
     
     func stopObservingTokensCount() {
-        observingTokensCount = false
-        countRequestTimer?.cancel()
+        observingNftsCount = false
+        nftsRequestTimer?.cancel()
+    }
+    
+    func startObservingPrivateCollections() {
+        collectionsRequestTimer?.cancel()
+        observingCollectionsCount = true
+        lastCollectionsCount = privateCollections.count
+        collectionsRequestTimer = Timer.publish(every: updateInterval,
+                              tolerance: updateInterval/2,
+                              on: .main,
+                              in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.getPrivateCollectionsCount()
+        }
+    }
+    
+    func stopObservingPrivateCollections() {
+        observingCollectionsCount = false
+        collectionsRequestTimer?.cancel()
     }
     
     func refreshNfts() {

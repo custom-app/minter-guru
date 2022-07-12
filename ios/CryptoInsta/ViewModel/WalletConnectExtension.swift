@@ -119,7 +119,6 @@ extension GlobalViewModel: WalletConnectDelegate {
                 }
                 showConnectSheet = false
                 if !isWrongChain {
-                    loadNftList()
                     getPublicTokensCount()
                     getPrivateCollectionPrice()
                     getMinterBalance()

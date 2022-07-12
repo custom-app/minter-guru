@@ -250,7 +250,12 @@ struct MintContainer: View {
                 
                 Rectangle()
                     .frame(height: 0)
-                    .sheet(isPresented: $showCreateCollectionSheet) {
+                    .sheet(isPresented: $showCreateCollectionSheet, onDismiss: {
+                        withAnimation {
+                            globalVm.purchasingInProgress = false
+                            globalVm.purchaseFinished = false
+                        }
+                    }) {
                         CollectionConstructor()
                             .environmentObject(globalVm)
                     }
