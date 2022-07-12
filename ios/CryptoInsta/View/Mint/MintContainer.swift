@@ -16,12 +16,6 @@ struct MintContainer: View {
     var showPhotoPicker = false
     
     @State
-    var creatingNewCollection = false
-    
-    @State
-    var newCollectionName = ""
-    
-    @State
     var showCreateCollectionSheet = false
     
     var body: some View {
@@ -167,98 +161,52 @@ struct MintContainer: View {
                         if globalVm.pickedPrivateCollection {
                             VStack(spacing: 0) {
                                 HStack(spacing: 10) {
-                                    Text(creatingNewCollection ? "Enter collection name" : "Select a Private collection")
+                                    Text("Select a Private collection")
                                         .foregroundColor(Colors.mainGrey)
                                         .font(.custom("rubik-bold", size: 16))
                                     
                                     Button {
-                                        if creatingNewCollection {
-                                            withAnimation {
-                                                creatingNewCollection = false
-                                            }
-                                        } else {
-                                            withAnimation {
-                                                creatingNewCollection = true
-                                            }
-                                        }
                                         showCreateCollectionSheet = true
                                     } label: {
-                                        Text(creatingNewCollection ? "Cancel" : "Create")
+                                        Text("Create")
                                             .foregroundColor(Colors.mainGreen)
                                             .font(.custom("rubik-bold", size: 16))
                                     }
                                 }
-                                if creatingNewCollection {
-                                    ZStack {
-                                        TextField("", text: $newCollectionName)
-                                            .font(.custom("rubik-bold", size: 17))
-                                            .placeholder(when: newCollectionName.isEmpty) {
-                                                HStack {
-                                                    Text("New collection's name")
-                                                        .font(.custom("rubik-bold", size: 17))
-                                                        .foregroundColor(Colors.mainGrey)
-                                                    Spacer()
-                                                }
-                                            }
-                                            .foregroundColor(Colors.mainBlack)
-                                            .lineLimit(1)
-                                            .truncationMode(.tail)
-                                            .padding(.horizontal, 14)
-                                            .padding(.vertical, 13)
-                                            .padding(.trailing, 35)
-                                            .background(Colors.mainWhite)
-                                            .cornerRadius(32)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 32)
-                                                    .stroke(Colors.mainGreen, lineWidth: 2)
-                                            )
-                                            .overlay(
-                                                HStack {
-                                                    Spacer()
-                                                    Button {
-
-                                                    } label: {
-                                                        Image("ic_ok")
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 24, height: 24)
-                                                    }
-                                                    .padding(.trailing, 16)
-                                                }
-                                            )
-                                            .padding(.horizontal, 26)
-                                            .padding(.top, 25)
-//                                        }
-                                    }
-                                }
+                                
                             }
                             .padding(.top, 25)
                             
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(globalVm.privateCollections, id: \.self) { collection in
-                                        Text("#\(collection.data.name)")
-                                            .foregroundColor(Colors.mainGreen)
-                                            .font(.custom("rubik-bold", size: 16))
-                                            .padding(.vertical, 8)
-                                            .padding(.horizontal, 10)
-                                            .background(Colors.paleGreen)
-                                            .cornerRadius(30)
-                                            .overlay(RoundedRectangle(cornerRadius: 30)
-                                                .stroke(Colors.mainGreen, lineWidth: 2)
-                                                .opacity(collection.data.name == globalVm.pickedCollectionName ? 1 : 0))
-                                            .onTapGesture {
-                                                if collection.data.name != globalVm.pickedCollectionName {
-                                                    withAnimation {
-                                                        globalVm.pickedCollectionName = collection.data.name
+                            if globalVm.privateCollectionsLoaded {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 10) {
+                                        ForEach(globalVm.privateCollections, id: \.self) { collection in
+                                            Text("#\(collection.data.name)")
+                                                .foregroundColor(Colors.mainGreen)
+                                                .font(.custom("rubik-bold", size: 16))
+                                                .padding(.vertical, 8)
+                                                .padding(.horizontal, 10)
+                                                .background(Colors.paleGreen)
+                                                .cornerRadius(30)
+                                                .overlay(RoundedRectangle(cornerRadius: 30)
+                                                    .stroke(Colors.mainGreen, lineWidth: 2)
+                                                    .opacity(collection.data.name == globalVm.pickedCollectionName ? 1 : 0))
+                                                .onTapGesture {
+                                                    if collection.data.name != globalVm.pickedCollectionName {
+                                                        withAnimation {
+                                                            globalVm.pickedCollectionName = collection.data.name
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        
+                                            
+                                        }
                                     }
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal, 26)
                                 }
-                                .padding(.vertical, 10)
-                                .padding(.horizontal, 26)
+                            } else {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
                             }
                         }
                         
