@@ -7,11 +7,35 @@ import (
 	"github.com/jackc/pgx/v4"
 	"log"
 	"math/big"
+	"strings"
 	"sync"
 	"time"
 )
 
 var twitterLock = &sync.RWMutex{}
+
+func (s *MinterGuruServiceImpl) applyForTwitterReward(ctx context.Context, tx pgx.Tx, userId int64) (*TwitterReward, *ErrorResponse) {
+	now := Now()
+	// language=PostgreSQL
+	row := tx.QueryRow(ctx, `SELECT COUNT(*) FROM twitter_rewards WHERE user_id=$1 AND created_at>=$2`,
+		userId, now.AddDate(0, 0, -1).UnixMilli())
+	var count int
+	if err := row.Scan(&count); err != nil {
+		return nil, checkAndLogDatabaseError(err)
+	}
+	if count >= s.cfg.getMinterGuruTwitterDailyLimit() {
+		return nil, TwitterLimitReached
+	}
+	// language=PostgreSQL
+	row = tx.QueryRow(ctx, `INSERT INTO twitter_rewards VALUES (DEFAULT,$1,$2) RETURNING id`, userId, now.UnixMilli())
+	res := &TwitterReward{
+		CreatedAt: now.UnixMilli(),
+	}
+	if err := row.Scan(&res.Id); err != nil {
+		return nil, checkAndLogDatabaseError(err)
+	}
+	return res, nil
+}
 
 func (s *MinterGuruServiceImpl) ApplyForTwitterReward(ctx context.Context,
 	userId int64) (*TwitterReward, *ErrorResponse) {
@@ -21,24 +45,9 @@ func (s *MinterGuruServiceImpl) ApplyForTwitterReward(ctx context.Context,
 	twitterLock.Lock()
 	defer twitterLock.Unlock()
 	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
-		now := Now()
-		// language=PostgreSQL
-		row := tx.QueryRow(ctx, `SELECT COUNT(*) FROM twitter_rewards WHERE user_id=$1 AND created_at>=$2`,
-			userId, now.AddDate(0, 0, -1).UnixMilli())
-		var count int
-		if err := row.Scan(&count); err != nil {
-			return nil, false, checkAndLogDatabaseError(err)
-		}
-		if count >= s.cfg.getMinterGuruTwitterDailyLimit() {
-			return nil, false, TwitterLimitReached
-		}
-		// language=PostgreSQL
-		row = tx.QueryRow(ctx, `INSERT INTO twitter_rewards VALUES (DEFAULT,$1,$2) RETURNING id`, userId, now.UnixMilli())
-		res := &TwitterReward{
-			CreatedAt: now.UnixMilli(),
-		}
-		if err := row.Scan(&res.Id); err != nil {
-			return nil, false, checkAndLogDatabaseError(err)
+		res, e := s.applyForTwitterReward(ctx, tx, userId)
+		if e != nil {
+			return nil, false, e
 		}
 		return res, true, nil
 	})
@@ -48,30 +57,86 @@ func (s *MinterGuruServiceImpl) ApplyForTwitterReward(ctx context.Context,
 	return res.(*TwitterReward), nil
 }
 
+func (s *MinterGuruServiceImpl) ApplyForTwitterRewardByAddress(ctx context.Context,
+	address string) (*TwitterReward, *ErrorResponse) {
+	if !s.cfg.getMinterGuruTwitterEventOpen() {
+		return nil, TwitterEventClosed
+	}
+	twitterLock.Lock()
+	defer twitterLock.Unlock()
+	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
+		user, e := s.findOrCreateUserWithAddress(ctx, tx, strings.ToLower(address))
+		if e != nil {
+			return nil, false, e
+		}
+		res, e := s.applyForTwitterReward(ctx, tx, user.Id)
+		if e != nil {
+			return nil, false, e
+		}
+		return res, true, nil
+	})
+	if e != nil {
+		return nil, e
+	}
+	return res.(*TwitterReward), nil
+}
+
+func (s *MinterGuruServiceImpl) getTwitterRewards(ctx context.Context, tx pgx.Tx,
+	userId int64) ([]*TwitterReward, *ErrorResponse) {
+	twitterLock.RLock()
+	defer twitterLock.RUnlock()
+	// language=PostgreSQL
+	rows, err := tx.Query(ctx, `SELECT id, created_at, coalesce(txid, '') FROM twitter_rewards 
+                                          WHERE user_id=$1 ORDER BY id DESC`, userId)
+	if err != nil {
+		return nil, checkAndLogDatabaseError(err)
+	}
+	defer rows.Close()
+	var res []*TwitterReward
+	for rows.Next() {
+		r := &TwitterReward{
+			Transaction: &Transaction{},
+		}
+		if err := rows.Scan(&r.Id, &r.CreatedAt, &r.Transaction.Id); err != nil {
+			return nil, checkAndLogDatabaseError(err)
+		}
+		if r.Transaction.Id == "" {
+			r.Transaction = nil
+		}
+		res = append(res, r)
+	}
+	return res, nil
+}
+
 func (s *MinterGuruServiceImpl) GetTwitterRewards(ctx context.Context,
 	userId int64) ([]*TwitterReward, *ErrorResponse) {
 	twitterLock.RLock()
 	defer twitterLock.RUnlock()
 	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
-		// language=PostgreSQL
-		rows, err := tx.Query(ctx, `SELECT id, created_at, coalesce(txid, '') FROM twitter_rewards 
-                                          WHERE user_id=$1 ORDER BY id DESC`, userId)
-		if err != nil {
-			return nil, false, checkAndLogDatabaseError(err)
+		res, e := s.getTwitterRewards(ctx, tx, userId)
+		if e != nil {
+			return nil, false, e
 		}
-		defer rows.Close()
-		var res []*TwitterReward
-		for rows.Next() {
-			r := &TwitterReward{
-				Transaction: &Transaction{},
-			}
-			if err := rows.Scan(&r.Id, &r.CreatedAt, &r.Transaction.Id); err != nil {
-				return nil, false, checkAndLogDatabaseError(err)
-			}
-			if r.Transaction.Id == "" {
-				r.Transaction = nil
-			}
-			res = append(res, r)
+		return res, true, nil
+	})
+	if e != nil {
+		return nil, e
+	}
+	return res.([]*TwitterReward), nil
+}
+
+func (s *MinterGuruServiceImpl) GetTwitterRewardsByAddress(ctx context.Context,
+	address string) ([]*TwitterReward, *ErrorResponse) {
+	twitterLock.RLock()
+	defer twitterLock.RUnlock()
+	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
+		user, e := s.findOrCreateUserWithAddress(ctx, tx, strings.ToLower(address))
+		if e != nil {
+			return nil, false, e
+		}
+		res, e := s.getTwitterRewards(ctx, tx, user.Id)
+		if e != nil {
+			return nil, false, e
 		}
 		return res, true, nil
 	})
