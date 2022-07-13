@@ -29,8 +29,11 @@ type MinterGuruService interface {
 	GetAuthMessage(context.Context, string) (*AuthMessageResponse, *ErrorResponse)
 	Auth(context.Context, string, string) (*AuthResponse, *ErrorResponse)
 	Faucet(context.Context, int64) (*Transaction, *ErrorResponse)
+	FaucetByAddress(ctx context.Context, address string) (*Transaction, *ErrorResponse)
 	ApplyForTwitterReward(context.Context, int64) (*TwitterReward, *ErrorResponse)
+	ApplyForTwitterRewardByAddress(ctx context.Context, address string) (*TwitterReward, *ErrorResponse)
 	GetTwitterRewards(context.Context, int64) ([]*TwitterReward, *ErrorResponse)
+	GetTwitterRewardsByAddress(ctx context.Context, address string) ([]*TwitterReward, *ErrorResponse)
 }
 
 type EthProvider interface {
@@ -81,14 +84,29 @@ func (s *MinterGuruServiceImpl) Start(ctx context.Context) error {
 		decodeEmptyRequest,
 		encodeResponse,
 	)
+	getTwitterRewardsByAddressHandler := httptransport.NewServer(
+		makeGetTwitterRewardsByAddressEndpoint(s),
+		decodeGetTwitterRewardsByAddressRequest,
+		encodeResponse,
+	)
 	applyForTwitterRewardHandler := httptransport.NewServer(
-		s.authMiddleware(makeApplyForTwitterRewardsEndpoint(s)),
+		s.authMiddleware(makeApplyForTwitterRewardEndpoint(s)),
 		decodeEmptyRequest,
+		encodeResponse,
+	)
+	applyForTwitterRewardByAddressHandler := httptransport.NewServer(
+		makeApplyForTwitterRewardByAddressEndpoint(s),
+		decodeApplyForTwitterByAddressRequest,
 		encodeResponse,
 	)
 	faucetHandler := httptransport.NewServer(
 		s.authMiddleware(makeFaucetEndpoint(s)),
 		decodeEmptyRequest,
+		encodeResponse,
+	)
+	faucetByAddressHandler := httptransport.NewServer(
+		makeFaucetByAddressEndpoint(s),
+		decodeFaucetByAddressRequest,
 		encodeResponse,
 	)
 
@@ -100,9 +118,13 @@ func (s *MinterGuruServiceImpl) Start(ctx context.Context) error {
 
 	twitterRouter := router.PathPrefix("/twitter").Methods(http.MethodPost).Subrouter()
 	twitterRouter.Handle("/get_records", getTwitterRewardsHandler)
+	twitterRouter.Handle("/get_records/by_address", getTwitterRewardsByAddressHandler)
 	twitterRouter.Handle("", applyForTwitterRewardHandler)
+	twitterRouter.Handle("/by_address", applyForTwitterRewardByAddressHandler)
 
-	router.Methods(http.MethodPost).Subrouter().Handle("/faucet", faucetHandler)
+	faucetRouter := router.PathPrefix("/faucet").Methods(http.MethodPost).Subrouter()
+	faucetRouter.Handle("", faucetHandler)
+	faucetRouter.Handle("/by_address", faucetByAddressHandler)
 
 	s.server = &http.Server{
 		Handler: router,

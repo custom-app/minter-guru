@@ -66,8 +66,20 @@ type AuthResponse struct {
 	AccessToken *TokenData `json:"accessToken"`
 }
 
+type FaucetByAddressRequest struct {
+	Address string `json:"address"`
+}
+
+type TwitterRewardsByAddressRequest struct {
+	Address string `json:"address"`
+}
+
 type TwitterRewardsResponse struct {
 	Records []*TwitterReward `json:"records"`
+}
+
+type ApplyForTwitterRewardByAddressRequest struct {
+	Address string `json:"address"`
 }
 
 type ApplyForTwitterRewardResponse struct {
@@ -91,6 +103,33 @@ func decodeAuthMessageRequest(_ context.Context, r *http.Request) (interface{}, 
 
 func decodeAuthRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var req AuthRequest
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}
+
+func decodeFaucetByAddressRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req FaucetByAddressRequest
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}
+
+func decodeApplyForTwitterByAddressRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req ApplyForTwitterRewardByAddressRequest
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}
+
+func decodeGetTwitterRewardsByAddressRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req TwitterRewardsByAddressRequest
 	defer r.Body.Close()
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err
@@ -155,11 +194,43 @@ func makeGetTwitterRewardsEndpoint(s MinterGuruService) endpoint.Endpoint {
 	}
 }
 
-func makeApplyForTwitterRewardsEndpoint(s MinterGuruService) endpoint.Endpoint {
+func makeGetTwitterRewardsByAddressEndpoint(s MinterGuruService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		req, ok := request.(*TwitterRewardsByAddressRequest)
+		if !ok {
+			return ParseFailed, nil
+		}
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		res, e := s.GetTwitterRewardsByAddress(ctx, req.Address)
+		if e != nil {
+			return e, nil
+		}
+		return res, nil
+	}
+}
+
+func makeApplyForTwitterRewardEndpoint(s MinterGuruService) endpoint.Endpoint {
 	return func(ctx context.Context, _ interface{}) (response interface{}, err error) {
 		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
 		res, e := s.ApplyForTwitterReward(ctx, ctx.Value("userId").(int64))
+		if e != nil {
+			return e, nil
+		}
+		return res, nil
+	}
+}
+
+func makeApplyForTwitterRewardByAddressEndpoint(s MinterGuruService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		req, ok := request.(*ApplyForTwitterRewardByAddressRequest)
+		if !ok {
+			return ParseFailed, nil
+		}
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		res, e := s.ApplyForTwitterRewardByAddress(ctx, req.Address)
 		if e != nil {
 			return e, nil
 		}
@@ -172,6 +243,22 @@ func makeFaucetEndpoint(s MinterGuruService) endpoint.Endpoint {
 		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
 		res, e := s.Faucet(ctx, ctx.Value("userId").(int64))
+		if e != nil {
+			return e, nil
+		}
+		return res, nil
+	}
+}
+
+func makeFaucetByAddressEndpoint(s MinterGuruService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		req, ok := request.(*FaucetByAddressRequest)
+		if !ok {
+			return ParseFailed, nil
+		}
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		res, e := s.FaucetByAddress(ctx, req.Address)
 		if e != nil {
 			return e, nil
 		}

@@ -132,6 +132,16 @@ Empty
   "detail": ""
 }
 ```
+### Request faucet by address
+`POST /faucet/by_address`
+
+Public version of request with required authorization
+#### Body
+```json
+{
+  "address": "user address"
+}
+```
 ## Twitter rewards
 ### Get rewards list
 `POST /twitter/get_records`
@@ -185,5 +195,25 @@ Empty
   "code": 400,
   "message": "twitter limit reached",
   "detail": ""
+}
+```
+### Apply for twitter reward by address
+`POST /twitter/by_address`
+
+Public version of request with required authorization
+#### Body
+```json
+{
+  "address": "user address"
+}
+```
+### Get rewards list
+`POST /twitter/get_records/by_address`
+
+Public version of request with required authorization
+#### Body
+```json
+{
+  "address": "user address"
 }
 ```

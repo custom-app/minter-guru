@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgx/v4"
 	"log"
 	"math/big"
+	"strings"
 	"sync"
 	"time"
 )
@@ -87,29 +88,57 @@ func (s *MinterGuruServiceImpl) transferNativeTokens(ctx context.Context, user *
 	return t, nil
 }
 
+func (s *MinterGuruServiceImpl) faucet(ctx context.Context, tx pgx.Tx, userId int64) (*Transaction, *ErrorResponse) {
+	user, err := getUser(ctx, tx, userId)
+	if err != nil {
+		return nil, checkAndLogDatabaseError(err)
+	}
+	if e := s.checkUserToFaucet(ctx, tx, user); e != nil {
+		return nil, e
+	}
+	t, e := s.transferNativeTokens(ctx, user)
+	if e != nil {
+		return nil, e
+	}
+	// language=PostgreSQL
+	if _, err := tx.Exec(ctx, `INSERT INTO faucet_transactions VALUES ($1,$2,$3)`,
+		user.Id, Now().UnixMilli(), t.Hash().Hex()); err != nil {
+		return nil, checkAndLogDatabaseError(err)
+	}
+	return &Transaction{
+		Id: t.Hash().Hex(),
+	}, nil
+}
+
 func (s *MinterGuruServiceImpl) Faucet(ctx context.Context, userId int64) (*Transaction, *ErrorResponse) {
 	faucetLock.Lock()
 	defer faucetLock.Unlock()
 	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
-		user, err := getUser(ctx, tx, userId)
-		if err != nil {
-			return nil, false, checkAndLogDatabaseError(err)
-		}
-		if e := s.checkUserToFaucet(ctx, tx, user); e != nil {
-			return nil, false, e
-		}
-		t, e := s.transferNativeTokens(ctx, user)
+		res, e := s.faucet(ctx, tx, userId)
 		if e != nil {
 			return nil, false, e
 		}
-		// language=PostgreSQL
-		if _, err := tx.Exec(ctx, `INSERT INTO faucet_transactions VALUES ($1,$2,$3)`,
-			user.Id, Now().UnixMilli(), t.Hash().Hex()); err != nil {
-			return nil, false, checkAndLogDatabaseError(err)
+		return res, true, nil
+	})
+	if e != nil {
+		return nil, e
+	}
+	return res.(*Transaction), nil
+}
+
+func (s *MinterGuruServiceImpl) FaucetByAddress(ctx context.Context, address string) (*Transaction, *ErrorResponse) {
+	faucetLock.Lock()
+	defer faucetLock.Unlock()
+	res, e := s.makeTxOperation(ctx, func(ctx context.Context, tx pgx.Tx) (interface{}, bool, *ErrorResponse) {
+		user, e := s.findOrCreateUserWithAddress(ctx, tx, strings.ToLower(address))
+		if e != nil {
+			return nil, false, e
 		}
-		return &Transaction{
-			Id: t.Hash().Hex(),
-		}, true, nil
+		res, e := s.faucet(ctx, tx, user.Id)
+		if e != nil {
+			return nil, false, e
+		}
+		return res, true, nil
 	})
 	if e != nil {
 		return nil, e
