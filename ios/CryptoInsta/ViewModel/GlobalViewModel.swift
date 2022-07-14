@@ -11,12 +11,14 @@ import PhotosUI
 import WalletConnectSwift
 import BigInt
 import Combine
+import web3swift
 
 class GlobalViewModel: ObservableObject {
     
     //TODO: move to consts
     let deepLinkDelay = 0.25
     let mintLabel = "mint"
+    let privateMintLabel = "private_mint"
     let purchaseCollectionLabel = "purchase_collection"
     
     @Published
@@ -55,7 +57,7 @@ class GlobalViewModel: ObservableObject {
     @Published
     var pickedPrivateCollection = false
     @Published
-    var pickedCollectionName = ""
+    var pickedCollection: PrivateCollection?
     @Published
     var mintedPictureCollection = ""
     @Published
@@ -200,12 +202,20 @@ class GlobalViewModel: ObservableObject {
                             self.pickedImage = nil
                             self.mintedPictureName = self.pictureName
                             self.pictureName = ""
-                            self.mintedPictureCollection = self.pickedCollectionName
+                            self.mintedPictureCollection = self.pickedCollection?.data.name ?? ""
                         }
-                        self.publicMint(metaUrl: "ipfs://\(cid)",
-                                  nftData: NftData(name: self.mintedPictureName,
-                                                   createDate: Date().timestamp(),
-                                                   filebaseName: filebaseImageName))
+                        if let collection = self.pickedCollection {
+                            self.privateMint(contract: collection.address,
+                                             metaUrl: "ipfs://\(cid)",
+                                             nftData: NftData(name: self.mintedPictureName,
+                                                       createDate: Date().timestamp(),
+                                                       filebaseName: filebaseImageName))
+                        } else {
+                            self.publicMint(metaUrl: "ipfs://\(cid)",
+                                      nftData: NftData(name: self.mintedPictureName,
+                                                       createDate: Date().timestamp(),
+                                                       filebaseName: filebaseImageName))
+                        }
                     }
                 }
             }
@@ -363,6 +373,29 @@ class GlobalViewModel: ObservableObject {
             prepareAndSendTx(to: Constants.routerAddress, data: data, label: mintLabel)
         } catch {
             print("Error encoding NftData: \(error)")
+            //TODO: handle error
+        }
+    }
+    
+    func privateMint(contract: String, metaUrl: String, nftData: NftData) {
+        print("minting to private collection")
+        if let address = walletAccount, let mintTo = EthereumAddress(address) {
+            do {
+                let data = try JSONEncoder().encode(nftData)
+                guard let data = web3.privateMintData(to: mintTo,
+                                                      metaUrl: metaUrl,
+                                                      data: data) else {
+                    print("error getting data")
+                    //TODO: handle error
+                    return
+                }
+                prepareAndSendTx(to: contract, data: data, label: privateMintLabel)
+            } catch {
+                print("Error encoding NftData: \(error)")
+                //TODO: handle error
+            }
+        } else {
+            print("Invalid address for private mint")
             //TODO: handle error
         }
     }

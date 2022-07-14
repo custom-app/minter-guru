@@ -26,7 +26,7 @@ struct MintContainer: View {
                     if globalVm.mintInProgress {
                         globalVm.refreshNfts()
                     } else {
-                        
+                        globalVm.getPrivateCollections()
                     }
                 }
                 
@@ -190,11 +190,11 @@ struct MintContainer: View {
                                                 .cornerRadius(30)
                                                 .overlay(RoundedRectangle(cornerRadius: 30)
                                                     .stroke(Colors.mainGreen, lineWidth: 2)
-                                                    .opacity(collection.data.name == globalVm.pickedCollectionName ? 1 : 0))
+                                                    .opacity(collection == globalVm.pickedCollection ? 1 : 0))
                                                 .onTapGesture {
-                                                    if collection.data.name != globalVm.pickedCollectionName {
+                                                    if collection != globalVm.pickedCollection {
                                                         withAnimation {
-                                                            globalVm.pickedCollectionName = collection.data.name
+                                                            globalVm.pickedCollection = collection
                                                         }
                                                     }
                                                 }
@@ -302,8 +302,8 @@ struct CollectionMenu: View {
                         withAnimation {
                             globalVm.pickedPrivateCollection = true
                         }
-                        if globalVm.pickedCollectionName == "" && globalVm.privateCollections.count > 0 {
-                            globalVm.pickedCollectionName = globalVm.privateCollections[0].data.name
+                        if globalVm.pickedCollection == nil && globalVm.privateCollections.count > 0 {
+                            globalVm.pickedCollection = globalVm.privateCollections[0]
                         }
                     }
                 }

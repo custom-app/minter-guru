@@ -21,6 +21,7 @@ class Web3Worker: ObservableObject {
     private let accessTokenContractWeb3: web3.web3contract
     private let minterContract: EthereumContract
     private let minterContractWeb3: web3.web3contract
+    private let privateCollectionContract: EthereumContract
     
     init(endpoint: String) {
         let chainId = BigUInt(Constants.requiredChainId)
@@ -30,15 +31,18 @@ class Web3Worker: ObservableObject {
         let routerPath = Bundle.main.path(forResource: "public_router_abi", ofType: "json")!
         let accessTokenPath = Bundle.main.path(forResource: "access_token_abi", ofType: "json")!
         let minterTokenPath = Bundle.main.path(forResource: "migu_token_abi", ofType: "json")!
+        let privateCollectionPath = Bundle.main.path(forResource: "private_collection_abi", ofType: "json")!
         let routerAbi = try! String(contentsOfFile: routerPath)
         let accessTokenAbi = try! String(contentsOfFile: accessTokenPath)
         let minterAbi = try! String(contentsOfFile: minterTokenPath)
+        let privateCollectionAbi = try! String(contentsOfFile: privateCollectionPath)
         routerContract = EthereumContract(routerAbi)!
         routerContractWeb3 = web3.contract(routerAbi, at: EthereumAddress(Constants.routerAddress)!, abiVersion: 2)!
         accessTokenContract = EthereumContract(accessTokenAbi)!
         accessTokenContractWeb3 = web3.contract(accessTokenAbi, at: EthereumAddress(Constants.accessTokenAddress)!, abiVersion: 2)!
         minterContract = EthereumContract(minterAbi)!
         minterContractWeb3 = web3.contract(minterAbi, at: EthereumAddress(Constants.minterAddress)!, abiVersion: 2)!
+        privateCollectionContract = EthereumContract(privateCollectionAbi)!
     }
     
     func getBalance(address: String, onResult: @escaping (Double, Error?) -> ()) {
@@ -358,6 +362,67 @@ class Web3Worker: ObservableObject {
         }
     }
     
+    func getPrivateTokens(collections: [PrivateCollection],
+                          ids: [BigUInt],
+                          pages: [BigUInt],
+                          sizes: [BigUInt],
+                          address: String,
+                          onResult: @escaping ([Nft], Error?) -> ()) {
+        if let walletAddress = EthereumAddress(address) {
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                do {
+                    var options = TransactionOptions.defaultOptions
+                    options.from = walletAddress
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+                    let parameters: [AnyObject] = [
+                        ids as AnyObject,
+                        pages as AnyObject,
+                        sizes as AnyObject
+                    ]
+                    let tx = routerContractWeb3.read(
+                        "getSelfTokens",
+                        parameters: parameters,
+                        extraData: Data(),
+                        transactionOptions: options)!
+                    let result = try tx.call()
+                    
+                    print("Got private tokens response:\n\(result)")
+                    if let success = result["_success"] as? Bool, !success {
+                        DispatchQueue.main.async {
+                            onResult([], InternalError.unsuccessfullСontractRead(description: "get private tokens: \(result)"))
+                        }
+                    } else {
+                        let tokens = result["0"] as! [[[AnyObject]]]
+                        let tokensData = try parser.parseTokens(tokens: tokens)
+                        var nfts: [Nft] = []
+                        let decoder = JSONDecoder()
+                        for (i, tokensArr) in tokensData.enumerated() {
+                            for token in tokensArr {
+                                let data = try decoder.decode(NftData.self, from: token.data)
+                                let nft = Nft(
+                                    id: token.id,
+                                    metaUrl: token.metaUrl,
+                                    contractAddress: collections[i].address,
+                                    data: data,
+                                    isPublicCollection: true,
+                                    collectionName: collections[i].data.name)
+                                nfts.append(nft)
+                            }
+                        }
+                        onResult(nfts, nil)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        onResult([], error)
+                    }
+                }
+            }
+        } else {
+            onResult([], InternalError.invalidAddress(address: address))
+        }
+    }
+    
     func mintData(version: BigUInt, id: BigUInt, metaUrl: String, data: Data) -> String? {
         return encodeFunctionData(contract: routerContract,
                                   method: "mint",
@@ -371,6 +436,14 @@ class Web3Worker: ObservableObject {
         return encodeFunctionData(contract: routerContract,
                                   method: "mintWithoutId",
                                   parameters: [version as AnyObject,
+                                               metaUrl as AnyObject,
+                                               data as AnyObject])?.toHexString(withPrefix: true)
+    }
+    
+    func privateMintData(to: EthereumAddress, metaUrl: String, data: Data) -> String? {
+        return encodeFunctionData(contract: privateCollectionContract,
+                                  method: "mintWithoutId",
+                                  parameters: [to as AnyObject,
                                                metaUrl as AnyObject,
                                                data as AnyObject])?.toHexString(withPrefix: true)
     }

@@ -31,6 +31,7 @@
 		11C562F1287B8E9A0028F885 /* PrivateCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C562F0287B8E9A0028F885 /* PrivateCollection.swift */; };
 		11C6D894287C7B6800CE0950 /* PrivateCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */; };
 		11C6D896287C9FA100CE0950 /* CollectionConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C6D895287C9FA100CE0950 /* CollectionConstructor.swift */; };
+		11C6D898287E2C8000CE0950 /* private_collection_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 11C6D897287E2C8000CE0950 /* private_collection_abi.json */; };
 		11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */; };
 		11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */; };
 		11C9F993285FA7E100A27587 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F992285FA7E100A27587 /* ShareView.swift */; };
@@ -89,6 +90,7 @@
 		11C562F0287B8E9A0028F885 /* PrivateCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCollection.swift; sourceTree = "<group>"; };
 		11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCollectionData.swift; sourceTree = "<group>"; };
 		11C6D895287C9FA100CE0950 /* CollectionConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionConstructor.swift; sourceTree = "<group>"; };
+		11C6D897287E2C8000CE0950 /* private_collection_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = private_collection_abi.json; sourceTree = "<group>"; };
 		11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintProcessingScreen.swift; sourceTree = "<group>"; };
 		11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintFinishedSheet.swift; sourceTree = "<group>"; };
 		11C9F992285FA7E100A27587 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			children = (
 				11ED5A98284703C100F0D61D /* Info.plist */,
 				1154D500286273ED006C6E25 /* public_router_abi.json */,
+				11C6D897287E2C8000CE0950 /* private_collection_abi.json */,
 				1196D3EB2870D06000EF6F63 /* access_token_abi.json */,
 				1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */,
 				11ED5A7E2846BC0E00F0D61D /* Util */,
@@ -395,6 +398,7 @@
 				1154D501286273ED006C6E25 /* public_router_abi.json in Resources */,
 				11D2572C28444C7B0028E2B4 /* Preview Assets.xcassets in Resources */,
 				11D2572928444C7B0028E2B4 /* Assets.xcassets in Resources */,
+				11C6D898287E2C8000CE0950 /* private_collection_abi.json in Resources */,
 				1196D3EC2870D06000EF6F63 /* access_token_abi.json in Resources */,
 				11BEBE5A285A5C0200D056FA /* rubik-regular.ttf in Resources */,
 				11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */,
