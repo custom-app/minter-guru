@@ -18,6 +18,9 @@ struct MintContainer: View {
     @State
     var showCreateCollectionSheet = false
     
+    @State
+    var showFaucet = false
+    
     var body: some View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
@@ -26,6 +29,7 @@ struct MintContainer: View {
                     if globalVm.mintInProgress {
                         globalVm.refreshNfts()
                     } else {
+                        globalVm.getPolygonBalance()
                         globalVm.getPrivateCollections()
                     }
                 }
@@ -212,6 +216,33 @@ struct MintContainer: View {
                         
                         if let image = globalVm.pickedImage {
                             
+                            let zeroBalance = globalVm.polygonBalanceLoaded && globalVm.polygonBalance == 0
+                            if zeroBalance {
+                                
+                                if globalVm.faucetUsed {
+                                    Tip(text: "To mint a photo, you need to pay a commission to the blockchain network. Please top up your balance ")
+                                        .padding(.top, 25)
+                                        .padding(.horizontal, 26)
+                                } else {
+                                    Tip(text: "To mint a photo, you need to pay a transaction fee. We can give you some crypto in the Faucet section")
+                                        .padding(.top, 25)
+                                        .padding(.horizontal, 26)
+                                    
+                                    Button {
+                                        showFaucet = true
+                                    } label: {
+                                        Text("Faucet")
+                                            .font(.custom("rubik-bold", size: 17))
+                                            .foregroundColor(Colors.mainGreen)
+                                    }
+                                    .padding(.top, 10)
+                                    .sheet(isPresented: $showFaucet) {
+                                        FaucetScreen()
+                                            .environmentObject(globalVm)
+                                    }
+                                }
+                            }
+                            
                             Button {
                                 if globalVm.pictureName.isEmpty {
                                     globalVm.alert = IdentifiableAlert.build(
@@ -227,13 +258,15 @@ struct MintContainer: View {
                                     .foregroundColor(Colors.mainWhite)
                                     .padding(.vertical, 17)
                                     .padding(.horizontal, 60)
-                                    .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
+                                    .background(LinearGradient(colors: [zeroBalance ? Colors.darkGrey : Colors.darkGreen,
+                                                                        zeroBalance ? Colors.darkGrey : Colors.lightGreen],
                                                                startPoint: .leading,
                                                                endPoint: .trailing))
                                     .cornerRadius(32)
                                     .padding(.vertical, 25)
-                                    .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                    .shadow(color: Colors.mainGreen.opacity(zeroBalance ? 0 : 0.5), radius: 10, x: 0, y: 0)
                             }
+                            .disabled(zeroBalance)
                         }
                         
                         Spacer()

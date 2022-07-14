@@ -9,7 +9,8 @@ import SwiftUI
 
 struct FaucetScreen: View {
     
-    var isUsed = false
+    @EnvironmentObject
+    var globalVm: GlobalViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -48,7 +49,7 @@ struct FaucetScreen: View {
             .padding(.top, 50)
             .padding(.horizontal, 26)
             
-            if isUsed {
+            if globalVm.faucetUsed {
                 
                 Tip(text: "Reuse of the Faucet is not available, please top up your crypto wallet account.\nIf you have any difficulties, please take a look at the “Guides” section",
                     backgroundColor: Colors.paleRed)
@@ -69,7 +70,10 @@ struct FaucetScreen: View {
                     .padding(.horizontal, 26)
                 
                 Button {
-                    
+                    UserDefaultsWorker.shared.setFaucetUsed()
+                    withAnimation {
+                        globalVm.faucetUsed = true
+                    }
                 } label: {
                     Text("Get Matic")
                         .font(.custom("rubik-bold", size: 17))

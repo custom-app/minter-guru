@@ -133,7 +133,7 @@ struct ShopScreen: View {
                                     .cornerRadius(32)
                                     .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                             }
-                            .padding(.top, 50)
+                            .padding(.vertical, 50)
                         }
                     }
                     .padding(.horizontal, 26)

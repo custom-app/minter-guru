@@ -76,6 +76,12 @@ class GlobalViewModel: ObservableObject {
     var web3 = Web3Worker(endpoint: Config.endpoint)
     
     @Published
+    var polygonBalance = 0.0
+    @Published
+    var polygonBalanceLoaded = false
+    @Published
+    var faucetUsed = false
+    @Published
     var publicTokensCount = 0
     @Published
     var privateCollectionsCount = 0
@@ -106,6 +112,12 @@ class GlobalViewModel: ObservableObject {
     
     var isPassBought: Bool {
         return true
+    }
+    
+    init() {
+        if let used = UserDefaultsWorker.shared.isFaucetUsed() {
+            faucetUsed = used
+        }
     }
     
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
@@ -305,6 +317,19 @@ class GlobalViewModel: ObservableObject {
     }
     
     // Web3 calls
+    
+    func getPolygonBalance() {
+        if let address = walletAccount {
+            web3.getBalance(address: address) { [weak self] balance, error in
+                if error == nil {
+                    withAnimation {
+                        self?.polygonBalance = balance
+                        self?.polygonBalanceLoaded = true
+                    }
+                }
+            }
+        }
+    }
     
     func getPublicTokensCount() {
         print("requesting tokens count")

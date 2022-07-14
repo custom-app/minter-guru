@@ -119,6 +119,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                 }
                 showConnectSheet = false
                 if !isWrongChain {
+                    getPolygonBalance()
                     getPublicTokensCount()
                     getPrivateCollectionPrice()
                     getMinterBalance()
