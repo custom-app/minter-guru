@@ -256,7 +256,7 @@ struct MintContainer: View {
                             globalVm.purchaseFinished = false
                         }
                     }) {
-                        CollectionConstructor()
+                        ShopScreen()
                             .environmentObject(globalVm)
                     }
             }
