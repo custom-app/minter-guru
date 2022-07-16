@@ -15,6 +15,9 @@ struct ShopScreen: View {
     @State
     var collectionName = ""
     
+    @Binding
+    var showingSheet: Bool
+    
     var body: some View {
         
         VStack(spacing: 0) {
@@ -41,12 +44,54 @@ struct ShopScreen: View {
                             .frame(height: geometry.size.height)
                         } else if globalVm.purchaseFinished {
                             VStack(spacing: 0) {
-                                Text("Purchased successfully")
+                                
+                                Image("ic_ok")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 64, height: 64)
+                                
+                                Text("Success!")
                                     .font(.custom("rubik-bold", size: 28))
                                     .foregroundColor(Colors.mainBlack)
-                                    .padding(.horizontal, 10)
+                                    .padding(.top, 20)
+                                
+                                Text("Your private collection")
+                                    .foregroundColor(Colors.mainGrey)
+                                    .multilineTextAlignment(.center)
+                                    .font(.custom("rubik-bold", size: 19))
+                                    .padding(.top, 10)
+                                
+                                Text("#\(collectionName)")
+                                    .foregroundColor(Colors.mainGrey)
+                                    .multilineTextAlignment(.center)
+                                    .font(.custom("rubik-bold", size: 19))
+                                    .padding(.top, 6)
+                                
+                                Text("has been created")
+                                    .foregroundColor(Colors.mainGrey)
+                                    .multilineTextAlignment(.center)
+                                    .font(.custom("rubik-bold", size: 19))
+                                    .padding(.top, 6)
+                                
+                                Button {
+                                    withAnimation {
+                                        showingSheet = false
+                                    }
+                                } label: {
+                                    Text("Go mint")
+                                        .font(.custom("rubik-bold", size: 17))
+                                        .foregroundColor(Colors.mainWhite)
+                                        .padding(.vertical, 17)
+                                        .padding(.horizontal, 60)
+                                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
+                                                                   startPoint: .leading,
+                                                                   endPoint: .trailing))
+                                        .cornerRadius(32)
+                                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                }
+                                .padding(.top, 50)
                             }
-                            .frame(height: geometry.size.height)
+                            .frame(width: geometry.size.width-52, height: geometry.size.height)
                         } else {
                             
                             Text("Shop")
@@ -118,6 +163,7 @@ struct ShopScreen: View {
                                         .stroke(Colors.mainGreen, lineWidth: 2)
                                 )
                                 .padding(.top, 50)
+                                .disabled(globalVm.purchasingInProgress)
                             
                             Button {
                                 globalVm.purchaseCollection(collectionData: PrivateCollectionData(name: collectionName))

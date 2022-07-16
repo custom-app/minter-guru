@@ -289,7 +289,7 @@ struct MintContainer: View {
                             globalVm.purchaseFinished = false
                         }
                     }) {
-                        ShopScreen()
+                        ShopScreen(showingSheet: $showCreateCollectionSheet)
                             .environmentObject(globalVm)
                     }
             }

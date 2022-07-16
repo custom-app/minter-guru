@@ -208,7 +208,7 @@ struct AuthContainer: View {
                             .padding(.top, 10)
                     }
                     .sheet(isPresented: $showShop) {
-                        ShopScreen()
+                        ShopScreen(showingSheet: $showShop)
                             .environmentObject(globalVm)
                     }
                 }
