@@ -20,8 +20,9 @@ contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
 
     /// @dev PrivateCollectionData - struct for collections list getter
     struct PrivateCollectionData {
+        uint256 tokenId;                                // access token id
         MinterGuruPrivateCollection contractAddress;    // collection contract address
-        bytes data;                                   // additional meta data of collection
+        bytes data;                                     // additional meta data of collection
     }
 
     /// @dev CollectionPurchased - emitted when collection is purchased
@@ -135,7 +136,8 @@ contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256[] memory counts = new uint256[](resSize);
         for (uint256 i = page * size; i < page * size + resSize; i++) {
             uint256 tokenId = uint256(ownedCollections[_msgSender()].at(i));
-            res[i - page * size] = PrivateCollectionData(tokenCollections[tokenId], tokenCollections[tokenId].data());
+            res[i - page * size] = PrivateCollectionData(tokenId, tokenCollections[tokenId],
+                tokenCollections[tokenId].data());
             counts[i - page*size] = tokenCollections[tokenId].balanceOf(_msgSender());
         }
         return (res, counts);
