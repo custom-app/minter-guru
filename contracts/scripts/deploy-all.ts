@@ -6,12 +6,6 @@
 import { ethers } from "hardhat";
 import { Signer, BigNumber as BN } from "ethers";
 import {
-  MinterGuruCollectionsAccessToken,
-  // eslint-disable-next-line camelcase
-  MinterGuruCollectionsAccessToken__factory,
-  MinterGuruPrivateCollection,
-  // eslint-disable-next-line camelcase
-  MinterGuruPrivateCollection__factory,
   MinterGuruPublicCollection,
   // eslint-disable-next-line camelcase
   MinterGuruPublicCollection__factory,
@@ -23,6 +17,8 @@ import {
   MinterGuruToken__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
+// eslint-disable-next-line node/no-missing-import
+import { createPrivateCollectionsAccessToken } from "./util";
 
 async function createPublicRouter(account: Signer) {
   const factory = new MinterGuruPublicCollection__factory(account);
@@ -57,32 +53,15 @@ async function createMinterGuruToken(accounts: Signer[]): Promise<string> {
   return instance.address;
 }
 
-async function createPrivateCollectionsAccessToken(
-  account: Signer,
-  tokenAddress: string
-) {
-  const factory = new MinterGuruPrivateCollection__factory(account);
-  const impl: MinterGuruPrivateCollection = await factory.deploy();
-  const accessTokenFactory = new MinterGuruCollectionsAccessToken__factory(
-    account
-  );
-  const multiplier = BN.from(10).pow(BN.from(18));
-  const instance: MinterGuruCollectionsAccessToken =
-    await accessTokenFactory.deploy(
-      "MinterGuruAccessToken",
-      "MIGUAT",
-      tokenAddress,
-      impl.address,
-      BN.from(1).mul(multiplier)
-    );
-  console.log("MinterGuruAccessToken: ", instance.address);
-}
-
 async function main() {
   const accounts: Signer[] = await ethers.getSigners();
   await createPublicRouter(accounts[0]);
   const tokenAddress = await createMinterGuruToken(accounts);
-  await createPrivateCollectionsAccessToken(accounts[0], tokenAddress);
+  const accessTokenInstance = await createPrivateCollectionsAccessToken(
+    accounts[0],
+    tokenAddress
+  );
+  console.log("MinterGuruAccessToken: ", accessTokenInstance.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

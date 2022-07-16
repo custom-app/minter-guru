@@ -98,7 +98,7 @@ describe("Private collection", async () => {
       .connect(accounts[4])
       .getSelfCollections(BN.from(0), BN.from(10));
     expect(collections).deep.eq([
-      [[boughtCollection.address, "0xaa"]],
+      [[BN.from(0), boughtCollection.address, "0xaa"]],
       [BN.from(0)],
     ]);
   });
@@ -128,7 +128,7 @@ describe("Private collection", async () => {
       .connect(accounts[4])
       .getSelfCollections(BN.from(0), BN.from(10));
     expect(collections).deep.eq([
-      [[boughtCollection.address, "0xaa"]],
+      [[BN.from(0), boughtCollection.address, "0xaa"]],
       [BN.from(1)],
     ]);
   });
