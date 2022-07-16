@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import BigInt
 
 struct PrivateCollection: Hashable {
     
+    let id: BigUInt
     let address: String
     let tokensCount: Int
     let data: PrivateCollectionData

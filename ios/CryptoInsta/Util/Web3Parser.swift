@@ -54,13 +54,15 @@ class Web3Parser {
             if collection.count < 2 {
                 throw InternalError.structParseError(description: "Error privateCollection parse: \(collection)")
             }
-            guard let address = collection[0] as? EthereumAddress,
-                  let data = collection[1] as? Data,
+            guard let id = collection[0] as? BigUInt,
+                  let address = collection[1] as? EthereumAddress,
+                  let data = collection[2] as? Data,
                   let count = counts[i] as? BigUInt else {
                       throw InternalError.structParseError(description: "Error privateCollection parse: \(collection)")
             }
             let privateCollectionData = try decoder.decode(PrivateCollectionData.self, from: data)
-            let privateCollection = PrivateCollection(address: address.address,
+            let privateCollection = PrivateCollection(id: id,
+                                                      address: address.address,
                                                       tokensCount: Int(count),
                                                       data: privateCollectionData)
             res.append(privateCollection)
