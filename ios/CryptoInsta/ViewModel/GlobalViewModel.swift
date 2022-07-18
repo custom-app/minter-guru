@@ -93,9 +93,14 @@ class GlobalViewModel: ObservableObject {
     var loadedMinterBalance = false
     
     @Published
-    var nftList: [Nft] = []
+    var publicNfts: [Nft] = []
     @Published
-    var nftListLoaded = false
+    var publicNftsLoaded = false
+    
+    @Published
+    var privateNfts: [Nft] = []
+    @Published
+    var privateNftsLoaded = false
     
     private let updateInterval: Double = 1
     
@@ -242,9 +247,9 @@ class GlobalViewModel: ObservableObject {
                     print("error getting meta: \(error)")
                 } else if let meta = meta {
                     DispatchQueue.main.async {
-                        if let index = self.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                        if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
                             withAnimation {
-                                self.nftList[index].meta = meta
+                                self.publicNfts[index].meta = meta
                             }
                             if loadImageAfter {
                                 self.loadImageFromIpfs(meta: meta, tokenId: nft.id)
@@ -272,10 +277,10 @@ class GlobalViewModel: ObservableObject {
                     let image = UIImage(data: data)
                     DispatchQueue.main.async {
                         print("searching index")
-                        if let index = self.nftList.firstIndex(where: { $0.id == tokenId}) {
+                        if let index = self.publicNfts.firstIndex(where: { $0.id == tokenId}) {
                             print("index found")
                             withAnimation {
-                                self.nftList[index].image = image
+                                self.publicNfts[index].image = image
                             }
                         }
                     }
@@ -301,10 +306,10 @@ class GlobalViewModel: ObservableObject {
                     let image = UIImage(data: data)
                     DispatchQueue.main.async {
                         print("searching index")
-                        if let index = self.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                        if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
                             print("index found")
                             withAnimation {
-                                self.nftList[index].image = image
+                                self.publicNfts[index].image = image
                             }
                         }
                     }
@@ -349,7 +354,7 @@ class GlobalViewModel: ObservableObject {
                         withAnimation {
                             self?.publicTokensCount = Int(count)
                             if count == 0 {
-                                self?.nftListLoaded = true
+                                self?.publicNftsLoaded = true
                             }
                             self?.getPublicTokens(page: 0)
                         }
@@ -369,8 +374,8 @@ class GlobalViewModel: ObservableObject {
                     print("got public tokens: \(tokens)")
                     DispatchQueue.main.async {
                         withAnimation {
-                            self?.nftList = tokens
-                            self?.nftListLoaded = true
+                            self?.publicNfts = tokens
+                            self?.publicNftsLoaded = true
                             self?.refreshingNfts = false
                         }
                         if let observing = self?.observingNftsCount,
@@ -585,7 +590,7 @@ class GlobalViewModel: ObservableObject {
     func startObservingTokensCount() {
         nftsRequestTimer?.cancel()
         observingNftsCount = true
-        lastNftsCount = nftList.count
+        lastNftsCount = publicNfts.count
         nftsRequestTimer = Timer.publish(every: updateInterval,
                               tolerance: updateInterval/2,
                               on: .main,

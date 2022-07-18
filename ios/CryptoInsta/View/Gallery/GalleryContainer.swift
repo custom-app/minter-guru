@@ -35,25 +35,54 @@ struct GalleryContainer: View {
                             .font(.custom("rubik-bold", size: 28))
                             .padding(.top, 10)
                         
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach($globalVm.nftList) { nft in
-                                let last = globalVm.nftList.last ?? Nft.empty()
-                                NftListView(nft: nft,
-                                            selectedNft: $selectedNft,
-                                            isLast: last == nft.wrappedValue)
+                        if globalVm.publicNfts.isEmpty && globalVm.privateNfts.isEmpty {
+                            VStack(spacing: 0) {
+                                
+                                Text("Your nft gallery is empty")
+                                    .foregroundColor(Colors.mainGrey)
+                                    .multilineTextAlignment(.center)
+                                    .font(.custom("rubik-bold", size: 19))
+                                
+                                Button {
+                                    withAnimation {
+                                        globalVm.currentTab = .mint
+                                    }
+                                } label: {
+                                    Text("Mint now!")
+                                        .font(.custom("rubik-bold", size: 17))
+                                        .foregroundColor(Colors.mainWhite)
+                                        .padding(.vertical, 17)
+                                        .padding(.horizontal, 50)
+                                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
+                                                                   startPoint: .leading,
+                                                                   endPoint: .trailing))
+                                        .cornerRadius(32)
+                                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                }
+                                .padding(.top, 50)
                             }
-                        }
-                        .padding(20)
-                        .background(Colors.mainWhite)
-                        .cornerRadius(30, corners: [.topLeft, .bottomRight])
-                        .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                        .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
-                        .padding(.top, 25)
-                        .padding(.horizontal, 26)
-                        .sheet(item: $selectedNft,
-                               onDismiss: { selectedNft = nil }) { nft in
-                            if let index = globalVm.nftList.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
-                                NftInfoSheet(nft: $globalVm.nftList[index])
+                            .frame(width: geometry.size.width, height: geometry.size.height - 50)
+                        } else {
+                            LazyVStack(alignment: .leading, spacing: 0) {
+                                ForEach($globalVm.publicNfts) { nft in
+                                    let last = globalVm.publicNfts.last ?? Nft.empty()
+                                    NftListView(nft: nft,
+                                                selectedNft: $selectedNft,
+                                                isLast: last == nft.wrappedValue)
+                                }
+                            }
+                            .padding(20)
+                            .background(Colors.mainWhite)
+                            .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                            .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                            .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                            .padding(.top, 25)
+                            .padding(.horizontal, 26)
+                            .sheet(item: $selectedNft,
+                                   onDismiss: { selectedNft = nil }) { nft in
+                                if let index = globalVm.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
+                                    NftInfoSheet(nft: $globalVm.publicNfts[index])
+                                }
                             }
                         }
                     }
