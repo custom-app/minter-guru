@@ -63,7 +63,7 @@ class Web3Parser {
             let privateCollectionData = try decoder.decode(PrivateCollectionData.self, from: data)
             let privateCollection = PrivateCollection(id: id,
                                                       address: address.address,
-                                                      tokensCount: Int(count),
+                                                      tokensCount: count,
                                                       data: privateCollectionData)
             res.append(privateCollection)
         }

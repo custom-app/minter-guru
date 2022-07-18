@@ -12,7 +12,7 @@ struct PrivateCollection: Hashable {
     
     let id: BigUInt
     let address: String
-    let tokensCount: Int
+    let tokensCount: BigUInt
     let data: PrivateCollectionData
     
     static func == (lhs: PrivateCollection, rhs: PrivateCollection) -> Bool {

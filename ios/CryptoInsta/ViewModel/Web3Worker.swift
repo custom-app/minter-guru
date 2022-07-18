@@ -66,7 +66,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult(0, InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult(0, InternalError.invalidAddress(address: address))
+            }
         }
     }
     
@@ -118,7 +120,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult(0, InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult(0, InternalError.invalidAddress(address: address))
+            }
         }
     }
     
@@ -167,7 +171,9 @@ class Web3Worker: ObservableObject {
                                 nfts.append(nft)
                             }
                         }
-                        onResult(nfts, nil)
+                        DispatchQueue.main.async {
+                            onResult(nfts, nil)
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {
@@ -176,7 +182,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult([], InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult([], InternalError.invalidAddress(address: address))
+            }
         }
     }
     
@@ -244,7 +252,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult(0, InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult(0, InternalError.invalidAddress(address: address))
+            }
         }
     }
     
@@ -280,7 +290,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult(0, InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult(0, InternalError.invalidAddress(address: address))
+            }
         }
     }
     
@@ -317,7 +329,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult(0, InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult(0, InternalError.invalidAddress(address: address))
+            }
         }
     }
     
@@ -349,7 +363,9 @@ class Web3Worker: ObservableObject {
                         let collectionsData = result["0"] as! [[AnyObject]]
                         let counts = result["1"] as! [AnyObject]
                         let collections = try parser.parsePrivateCollections(collections: collectionsData, counts: counts)
-                        onResult(collections, nil)
+                        DispatchQueue.main.async {
+                            onResult(collections, nil)
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {
@@ -358,19 +374,26 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult([], InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult([], InternalError.invalidAddress(address: address))
+            }
         }
     }
     
     func getPrivateTokens(collections: [PrivateCollection],
-                          ids: [BigUInt],
-                          pages: [BigUInt],
-                          sizes: [BigUInt],
                           address: String,
                           onResult: @escaping ([Nft], Error?) -> ()) {
+        if collections.isEmpty {
+            DispatchQueue.main.async {
+                onResult([], nil)
+            }
+        }
         if let walletAddress = EthereumAddress(address) {
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 do {
+                    let ids: [BigUInt] = collections.compactMap({ $0.id })
+                    let pages = [BigUInt](repeating: 0, count: collections.count)
+                    let sizes: [BigUInt] = collections.compactMap({ $0.tokensCount })
                     var options = TransactionOptions.defaultOptions
                     options.from = walletAddress
                     options.gasPrice = .automatic
@@ -380,7 +403,7 @@ class Web3Worker: ObservableObject {
                         pages as AnyObject,
                         sizes as AnyObject
                     ]
-                    let tx = routerContractWeb3.read(
+                    let tx = accessTokenContractWeb3.read(
                         "getSelfTokens",
                         parameters: parameters,
                         extraData: Data(),
@@ -405,12 +428,14 @@ class Web3Worker: ObservableObject {
                                     metaUrl: token.metaUrl,
                                     contractAddress: collections[i].address,
                                     data: data,
-                                    isPublicCollection: true,
+                                    isPublicCollection: false,
                                     collectionName: collections[i].data.name)
                                 nfts.append(nft)
                             }
                         }
-                        onResult(nfts, nil)
+                        DispatchQueue.main.async {
+                            onResult(nfts, nil)
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {
@@ -419,7 +444,9 @@ class Web3Worker: ObservableObject {
                 }
             }
         } else {
-            onResult([], InternalError.invalidAddress(address: address))
+            DispatchQueue.main.async {
+                onResult([], InternalError.invalidAddress(address: address))
+            }
         }
     }
     

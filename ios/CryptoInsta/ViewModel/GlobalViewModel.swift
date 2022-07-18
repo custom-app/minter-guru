@@ -108,6 +108,9 @@ class GlobalViewModel: ObservableObject {
     private var nftsRequestTimer: AnyCancellable?
     private var lastNftsCount: Int?
     
+    private var observingPrivateNftsCount = false
+    private var privateNftsRequestTimer: AnyCancellable?
+    
     private var observingCollectionsCount = false
     private var collectionsRequestTimer: AnyCancellable?
     private var lastCollectionsCount: Int?
@@ -523,6 +526,7 @@ class GlobalViewModel: ObservableObject {
                 } else {
                     print("get private collections: \(collections)")
                     DispatchQueue.main.async {
+                        let oldTokensCount = self?.privateCollections.reduce(0) { $0 + $1.tokensCount }
                         withAnimation {
                             self?.privateCollections = collections
                             self?.privateCollectionsLoaded = true
@@ -535,6 +539,38 @@ class GlobalViewModel: ObservableObject {
                             self?.purchaseFinished = true
                             self?.purchasingInProgress = false
                             self?.getMinterBalance()
+                        }
+                        let newTokensCount = collections.reduce(0) { $0 + $1.tokensCount}
+                        if oldTokensCount != newTokensCount {
+                            self?.privateNftsRequestTimer?.cancel()
+                            self?.getPrivateTokens()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPrivateTokens() {
+        if let address = walletAccount {
+            web3.getPrivateTokens(collections: privateCollections, address: address) { [weak self] tokens, error in
+                if let error = error {
+                    print("get private tokens error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got private tokens: \(tokens)")
+                    DispatchQueue.main.async {
+                        let lastCount = self?.privateNfts.count
+                        withAnimation {
+                            self?.privateNfts = tokens
+                            self?.privateNftsLoaded = true
+                        }
+                        if let observing = self?.observingPrivateNftsCount,
+                            let lastCount = lastCount,
+                           observing && tokens.count > lastCount {
+                            self?.stopObservingPrivateTokensCount()
+                            self?.showMintFinishedSheet = true
+                            self?.mintInProgress = false
                         }
                     }
                 }
@@ -571,6 +607,8 @@ class GlobalViewModel: ObservableObject {
                         self?.startObservingTokensCount()
                     case self?.purchaseCollectionLabel:
                         self?.startObservingPrivateCollections()
+                    case self?.privateMintLabel:
+                        self?.startObservingPrivateTokensCount()
                     default:
                         print("unknown tx label: \(label)")
                     }
@@ -604,6 +642,24 @@ class GlobalViewModel: ObservableObject {
     func stopObservingTokensCount() {
         observingNftsCount = false
         nftsRequestTimer?.cancel()
+    }
+    
+    func startObservingPrivateTokensCount() {
+        privateNftsRequestTimer?.cancel()
+        observingPrivateNftsCount = true
+        privateNftsRequestTimer = Timer.publish(every: updateInterval,
+                              tolerance: updateInterval/2,
+                              on: .main,
+                              in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.getPrivateCollections()
+        }
+    }
+    
+    func stopObservingPrivateTokensCount() {
+        observingPrivateNftsCount = false
+        privateNftsRequestTimer?.cancel()
     }
     
     func startObservingPrivateCollections() {
