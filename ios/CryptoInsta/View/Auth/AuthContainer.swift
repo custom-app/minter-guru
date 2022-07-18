@@ -21,6 +21,9 @@ struct AuthContainer: View {
     @State
     var showShop = false
     
+    @State
+    var showMinterInfo = false
+    
     var body: some View {
         ScrollView {
             let connected = globalVm.session != nil
@@ -108,12 +111,16 @@ struct AuthContainer: View {
                     .padding(.top, 8)
                     
                     Button {
-                        
+                        showMinterInfo = true
                     } label: {
                         Text("How to earn")
                             .foregroundColor(Colors.mainGreen)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 6)
+                    }
+                    .sheet(isPresented: $showMinterInfo) {
+                        MinterInfoScreen()
+                            .environmentObject(globalVm)
                     }
                 }
                 .padding(20)

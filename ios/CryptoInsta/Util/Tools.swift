@@ -45,4 +45,26 @@ class Tools {
     static func formatUint256(_ count: BigUInt, decimals: Int = 2) -> String {
         return Web3.Utils.formatToEthereumUnits(count, toUnits: .eth, decimals: decimals)!
     }
+    
+    static func parseTwitter(twitter: String) -> (login: String, valid: Bool) {
+        if twitter.isEmpty {
+            return ("", false)
+        }
+        if twitter[0] == "@" {
+            let nickname = twitter[1...]
+            return (nickname, isTwitterNicknameValid(nickname: nickname))
+        }
+        if twitter.starts(with: Constants.twitterLink) {
+            let nickname = twitter.replacingOccurrences(of: Constants.twitterLink, with: "")
+            return (nickname, isTwitterNicknameValid(nickname: nickname))
+        }
+        return (twitter, isTwitterNicknameValid(nickname: twitter))
+    }
+    
+    static func isTwitterNicknameValid(nickname: String) -> Bool {
+        if nickname.length > 15 || nickname.length < 4 {
+            return false
+        }
+        return Constants.twitterCharacters.isSuperset(of: CharacterSet(charactersIn: nickname))
+    }
 }

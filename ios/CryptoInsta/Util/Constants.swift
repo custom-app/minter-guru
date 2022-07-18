@@ -9,6 +9,8 @@ import Foundation
 
 struct Constants {
     
+    static let twitterCharacters = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_")
+    static let twitterLink = "https://twitter.com/"
     static let sessionKey = "session_key"
     static let currentVersion = 0
     

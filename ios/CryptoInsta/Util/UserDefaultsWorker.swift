@@ -33,4 +33,14 @@ class UserDefaultsWorker {
         let defaults = UserDefaults.standard
         defaults.set(true, forKey: UserDefaultsWorker.OnboardingShownKey)
     }
+    
+    func getTwitterLogin() -> String {
+        let defaults = UserDefaults.standard
+        return defaults.object(forKey: UserDefaultsWorker.TwitterLoginKey) as? String ?? ""
+    }
+    
+    func saveTwitterLogin(token: String) {
+        let defaults = UserDefaults.standard
+        defaults.set(token, forKey: UserDefaultsWorker.TwitterLoginKey)
+    }
 }

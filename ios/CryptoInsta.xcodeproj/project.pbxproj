@@ -35,6 +35,7 @@
 		11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */; };
 		11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */; };
 		11C9F993285FA7E100A27587 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9F992285FA7E100A27587 /* ShareView.swift */; };
+		11CC0B2D28845FBC000E52D0 /* MinterInfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CC0B2C28845FBC000E52D0 /* MinterInfoScreen.swift */; };
 		11CE41A728665D66000A15EA /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 11CE41A628665D66000A15EA /* web3swift */; };
 		11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572428444C790028E2B4 /* CryptoInstaApp.swift */; };
 		11D2572728444C790028E2B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2572628444C790028E2B4 /* ContentView.swift */; };
@@ -94,6 +95,7 @@
 		11C9F98E285F6E0500A27587 /* MintProcessingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintProcessingScreen.swift; sourceTree = "<group>"; };
 		11C9F990285F6E1000A27587 /* MintFinishedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintFinishedSheet.swift; sourceTree = "<group>"; };
 		11C9F992285FA7E100A27587 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
+		11CC0B2C28845FBC000E52D0 /* MinterInfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinterInfoScreen.swift; sourceTree = "<group>"; };
 		11CE41A428665D32000A15EA /* web3swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = web3swift; path = ../../web3swift; sourceTree = "<group>"; };
 		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */,
 				11F972A1285CEF6D000026FD /* FaucetScreen.swift */,
 				11C6D895287C9FA100CE0950 /* ShopScreen.swift */,
+				11CC0B2C28845FBC000E52D0 /* MinterInfoScreen.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -414,6 +417,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11CC0B2D28845FBC000E52D0 /* MinterInfoScreen.swift in Sources */,
 				11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */,
 				11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */,
 				11DEE939284854DF00B7E2E5 /* Web3Worker.swift in Sources */,
