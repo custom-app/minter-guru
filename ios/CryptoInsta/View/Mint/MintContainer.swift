@@ -208,22 +208,29 @@ struct MintContainer: View {
                                     .padding(.vertical, 10)
                                     .padding(.horizontal, 26)
                                 }
+                                
+                                if globalVm.privateCollections.isEmpty {
+                                    Tip(text: "Private Collections is an advanced feature that can be purchased. You can buy your own private collections in the shop section.")
+                                        .padding(.horizontal, 26)
+                                        .padding(.top, 10)
+                                }
                             } else {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
                             }
                         }
                         
+                        
                         if let image = globalVm.pickedImage {
                             
                             let zeroBalance = globalVm.polygonBalanceLoaded && globalVm.polygonBalance == 0
-                            if zeroBalance {
+                            if !zeroBalance {
                                 
                                 if globalVm.faucetUsed {
                                     Tip(text: "To mint a photo, you need to pay a commission to the blockchain network. Please top up your balance ")
                                         .padding(.top, 25)
                                         .padding(.horizontal, 26)
-                                } else {
+                                } else if !globalVm.pickedPrivateCollection || !globalVm.privateCollections.isEmpty {
                                     Tip(text: "To mint a photo, you need to pay a transaction fee. We can give you some crypto in the Faucet section")
                                         .padding(.top, 25)
                                         .padding(.horizontal, 26)
