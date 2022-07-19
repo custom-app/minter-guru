@@ -89,7 +89,7 @@ struct GalleryContainer: View {
                                 } else {
                                     LazyVStack(alignment: .leading, spacing: 0) {
                                         ForEach(nfts) { nft in
-                                            let last = globalVm.privateNfts.last ?? Nft.empty()
+                                            let last = nfts.last ?? Nft.empty()
                                             NftListView(nft: nft,
                                                         selectedNft: $selectedNft,
                                                         isLast: last == nft)

@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 
 struct Nft: Identifiable, Equatable {
-    let id: Int
+    let id = UUID()
+    let tokenId: Int
     let metaUrl: String
     let contractAddress: String
     let data: NftData
@@ -23,7 +24,7 @@ struct Nft: Identifiable, Equatable {
     }
     
     static func empty() -> Nft {
-        return Nft(id: 0,
+        return Nft(tokenId: 0,
                    metaUrl: "",
                    contractAddress: "",
                    data: NftData(name: "",

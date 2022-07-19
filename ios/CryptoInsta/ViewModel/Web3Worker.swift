@@ -163,7 +163,7 @@ class Web3Worker: ObservableObject {
                             for token in tokensArr {
                                 let data = try decoder.decode(NftData.self, from: token.data)
                                 let nft = Nft(
-                                    id: token.id,
+                                    tokenId: token.id,
                                     metaUrl: token.metaUrl,
                                     contractAddress: collection.address,
                                     data: data,
@@ -422,7 +422,7 @@ class Web3Worker: ObservableObject {
                             for token in tokensArr {
                                 let data = try decoder.decode(NftData.self, from: token.data)
                                 let nft = Nft(
-                                    id: token.id,
+                                    tokenId: token.id,
                                     metaUrl: token.metaUrl,
                                     contractAddress: collections[i].address,
                                     data: data,

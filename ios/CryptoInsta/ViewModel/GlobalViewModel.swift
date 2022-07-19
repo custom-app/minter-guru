@@ -302,7 +302,7 @@ class GlobalViewModel: ObservableObject {
                                 self.publicNfts[index].meta = meta
                             }
                             if loadImageAfter {
-                                self.loadImageFromIpfs(meta: meta, tokenId: nft.id)
+                                self.loadImageFromIpfs(meta: meta, tokenId: nft.tokenId)
                             }
                         }
                     }
@@ -327,7 +327,7 @@ class GlobalViewModel: ObservableObject {
                     let image = UIImage(data: data)
                     DispatchQueue.main.async {
                         print("searching index")
-                        if let index = self.publicNfts.firstIndex(where: { $0.id == tokenId}) {
+                        if let index = self.publicNfts.firstIndex(where: { $0.tokenId == tokenId}) {
                             print("index found")
                             withAnimation {
                                 self.publicNfts[index].image = image
