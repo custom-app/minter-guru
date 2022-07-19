@@ -89,6 +89,7 @@ struct MinterInfoScreen: View {
                  HStack {
                      Spacer()
                      Button {
+                         twitterName = twitterName.trimmingCharacters(in: .whitespacesAndNewlines)
                          let res = Tools.parseTwitter(twitter: twitterName)
                          if res.valid {
                              UserDefaultsWorker.shared.saveTwitterLogin(token: res.login)

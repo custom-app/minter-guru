@@ -167,6 +167,52 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
+    func callFaucet() {
+        if let address = walletAccount {
+            DispatchQueue.global(qos: .userInitiated).async {
+                HttpRequester.shared.callFaucet(address: "0x85c42264f9d73e940b3dF8f52Db35c3195D3A157") { result, error in
+                    if let error = error {
+                        print("got faucet call error: \(error)")
+                        //TODO: handle error
+                    } else if let result = result {
+                        print("faucet sucessfuly used, txid: \(result.id)")
+                    }
+                }
+            }
+        }
+    }
+    
+    func applyForRepostReward() {
+        if let address = walletAccount {
+            DispatchQueue.global(qos: .userInitiated).async {
+                HttpRequester.shared.applyForRepostReward(address: address) { result, error in
+                    if let error = error {
+                        print("apply for reward error: \(error)")
+                        //TODO: handle error
+                    } else if let result = result {
+                        print("reward successfully requested: \(result)")
+                    }
+                }
+            }
+        }
+    }
+    
+    func getRepostRewards() {
+        print("called repost rewards")
+        if let address = walletAccount {
+            DispatchQueue.global(qos: .userInitiated).async {
+                HttpRequester.shared.getRewards(address: address) { result, error in
+                    if let error = error {
+                        print("get rewards error: \(error)")
+                        //TODO: handle error
+                    } else if let result = result {
+                        print("got rewards list: \(result)")
+                    }
+                }
+            }
+        }
+    }
+    
     func uploadImageToIpfs(image: UIImage,
                            name: String,
                            quality: Double = 0.85) {

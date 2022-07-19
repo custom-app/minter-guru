@@ -18,6 +18,7 @@ enum InternalError: Error {
     case unsuccessfulСontractRead(description: String)
     case nilDataError
     case httpError(body: String)
+    case minterApiError(error: ErrorResponse)
     case nilContractMethodData(method: String)
     case nilClientOrSession
 }

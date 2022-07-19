@@ -194,4 +194,93 @@ class HttpRequester {
         }
         task.resume()
     }
+    
+    func callFaucet(address: String, onResult: @escaping (FaucetResponse?, Error?) -> ()) {
+        let encoder = JSONEncoder()
+        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        doApiRequest(route: ApiRoute.callFaucet, data: bodyJson, onResult: onResult)
+    }
+    
+    func applyForRepostReward(address: String, onResult: @escaping (RewardInfo?, Error?) -> ()) {
+        let encoder = JSONEncoder()
+        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        doApiRequest(route: ApiRoute.applyForTwitter, data: bodyJson, onResult: onResult)
+    }
+    
+    func getRewards(address: String, onResult: @escaping ([RewardInfo]?, Error?) -> ()) {
+        let encoder = JSONEncoder()
+        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        doApiRequest(route: ApiRoute.twitterRewards, data: bodyJson, onResult: onResult)
+    }
+    
+    
+    func doApiRequest<T: Decodable>(route: ApiRoute, data: Data, onResult: @escaping (T?, Error?) -> Void) {
+        let url = URL(string: Constants.backendUrl + route.rawValue)!
+        print("doRequest on: " + url.absoluteString)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "POST"
+        request.addValue(HttpRequester.JSON_MIME_TYPE, forHTTPHeaderField: HttpRequester.HEADER_CONTENT_TYPE)
+        request.httpBody = data
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) -> Void in
+            if let error = error {
+                print("error: ", error)
+                DispatchQueue.main.async {
+                    onResult(nil, error)
+                }
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    onResult(nil, InternalError.responseConvertingError(description: "error converting to httpresponse"))
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    onResult(nil, InternalError.nilDataError)
+                }
+                return
+            }
+            if httpResponse.statusCode == HttpRequester.HTTP_OK {
+                do {
+                    let result = try JSONDecoder().decode(T.self, from: data)
+                    print("decoded response: \(result)")
+                    DispatchQueue.main.async {
+                        onResult(result, nil)
+                    }
+                } catch {
+                    print("error decoding: \(error)\ndata: \(String(data: data, encoding: .utf8)!)")
+                    do {
+                        let error = try JSONDecoder().decode(ErrorResponse.self, from: data)
+                        print("decoded error: \(error)")
+                        DispatchQueue.main.async {
+                            onResult(nil, InternalError.minterApiError(error: error))
+                        }
+                    } catch {
+                        print("error decoding minter error: \(error)")
+                    }
+                }
+            } else {
+                let err = String(data: data, encoding: .utf8)! //TODO: handle
+                print("response not ok: \(err)")
+                do {
+                    let error = try JSONDecoder().decode(ErrorResponse.self, from: data)
+                    print("decoded error: \(error)")
+                    DispatchQueue.main.async {
+                        onResult(nil, InternalError.minterApiError(error: error))
+                    }
+                } catch {
+                    print("error decoding minter error: \(error)")
+                    DispatchQueue.main.async {
+                        onResult(nil, InternalError.httpError(body: err))
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
 }

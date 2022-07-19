@@ -22,6 +22,11 @@
 		1196D3F02870D15F00EF6F63 /* migu_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */; };
 		11A749692849A9F100387869 /* HttpRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A749682849A9F100387869 /* HttpRequester.swift */; };
 		11A7496E2849CD6700387869 /* AWSSigner in Frameworks */ = {isa = PBXBuildFile; productRef = 11A7496D2849CD6700387869 /* AWSSigner */; };
+		11BA411A28870A9D00CFA2F8 /* ApiRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA411928870A9D00CFA2F8 /* ApiRoute.swift */; };
+		11BA411E28871DBB00CFA2F8 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA411D28871DBB00CFA2F8 /* ErrorResponse.swift */; };
+		11BA412028871EAE00CFA2F8 /* AddressBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA411F28871EAE00CFA2F8 /* AddressBody.swift */; };
+		11BA412228871FE800CFA2F8 /* RewardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA412128871FE800CFA2F8 /* RewardInfo.swift */; };
+		11BA41242887237100CFA2F8 /* FaucetResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA41232887237100CFA2F8 /* FaucetResponse.swift */; };
 		11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 11BE8CDF2855D4410088F261 /* WalletConnectSwift */; };
 		11BEBE58285A5C0200D056FA /* rubik-medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE54285A5C0100D056FA /* rubik-medium.ttf */; };
 		11BEBE59285A5C0200D056FA /* rubik-semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */; };
@@ -83,6 +88,11 @@
 		1196D3EB2870D06000EF6F63 /* access_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = access_token_abi.json; sourceTree = "<group>"; };
 		1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = migu_token_abi.json; sourceTree = "<group>"; };
 		11A749682849A9F100387869 /* HttpRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequester.swift; sourceTree = "<group>"; };
+		11BA411928870A9D00CFA2F8 /* ApiRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRoute.swift; sourceTree = "<group>"; };
+		11BA411D28871DBB00CFA2F8 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
+		11BA411F28871EAE00CFA2F8 /* AddressBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBody.swift; sourceTree = "<group>"; };
+		11BA412128871FE800CFA2F8 /* RewardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardInfo.swift; sourceTree = "<group>"; };
+		11BA41232887237100CFA2F8 /* FaucetResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaucetResponse.swift; sourceTree = "<group>"; };
 		11BEBE54285A5C0100D056FA /* rubik-medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-medium.ttf"; sourceTree = "<group>"; };
 		11BEBE55285A5C0100D056FA /* rubik-semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-semibold.ttf"; sourceTree = "<group>"; };
 		11BEBE56285A5C0100D056FA /* rubik-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-regular.ttf"; sourceTree = "<group>"; };
@@ -144,6 +154,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11BA411828870A8300CFA2F8 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				11BA411928870A9D00CFA2F8 /* ApiRoute.swift */,
+				11BA411D28871DBB00CFA2F8 /* ErrorResponse.swift */,
+				11BA411F28871EAE00CFA2F8 /* AddressBody.swift */,
+				11BA412128871FE800CFA2F8 /* RewardInfo.swift */,
+				11BA41232887237100CFA2F8 /* FaucetResponse.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
 		11BEBE53285A5BED00D056FA /* fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,6 +240,7 @@
 		11ED5A7A2846BB6700F0D61D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				11BA411828870A8300CFA2F8 /* Api */,
 				11ED5A962847015300F0D61D /* Wallets.swift */,
 				1108864D284AF497002C4E5A /* NftMeta.swift */,
 				1108864F284B123C002C4E5A /* Nft.swift */,
@@ -419,6 +442,7 @@
 			files = (
 				11CC0B2D28845FBC000E52D0 /* MinterInfoScreen.swift in Sources */,
 				11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */,
+				11BA412028871EAE00CFA2F8 /* AddressBody.swift in Sources */,
 				11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */,
 				11DEE939284854DF00B7E2E5 /* Web3Worker.swift in Sources */,
 				111629C12863AAE50012B134 /* TokenData.swift in Sources */,
@@ -442,6 +466,7 @@
 				11F972A0285CED11000026FD /* Tip.swift in Sources */,
 				11D2572528444C790028E2B4 /* CryptoInstaApp.swift in Sources */,
 				11DEE92F2847F75300B7E2E5 /* WalletConnectExtension.swift in Sources */,
+				11BA412228871FE800CFA2F8 /* RewardInfo.swift in Sources */,
 				11DEE9312847F82000B7E2E5 /* WalletConnect.swift in Sources */,
 				11ED5A972847015300F0D61D /* Wallets.swift in Sources */,
 				11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */,
@@ -452,9 +477,11 @@
 				11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
 				111629BB286379B80012B134 /* TxWorker.swift in Sources */,
+				11BA41242887237100CFA2F8 /* FaucetResponse.swift in Sources */,
 				1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */,
 				11ED5AA22847077A00F0D61D /* BottomMenu.swift in Sources */,
 				11ED5A802846BCC600F0D61D /* Constants.swift in Sources */,
+				11BA411A28870A9D00CFA2F8 /* ApiRoute.swift in Sources */,
 				11DEE9352848063D00B7E2E5 /* BackgroundTasksManager.swift in Sources */,
 				1108864E284AF497002C4E5A /* NftMeta.swift in Sources */,
 				11A749692849A9F100387869 /* HttpRequester.swift in Sources */,
@@ -463,6 +490,7 @@
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 				111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */,
 				11C6D894287C7B6800CE0950 /* PrivateCollectionData.swift in Sources */,
+				11BA411E28871DBB00CFA2F8 /* ErrorResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

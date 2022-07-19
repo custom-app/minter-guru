@@ -354,7 +354,6 @@ class Web3Worker: ObservableObject {
                         transactionOptions: options)!
                     let result = try tx.call()
                     
-                    print("Got private collections response:\n\(result)")
                     if let success = result["_success"] as? Bool, !success {
                         DispatchQueue.main.async {
                             onResult([], InternalError.unsuccessfullСontractRead(description: "get private collections: \(result)"))
@@ -410,7 +409,6 @@ class Web3Worker: ObservableObject {
                         transactionOptions: options)!
                     let result = try tx.call()
                     
-                    print("Got private tokens response:\n\(result)")
                     if let success = result["_success"] as? Bool, !success {
                         DispatchQueue.main.async {
                             onResult([], InternalError.unsuccessfullСontractRead(description: "get private tokens: \(result)"))

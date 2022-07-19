@@ -68,6 +68,7 @@ struct MintFinishedSheet: View {
                     }
                     
                     Button {
+                        globalVm.applyForRepostReward()
                         textForShare = "Some info to detect post\nhttps://opensea.io/assets/matic/0xba21ce6b4dc183fa5d257584e657b913c90a69da/12"
                     } label: {
                         Text("Share")

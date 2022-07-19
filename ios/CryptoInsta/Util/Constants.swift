@@ -51,6 +51,11 @@ struct Constants {
         static let Testnet = "0xbE4e7319234bF56c18dE2CEa057c3dB330A2b76C"
     }
     
+    struct BackendEndpoint {
+        static let Prod = ""
+        static let Dev = "https://api-dev.minter.guru"
+    }
+    
     static var routerAddress: String {
         if Config.TESTING {
             return RouterContract.Testnet
@@ -72,6 +77,14 @@ struct Constants {
             return MinterContract.Testnet
         } else {
             return MinterContract.Mainnet
+        }
+    }
+    
+    static var backendUrl: String {
+        if Config.TESTING {
+            return BackendEndpoint.Dev
+        } else {
+            return BackendEndpoint.Prod
         }
     }
 }

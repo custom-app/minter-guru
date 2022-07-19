@@ -251,6 +251,7 @@ struct MintContainer: View {
                             }
                             
                             Button {
+                                globalVm.pictureName = globalVm.pictureName.trimmingCharacters(in: .whitespacesAndNewlines)
                                 if globalVm.pictureName.isEmpty {
                                     globalVm.alert = IdentifiableAlert.build(
                                         id: "empty_name",
