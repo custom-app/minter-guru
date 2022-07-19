@@ -77,93 +77,50 @@ struct GalleryContainer: View {
                             }
                         }
                         if globalVm.privateCollectionsInGallery {
-                            if !globalVm.privateNfts.isEmpty {
-                                VStack(spacing: 0) {
-                                    
-                                    Text("This collections are empty")
-                                        .foregroundColor(Colors.mainGrey)
-                                        .multilineTextAlignment(.center)
-                                        .font(.custom("rubik-bold", size: 19))
-                                        .padding(.horizontal, 20)
-                                    
-                                    Button {
-                                        withAnimation {
-                                            globalVm.currentTab = .mint
-                                        }
-                                    } label: {
-                                        Text("Mint now!")
-                                            .font(.custom("rubik-bold", size: 17))
-                                            .foregroundColor(Colors.mainWhite)
-                                            .padding(.vertical, 17)
-                                            .padding(.horizontal, 50)
-                                            .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing))
-                                            .cornerRadius(32)
-                                            .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
-                                    }
-                                    .padding(.top, 50)
-                                }
+                            if globalVm.privateNfts.isEmpty {
+                                EmptyCollectionView(text: "This collections are empty")
                                 .frame(width: geometry.size.width, height: geometry.size.height - 300)
                             } else {
-                                LazyVStack(alignment: .leading, spacing: 0) {
-                                    ForEach($globalVm.privateNfts) { nft in
-                                        let last = globalVm.privateNfts.last ?? Nft.empty()
-                                        NftListView(nft: nft,
-                                                    selectedNft: $selectedNft,
-                                                    isLast: last == nft.wrappedValue)
+                                let nfts = globalVm.chosenCollectionInGallery == nil ? globalVm.privateNfts :
+                                globalVm.privateNfts.filter({ $0.contractAddress == globalVm.chosenCollectionInGallery?.address })
+                                if nfts.isEmpty {
+                                    EmptyCollectionView(text: "This collection is empty")
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                } else {
+                                    LazyVStack(alignment: .leading, spacing: 0) {
+                                        ForEach(nfts) { nft in
+                                            let last = globalVm.privateNfts.last ?? Nft.empty()
+                                            NftListView(nft: nft,
+                                                        selectedNft: $selectedNft,
+                                                        isLast: last == nft)
+                                        }
                                     }
-                                }
-                                .padding(20)
-                                .background(Colors.mainWhite)
-                                .cornerRadius(30, corners: [.topLeft, .bottomRight])
-                                .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
-                                .padding(.top, 25)
-                                .padding(.horizontal, 26)
-                                .sheet(item: $selectedNft,
-                                       onDismiss: { selectedNft = nil }) { nft in
-                                    if let index = globalVm.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
-                                        NftInfoSheet(nft: $globalVm.privateNfts[index])
+                                    .padding(20)
+                                    .background(Colors.mainWhite)
+                                    .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                                    .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                                    .padding(.top, 25)
+                                    .padding(.horizontal, 26)
+                                    .sheet(item: $selectedNft,
+                                           onDismiss: { selectedNft = nil }) { nft in
+                                        if let index = globalVm.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
+                                            NftInfoSheet(nft: $globalVm.privateNfts[index])
+                                        }
                                     }
                                 }
                             }
                         } else {
                             if globalVm.publicNfts.isEmpty {
-                                VStack(spacing: 0) {
-                                    
-                                    Text("There are no your nfts in the collection")
-                                        .foregroundColor(Colors.mainGrey)
-                                        .multilineTextAlignment(.center)
-                                        .font(.custom("rubik-bold", size: 19))
-                                        .padding(.horizontal, 20)
-                                    
-                                    Button {
-                                        withAnimation {
-                                            globalVm.currentTab = .mint
-                                        }
-                                    } label: {
-                                        Text("Mint now!")
-                                            .font(.custom("rubik-bold", size: 17))
-                                            .foregroundColor(Colors.mainWhite)
-                                            .padding(.vertical, 17)
-                                            .padding(.horizontal, 50)
-                                            .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing))
-                                            .cornerRadius(32)
-                                            .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
-                                    }
-                                    .padding(.top, 50)
-                                }
+                                EmptyCollectionView(text: "There are no your nfts in the collection")
                                 .frame(width: geometry.size.width, height: geometry.size.height - 220)
                             } else {
                                 LazyVStack(alignment: .leading, spacing: 0) {
-                                    ForEach($globalVm.publicNfts) { nft in
+                                    ForEach(globalVm.publicNfts) { nft in
                                         let last = globalVm.publicNfts.last ?? Nft.empty()
                                         NftListView(nft: nft,
                                                     selectedNft: $selectedNft,
-                                                    isLast: last == nft.wrappedValue)
+                                                    isLast: last == nft)
                                     }
                                 }
                                 .padding(20)
@@ -191,7 +148,6 @@ struct GalleryContainer: View {
 
 struct NftListView: View {
     
-    @Binding
     var nft: Nft
     
     @Binding
@@ -220,4 +176,42 @@ struct NftListView: View {
             }
         }
     }
+}
+
+struct EmptyCollectionView: View {
+    
+    var text: String
+    
+    @EnvironmentObject
+    var globalVm: GlobalViewModel
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            
+            Text(text)
+                .foregroundColor(Colors.mainGrey)
+                .multilineTextAlignment(.center)
+                .font(.custom("rubik-bold", size: 19))
+                .padding(.horizontal, 20)
+            
+            Button {
+                withAnimation {
+                    globalVm.currentTab = .mint
+                }
+            } label: {
+                Text("Mint now!")
+                    .font(.custom("rubik-bold", size: 17))
+                    .foregroundColor(Colors.mainWhite)
+                    .padding(.vertical, 17)
+                    .padding(.horizontal, 50)
+                    .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
+                                               startPoint: .leading,
+                                               endPoint: .trailing))
+                    .cornerRadius(32)
+                    .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+            }
+            .padding(.top, 50)
+        }
+    }
+    
 }
