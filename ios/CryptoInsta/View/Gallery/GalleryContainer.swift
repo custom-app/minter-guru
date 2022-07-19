@@ -195,8 +195,11 @@ struct EmptyCollectionView: View {
                 .padding(.horizontal, 20)
             
             Button {
-                withAnimation {
-                    globalVm.currentTab = .mint
+                DispatchQueue.main.async {
+                    withAnimation {
+                        globalVm.currentTab = .mint
+                    }
+                    globalVm.objectWillChange.send()
                 }
             } label: {
                 Text("Mint now!")

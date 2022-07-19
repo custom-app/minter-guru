@@ -171,11 +171,6 @@ class GlobalViewModel: ObservableObject {
                            name: String,
                            quality: Double = 0.85) {
         if let address = walletAccount, address.count > 2 {
-            DispatchQueue.main.async {
-                withAnimation {
-                    self.mintInProgress = true
-                }
-            }
             print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 guard let data = image.jpegData(compressionQuality: quality) else {

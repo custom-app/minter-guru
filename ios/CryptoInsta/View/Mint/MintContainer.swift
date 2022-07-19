@@ -258,7 +258,13 @@ struct MintContainer: View {
                                         message: "Please enter picture name")
                                     return
                                 }
-                                globalVm.uploadImageToIpfs(image: image, name: globalVm.pictureName)
+                                DispatchQueue.main.async {
+                                    withAnimation {
+                                        globalVm.mintInProgress = true
+                                    }
+                                    globalVm.objectWillChange.send()
+                                    globalVm.uploadImageToIpfs(image: image, name: globalVm.pictureName)
+                                }
                             } label: {
                                 Text("Mint")
                                     .font(.custom("rubik-bold", size: 17))
