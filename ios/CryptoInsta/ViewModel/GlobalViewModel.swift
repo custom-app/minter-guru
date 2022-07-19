@@ -348,7 +348,7 @@ class GlobalViewModel: ObservableObject {
             if let filebaseName = nft.data.filebaseName,
                 let url = URL(string: Tools.formFilebaseLink(filename: filebaseName)) {
                 URLSession.shared.dataTask(with: url) { [self] data, response, error in
-                    print("got image response: \(error)")
+                    print("got image response, error: \(error)")
                     guard error == nil, let data = data else {
                         //TODO: handle error
                         return
@@ -360,6 +360,12 @@ class GlobalViewModel: ObservableObject {
                             print("index found")
                             withAnimation {
                                 self.publicNfts[index].image = image
+                            }
+                        }
+                        if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                            print("index found")
+                            withAnimation {
+                                self.privateNfts[index].image = image
                             }
                         }
                     }
