@@ -27,6 +27,13 @@ struct AuthContainer: View {
     var body: some View {
         ScrollView {
             let connected = globalVm.session != nil
+            
+            if connected {
+                SwipeRefresh(bg: .black.opacity(0), fg: .black) {
+                    globalVm.getPolygonBalance()
+                    globalVm.getMinterBalance()
+                }
+            }
             VStack(spacing: 0) {
                 Text("Crypto wallet")
                     .foregroundColor(Colors.mainBlack)
