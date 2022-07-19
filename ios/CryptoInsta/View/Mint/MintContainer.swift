@@ -159,7 +159,7 @@ struct MintContainer: View {
                             .font(.custom("rubik-bold", size: 17))
                             .padding(.top, 25)
                         
-                        CollectionMenu()
+                        CollectionMenu(pickedPrivateCollection: $globalVm.pickedPrivateCollection)
                             .padding(.top, 10)
                         
                         if globalVm.pickedPrivateCollection {
@@ -306,43 +306,50 @@ struct MintContainer: View {
 }
 
 struct CollectionMenu: View {
+    
+    @Binding
+    var pickedPrivateCollection: Bool
+    
+    var chooseFirstPrivateCollection: Bool = true
+    
     @EnvironmentObject
     var globalVm: GlobalViewModel
     
     var body: some View {
         HStack(spacing: 6) {
             Text("Common")
-                .foregroundColor(globalVm.pickedPrivateCollection ? Colors.mainGreen : Colors.mainWhite)
+                .foregroundColor(pickedPrivateCollection ? Colors.mainGreen : Colors.mainWhite)
                 .font(.custom("rubik-bold", size: 16))
                 .frame(width: 94)
                 .padding(.vertical, 10)
-                .background(globalVm.pickedPrivateCollection ?
+                .background(pickedPrivateCollection ?
                             Color.clear.cornerRadius(30) : Colors.mainGreen.cornerRadius(30)
                 )
                 .onTapGesture {
-                    if globalVm.pickedPrivateCollection {
+                    if pickedPrivateCollection {
                         withAnimation {
-                            globalVm.pickedPrivateCollection = false
+                            pickedPrivateCollection = false
                         }
                     }
                 }
             
             Text("Private")
                 .foregroundColor(globalVm.isPassBought ?
-                                 (globalVm.pickedPrivateCollection ? Colors.mainWhite : Colors.mainGreen) : Colors.mainGrey
+                                 (pickedPrivateCollection ? Colors.mainWhite : Colors.mainGreen) : Colors.mainGrey
                 )
                 .font(.custom("rubik-bold", size: 16))
                 .frame(width: 94)
                 .padding(.vertical, 10)
-                .background(globalVm.pickedPrivateCollection ?
+                .background(pickedPrivateCollection ?
                             Colors.mainGreen.cornerRadius(30) : Color.clear.cornerRadius(30)
                 )
                 .onTapGesture {
-                    if globalVm.isPassBought && !globalVm.pickedPrivateCollection {
+                    if globalVm.isPassBought && !pickedPrivateCollection {
                         withAnimation {
-                            globalVm.pickedPrivateCollection = true
+                            pickedPrivateCollection = true
                         }
-                        if globalVm.pickedCollection == nil && globalVm.privateCollections.count > 0 {
+                        if chooseFirstPrivateCollection &&
+                            globalVm.pickedCollection == nil && globalVm.privateCollections.count > 0 {
                             globalVm.pickedCollection = globalVm.privateCollections[0]
                         }
                     }

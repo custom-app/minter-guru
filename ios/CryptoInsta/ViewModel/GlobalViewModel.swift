@@ -118,6 +118,12 @@ class GlobalViewModel: ObservableObject {
     @Published
     var refreshingNfts = false
     
+    //Gallery state
+    @Published
+    var privateCollectionsInGallery = false
+    @Published
+    var chosenCollectionInGallery: PrivateCollection?
+    
     var isPassBought: Bool {
         return true
     }
