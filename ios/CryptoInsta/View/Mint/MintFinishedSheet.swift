@@ -15,9 +15,13 @@ struct MintFinishedSheet: View {
     @State
     var textForShare: String? = nil
     
+    @State
+    var showMinterInfo = false
+    
     var body: some View {
         VStack(spacing: 0) {
             SheetStroke()
+                .padding(.bottom, 4)
             
             ScrollView {
                 VStack(spacing: 0) {
@@ -80,8 +84,25 @@ struct MintFinishedSheet: View {
                                                        startPoint: .leading,
                                                        endPoint: .trailing))
                             .cornerRadius(32)
-                            .padding(.vertical, 25)
+                            .padding(.top, 25)
                             .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                    }
+                    
+                    Tip(text: "You can earn Minter Guru tokens by sharing photos on social networks")
+                        .padding(.horizontal, 26)
+                        .padding(.top, 25)
+                    
+                    Button {
+                        showMinterInfo = true
+                    } label: {
+                        Text("More info")
+                            .foregroundColor(Colors.mainGreen)
+                            .font(.custom("rubik-bold", size: 16))
+                    }
+                    .padding(.vertical, 10)
+                    .sheet(isPresented: $showMinterInfo) {
+                        MinterInfoScreen()
+                            .environmentObject(globalVm)
                     }
                 }
             }
