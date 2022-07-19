@@ -6,7 +6,7 @@ services:
       - ~/dev-logs:/logs
       - ~/.dev-creds:/creds
     ports:
-      - "127.0.0.1:7000:7000"
+      - "7000:7000"
     restart: unless-stopped
   dev-postgres:
     image: postgres:13
