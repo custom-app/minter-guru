@@ -1,5 +1,0 @@
-{
-  "port": 7000,
-  "chain_id": 1337,
-  "credentials_path": "configs/test_creds"
-}
