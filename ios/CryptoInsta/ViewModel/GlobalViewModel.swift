@@ -116,7 +116,9 @@ class GlobalViewModel: ObservableObject {
     private var lastCollectionsCount: Int?
     
     @Published
-    var refreshingNfts = false
+    var refreshingPublicNfts = false
+    @Published
+    var refreshingPrivateNfts = false
     
     //Gallery state
     @Published
@@ -446,7 +448,7 @@ class GlobalViewModel: ObservableObject {
                         withAnimation {
                             self?.publicNfts = tokens
                             self?.publicNftsLoaded = true
-                            self?.refreshingNfts = false
+                            self?.refreshingPublicNfts = false
                         }
                         if let observing = self?.observingNftsCount,
                             let lastCount = self?.lastNftsCount,
@@ -454,6 +456,129 @@ class GlobalViewModel: ObservableObject {
                             self?.stopObservingTokensCount()
                             self?.showMintFinishedSheet = true
                             self?.mintInProgress = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPrivateCollectionPrice() {
+        print("requesting private collection price")
+        web3.getPrivateCollectionPrice() { [weak self] price, error in
+            if let error = error {
+                print("get private collection price error: \(error)")
+                //TODO: handle error?
+            } else {
+                print("got private collection price: \(price)")
+                withAnimation {
+                    self?.privateCollectionPrice = price
+                }
+            }
+        }
+    }
+    
+    func getMinterBalance() {
+        if let address = walletAccount {
+            print("requesting minter balance")
+            web3.getMinterBalance(address: address) { [weak self] balance, error in
+                if let error = error {
+                    print("get minter balance error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got minter balance: \(balance)")
+                    withAnimation {
+                        self?.minterBalance = balance
+                        self?.loadedMinterBalance = true
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPrivateCollections(page: Int = 0, size: Int = 1000) {
+        if let address = walletAccount {
+            web3.getPrivateCollections(page: page, size: size, address: address) { [weak self] collections, error in
+                if let error = error {
+                    print("get private collections error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("get private collections: \(collections)")
+                    DispatchQueue.main.async {
+                        let oldTokensCount = self?.privateCollections.reduce(0) { $0 + $1.tokensCount }
+                        withAnimation {
+                            self?.privateCollections = collections
+                            self?.privateCollectionsLoaded = true
+                        }
+                        if let observing = self?.observingCollectionsCount,
+                            let lastCount = self?.lastCollectionsCount,
+                           observing && collections.count > lastCount {
+                            print("stopping observing")
+                            self?.stopObservingPrivateCollections()
+                            self?.purchaseFinished = true
+                            self?.purchasingInProgress = false
+                            self?.getMinterBalance()
+                        }
+                        let newTokensCount = collections.reduce(0) { $0 + $1.tokensCount}
+                        if oldTokensCount != newTokensCount {
+                            self?.privateNftsRequestTimer?.cancel()
+                            self?.getPrivateTokens()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPrivateTokens() {
+        if let address = walletAccount {
+            web3.getPrivateTokens(collections: privateCollections, address: address) { [weak self] tokens, error in
+                if let error = error {
+                    print("get private tokens error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got private tokens: \(tokens)")
+                    DispatchQueue.main.async {
+                        let lastCount = self?.privateNfts.count
+                        withAnimation {
+                            self?.privateNfts = tokens
+                            self?.privateNftsLoaded = true
+                            self?.refreshingPrivateNfts = false
+                        }
+                        if let observing = self?.observingPrivateNftsCount,
+                            let lastCount = lastCount,
+                           observing && tokens.count > lastCount {
+                            self?.stopObservingPrivateTokensCount()
+                            self?.showMintFinishedSheet = true
+                            self?.mintInProgress = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getPrivateCollectionsCount() {
+        if let address = walletAccount {
+            web3.getPrivateCollectionsCount(address: address) { [weak self] count, error in
+                if let error = error {
+                    print("get private collections count error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("get private collections count: \(count)")
+                    if let observing = self?.observingCollectionsCount, let lastCount = self?.lastCollectionsCount, observing {
+                        if count > lastCount {
+                            self?.collectionsRequestTimer?.cancel()
+                            self?.getPrivateCollections()
+                        }
+                    } else {
+                        withAnimation {
+                            self?.privateCollectionsCount = Int(count)
+                            if count == 0 {
+                                self?.privateCollectionsLoaded = true
+                            } else {
+                                self?.getPrivateCollections()
+                            }
                         }
                     }
                 }
@@ -519,128 +644,6 @@ class GlobalViewModel: ObservableObject {
             } catch {
                 print("Error encoding PrivatecollectionData: \(error)")
                 //TODO: handle error
-            }
-        }
-    }
-    
-    func getPrivateCollectionPrice() {
-        print("requesting private collection price")
-        web3.getPrivateCollectionPrice() { [weak self] price, error in
-            if let error = error {
-                print("get private collection price error: \(error)")
-                //TODO: handle error?
-            } else {
-                print("got private collection price: \(price)")
-                withAnimation {
-                    self?.privateCollectionPrice = price
-                }
-            }
-        }
-    }
-    
-    func getMinterBalance() {
-        if let address = walletAccount {
-            print("requesting minter balance")
-            web3.getMinterBalance(address: address) { [weak self] balance, error in
-                if let error = error {
-                    print("get minter balance error: \(error)")
-                    //TODO: handle error?
-                } else {
-                    print("got minter balance: \(balance)")
-                    withAnimation {
-                        self?.minterBalance = balance
-                        self?.loadedMinterBalance = true
-                    }
-                }
-            }
-        }
-    }
-    
-    func getPrivateCollectionsCount() {
-        if let address = walletAccount {
-            web3.getPrivateCollectionsCount(address: address) { [weak self] count, error in
-                if let error = error {
-                    print("get private collections count error: \(error)")
-                    //TODO: handle error?
-                } else {
-                    print("get private collections count: \(count)")
-                    if let observing = self?.observingCollectionsCount, let lastCount = self?.lastCollectionsCount, observing {
-                        if count > lastCount {
-                            self?.collectionsRequestTimer?.cancel()
-                            self?.getPrivateCollections()
-                        }
-                    } else {
-                        withAnimation {
-                            self?.privateCollectionsCount = Int(count)
-                            if count == 0 {
-                                self?.privateCollectionsLoaded = true
-                            } else {
-                                self?.getPrivateCollections()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func getPrivateCollections(page: Int = 0, size: Int = 1000) {
-        if let address = walletAccount {
-            web3.getPrivateCollections(page: page, size: size, address: address) { [weak self] collections, error in
-                if let error = error {
-                    print("get private collections error: \(error)")
-                    //TODO: handle error?
-                } else {
-                    print("get private collections: \(collections)")
-                    DispatchQueue.main.async {
-                        let oldTokensCount = self?.privateCollections.reduce(0) { $0 + $1.tokensCount }
-                        withAnimation {
-                            self?.privateCollections = collections
-                            self?.privateCollectionsLoaded = true
-                        }
-                        if let observing = self?.observingCollectionsCount,
-                            let lastCount = self?.lastCollectionsCount,
-                           observing && collections.count > lastCount {
-                            print("stopping observing")
-                            self?.stopObservingPrivateCollections()
-                            self?.purchaseFinished = true
-                            self?.purchasingInProgress = false
-                            self?.getMinterBalance()
-                        }
-                        let newTokensCount = collections.reduce(0) { $0 + $1.tokensCount}
-                        if oldTokensCount != newTokensCount {
-                            self?.privateNftsRequestTimer?.cancel()
-                            self?.getPrivateTokens()
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func getPrivateTokens() {
-        if let address = walletAccount {
-            web3.getPrivateTokens(collections: privateCollections, address: address) { [weak self] tokens, error in
-                if let error = error {
-                    print("get private tokens error: \(error)")
-                    //TODO: handle error?
-                } else {
-                    print("got private tokens: \(tokens)")
-                    DispatchQueue.main.async {
-                        let lastCount = self?.privateNfts.count
-                        withAnimation {
-                            self?.privateNfts = tokens
-                            self?.privateNftsLoaded = true
-                        }
-                        if let observing = self?.observingPrivateNftsCount,
-                            let lastCount = lastCount,
-                           observing && tokens.count > lastCount {
-                            self?.stopObservingPrivateTokensCount()
-                            self?.showMintFinishedSheet = true
-                            self?.mintInProgress = false
-                        }
-                    }
-                }
             }
         }
     }
@@ -748,12 +751,21 @@ class GlobalViewModel: ObservableObject {
         collectionsRequestTimer?.cancel()
     }
     
-    func refreshNfts() {
+    func refreshPublicNfts() {
         DispatchQueue.main.async {
             withAnimation {
-                self.refreshingNfts = true
+                self.refreshingPublicNfts = true
             }
         }
         getPublicTokens(page: 0)
+    }
+    
+    func refreshPrivateNfts() {
+        DispatchQueue.main.async {
+            withAnimation {
+                self.refreshingPrivateNfts = true
+            }
+        }
+        getPrivateTokens()
     }
 }

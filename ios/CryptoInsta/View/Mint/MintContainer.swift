@@ -27,7 +27,11 @@ struct MintContainer: View {
                 
                 SwipeRefresh(bg: .black.opacity(0), fg: .black) {
                     if globalVm.mintInProgress {
-                        globalVm.refreshNfts()
+                        if globalVm.pickedPrivateCollection {
+                            globalVm.refreshPrivateNfts()
+                        } else {
+                            globalVm.refreshPublicNfts()
+                        }
                     } else {
                         globalVm.getPolygonBalance()
                         globalVm.getPrivateCollections()

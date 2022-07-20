@@ -17,7 +17,10 @@ struct MintProcessingScreen: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            if globalVm.refreshingNfts {
+            let refreshingNfts = (globalVm.pickedPrivateCollection && globalVm.refreshingPrivateNfts) ||
+                                 (!globalVm.pickedPrivateCollection && globalVm.refreshingPublicNfts)
+            
+            if refreshingNfts {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
             } else {
