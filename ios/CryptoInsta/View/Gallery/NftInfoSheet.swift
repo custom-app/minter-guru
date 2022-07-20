@@ -46,7 +46,7 @@ struct NftInfoSheet: View {
                                 .cornerRadius(10)
                                 .frame(maxWidth: .infinity, maxHeight: 325)
                             
-                            Text(nft.meta?.name ?? "")
+                            Text(nft.data.name ?? "")
                                 .foregroundColor(Colors.mainBlack)
                                 .font(.custom("rubik-bold", size: 24))
                             

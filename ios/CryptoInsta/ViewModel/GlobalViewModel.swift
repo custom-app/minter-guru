@@ -305,6 +305,14 @@ class GlobalViewModel: ObservableObject {
                                 self.loadImageFromIpfs(meta: meta, tokenId: nft.tokenId)
                             }
                         }
+                        if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                            withAnimation {
+                                self.privateNfts[index].meta = meta
+                            }
+                            if loadImageAfter {
+                                self.loadImageFromIpfs(meta: meta, tokenId: nft.tokenId)
+                            }
+                        }
                     }
                 } else {
                     //should never happen
@@ -331,6 +339,12 @@ class GlobalViewModel: ObservableObject {
                             print("index found")
                             withAnimation {
                                 self.publicNfts[index].image = image
+                            }
+                        }
+                        if let index = self.privateNfts.firstIndex(where: { $0.tokenId == tokenId}) {
+                            print("index found")
+                            withAnimation {
+                                self.privateNfts[index].image = image
                             }
                         }
                     }
