@@ -104,17 +104,6 @@ class GlobalViewModel: ObservableObject {
     @Published
     var privateNftsLoaded = false
     
-    private var observingNftsCount = false
-    private var nftsRequestTimer: AnyCancellable?
-    private var lastNftsCount: Int?
-    
-    private var observingPrivateNftsCount = false
-    private var privateNftsRequestTimer: AnyCancellable?
-    
-    private var observingCollectionsCount = false
-    private var collectionsRequestTimer: AnyCancellable?
-    private var lastCollectionsCount: Int?
-    
     @Published
     var refreshingPublicNfts = false
     @Published
@@ -130,6 +119,24 @@ class GlobalViewModel: ObservableObject {
     var twitterInfo: TwitterInfo?
     @Published
     var faucetInfo: FaucetInfo?
+    @Published
+    var faucetProcessing = false
+    @Published
+    var faucetFinished = false
+    
+    private var observingNftsCount = false
+    private var nftsRequestTimer: AnyCancellable?
+    private var lastNftsCount: Int?
+    
+    private var observingPrivateNftsCount = false
+    private var privateNftsRequestTimer: AnyCancellable?
+    
+    private var observingCollectionsCount = false
+    private var collectionsRequestTimer: AnyCancellable?
+    private var lastCollectionsCount: Int?
+    
+    private var observingBalance = false
+    private var balanceRequestTimer: AnyCancellable?
     
     var isPassBought: Bool {
         return true
@@ -216,6 +223,11 @@ class GlobalViewModel: ObservableObject {
     }
     
     func callFaucet() {
+        DispatchQueue.main.async {
+            withAnimation {
+                self.faucetProcessing = true
+            }
+        }
         if let address = walletAccount {
             DispatchQueue.global(qos: .userInitiated).async {
                 HttpRequester.shared.callFaucet(address: address) { result, error in
@@ -224,6 +236,7 @@ class GlobalViewModel: ObservableObject {
                         //TODO: handle error
                     } else if let result = result {
                         print("faucet sucessfuly used, txid: \(result.id)")
+                        self.startObservingBalance()
                     }
                 }
             }
@@ -498,6 +511,13 @@ class GlobalViewModel: ObservableObject {
                     withAnimation {
                         self?.polygonBalance = balance
                         self?.polygonBalanceLoaded = true
+                    }
+                    if let observing = self?.observingBalance, observing, balance > 0 {
+                        self?.stopObservingBalance()
+                        withAnimation {
+                            self?.faucetFinished = true
+                            self?.faucetProcessing = false
+                        }
                     }
                 }
             }
@@ -845,6 +865,24 @@ class GlobalViewModel: ObservableObject {
     func stopObservingPrivateCollections() {
         observingCollectionsCount = false
         collectionsRequestTimer?.cancel()
+    }
+    
+    func startObservingBalance() {
+        balanceRequestTimer?.cancel()
+        observingBalance = true
+        balanceRequestTimer = Timer.publish(every: requestsInterval,
+                              tolerance: requestsInterval/2,
+                              on: .main,
+                              in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.getPolygonBalance()
+        }
+    }
+    
+    func stopObservingBalance() {
+        observingBalance = false
+        balanceRequestTimer?.cancel()
     }
     
     func refreshPublicNfts() {

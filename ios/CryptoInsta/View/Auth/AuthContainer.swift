@@ -192,8 +192,13 @@ struct AuthContainer: View {
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
-                    .sheet(isPresented: $showFaucet) {
-                        FaucetScreen()
+                    .sheet(isPresented: $showFaucet, onDismiss: {
+                        withAnimation {
+                            globalVm.faucetProcessing = false
+                            globalVm.faucetFinished = false
+                        }
+                    }) {
+                        FaucetScreen(showingSheet: $showFaucet)
                             .environmentObject(globalVm)
                     }
                     
