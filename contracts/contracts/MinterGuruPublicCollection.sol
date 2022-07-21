@@ -52,7 +52,7 @@ contract MinterGuruPublicCollection is MinterGuruBaseCollection {
     /// @dev burn function
     /// @param id - token id
     function burn(uint256 id) external {
-        require(ownerOf(id) == _msgSender(), "PublicCollection: not owner of burning token");
+        require(ownerOf(id) == _msgSender(), "MinterGuruPublicCollection: not owner of burning token");
         _burn(id);
     }
 }

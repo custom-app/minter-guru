@@ -125,9 +125,9 @@ contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256 page,
         uint256 size
     ) external view returns (PrivateCollectionData[] memory, uint256[] memory) {
-        require(size <= 1000, "CollectionsAccessToken: size must be 1000 or lower");
+        require(size <= 1000, "MinterGuruCollectionsAccessToken: size must be 1000 or lower");
         uint256 total = ownedCollections[_msgSender()].length();
-        require((total == 0 && page == 0) || page * size < total, "CollectionsAccessToken: out of bounds");
+        require((total == 0 && page == 0) || page * size < total, "MinterGuruCollectionsAccessToken: out of bounds");
         uint256 resSize = size;
         if ((page + 1) * size > total) {
             resSize = total - page * size;
@@ -153,15 +153,15 @@ contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256[] calldata pages,
         uint256[] calldata sizes
     ) external view returns (MinterGuruBaseCollection.TokenData[][] memory) {
-        require(ids.length <= 1000, "CollectionsAccessToken: collections quantity must be 1000 or lower");
-        require(ids.length == pages.length && pages.length == sizes.length, "CollectionsAccessToken: lengths unmatch");
+        require(ids.length <= 1000, "MinterGuruCollectionsAccessToken: collections quantity must be 1000 or lower");
+        require(ids.length == pages.length && pages.length == sizes.length, "MinterGuruCollectionsAccessToken: lengths unmatch");
         MinterGuruBaseCollection.TokenData[][] memory res = new MinterGuruBaseCollection.TokenData[][](ids.length);
         uint256 realSize = 0;
         uint256[] memory resSizes = new uint256[](ids.length);
         for (uint256 i = 0; i < ids.length; i++) {
-            require(address(tokenCollections[ids[i]]) != address(0), "CollectionsAccessToken: collection doesn't exist");
+            require(address(tokenCollections[ids[i]]) != address(0), "MinterGuruCollectionsAccessToken: collection doesn't exist");
             uint256 total = tokenCollections[ids[i]].balanceOf(_msgSender());
-            require((total == 0 && pages[i] == 0) || pages[i] * sizes[i] < total, "CollectionsAccessToken: out of bounds");
+            require((total == 0 && pages[i] == 0) || pages[i] * sizes[i] < total, "MinterGuruCollectionsAccessToken: out of bounds");
             resSizes[i] = sizes[i];
             if ((pages[i] + 1) * sizes[i] > total) {
                 resSizes[i] = total - pages[i] * sizes[i];
@@ -169,7 +169,7 @@ contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
             realSize += resSizes[i];
             res[i] = new MinterGuruBaseCollection.TokenData[](resSizes[i]);
         }
-        require(realSize <= 1000, "CollectionsAccessToken: tokens quantity must be 1000 or lower");
+        require(realSize <= 1000, "MinterGuruCollectionsAccessToken: tokens quantity must be 1000 or lower");
         for (uint256 i = 0; i < ids.length; i++) {
             MinterGuruPrivateCollection collection = tokenCollections[ids[i]];
             for (uint256 j = pages[i] * sizes[i]; j < pages[i] * sizes[i] + resSizes[i]; j++) {

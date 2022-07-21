@@ -12,13 +12,10 @@ import {
   MinterGuruPublicCollectionsRouter,
   // eslint-disable-next-line camelcase
   MinterGuruPublicCollectionsRouter__factory,
-  MinterGuruToken,
-  // eslint-disable-next-line camelcase
-  MinterGuruToken__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
 // eslint-disable-next-line node/no-missing-import
-import { createPrivateCollectionsAccessToken } from "./util";
+import { createPrivateCollectionsAccessToken, createMinterGuruToken } from "./util";
 
 async function createPublicRouter(account: Signer) {
   const factory = new MinterGuruPublicCollection__factory(account);
@@ -37,26 +34,11 @@ async function createPublicRouter(account: Signer) {
   await router.createCollectionClone("0x" + genRanHex(64), "test", "TEST");
 }
 
-async function createMinterGuruToken(accounts: Signer[]): Promise<string> {
-  const factory = new MinterGuruToken__factory(accounts[0]);
-  const multiplier = BN.from(10).pow(BN.from(18));
-  const instance: MinterGuruToken = await factory.deploy(
-    BN.from(100000).mul(multiplier),
-    BN.from(50000).mul(multiplier),
-    BN.from(20000).mul(multiplier),
-    BN.from(30000).mul(multiplier),
-    await accounts[1].getAddress(),
-    await accounts[2].getAddress(),
-    await accounts[3].getAddress()
-  );
-  console.log("MinterGuruToken: ", instance.address);
-  return instance.address;
-}
-
 async function main() {
   const accounts: Signer[] = await ethers.getSigners();
   await createPublicRouter(accounts[0]);
   const tokenAddress = await createMinterGuruToken(accounts);
+  console.log("MinterGuruToken: ", tokenAddress);
   const accessTokenInstance = await createPrivateCollectionsAccessToken(
     accounts[0],
     tokenAddress

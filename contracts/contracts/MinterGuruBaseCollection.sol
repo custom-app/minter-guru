@@ -34,9 +34,9 @@ contract MinterGuruBaseCollection is ERC721EnumerableUpgradeable {
     /// @return total - number of tokens
     /// @notice This function is potentially unsafe, since it doesn't guarantee order
     function getAllTokens(uint256 page, uint256 size) external view returns (TokenData[] memory res, uint256 total) {
-        require(size <= 1000, "MinterCollection: size must be 1000 or lower");
+        require(size <= 1000, "MinterGuruBaseCollection: size must be 1000 or lower");
         total = totalSupply();
-        require((total == 0 && page == 0) || page * size < total, "MinterCollection: out of bounds");
+        require((total == 0 && page == 0) || page * size < total, "MinterGuruBaseCollection: out of bounds");
         uint256 resSize = size;
         if ((page + 1) * size > total) {
             resSize = total - page * size;
@@ -59,9 +59,9 @@ contract MinterGuruBaseCollection is ERC721EnumerableUpgradeable {
         uint256 page,
         uint256 size
     ) external view returns (TokenData[] memory res, uint256 total) {
-        require(size <= 1000, "MinterCollection: size must be 1000 or lower");
+        require(size <= 1000, "MinterGuruBaseCollection: size must be 1000 or lower");
         total = balanceOf(_msgSender());
-        require((total == 0 && page == 0) || page * size < total, "MinterCollection: out of bounds");
+        require((total == 0 && page == 0) || page * size < total, "MinterGuruBaseCollection: out of bounds");
         uint256 resSize = size;
         if ((page + 1) * size > total) {
             resSize = total - page * size;
@@ -85,7 +85,7 @@ contract MinterGuruBaseCollection is ERC721EnumerableUpgradeable {
     /// @param metaUri - metadata uri
     /// @param data - additional token data
     function _mint(address to, uint256 id, string memory metaUri, bytes memory data) internal {
-        require(id == tokensCount, "MinterCollection: wrong id");
+        require(id == tokensCount, "MinterGuruBaseCollection: wrong id");
         tokensCount++;
         _safeMint(to, id);
         tokenUris[id] = metaUri;
