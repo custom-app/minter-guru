@@ -386,6 +386,7 @@ class Web3Worker: ObservableObject {
             DispatchQueue.main.async {
                 onResult([], nil)
             }
+            return
         }
         if let walletAddress = EthereumAddress(address) {
             DispatchQueue.global(qos: .userInitiated).async { [self] in
