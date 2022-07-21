@@ -66,12 +66,15 @@ extension GlobalViewModel {
     }
     
     func disconnect() {
-        guard let session = session, let walletConnect = walletConnect else { return }
-        try? walletConnect.client?.disconnect(from: session)
-        withAnimation {
-            self.session = nil
+        DispatchQueue.main.async {
+            guard let session = self.session, let walletConnect = self.walletConnect else { return }
+            try? walletConnect.client?.disconnect(from: session)
+            withAnimation {
+                self.session = nil
+            }
+            UserDefaults.standard.removeObject(forKey: Constants.sessionKey)
+            self.objectWillChange.send()
         }
-        UserDefaults.standard.removeObject(forKey: Constants.sessionKey)
     }
     
     func triggerPendingDeepLink() {

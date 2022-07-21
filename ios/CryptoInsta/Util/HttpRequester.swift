@@ -201,6 +201,20 @@ class HttpRequester {
         doApiRequest(route: ApiRoute.callFaucet, data: bodyJson, onResult: onResult)
     }
     
+    func checkFaucet(address: String, onResult: @escaping (FaucetUsageInfo?, Error?) -> ()) {
+        let encoder = JSONEncoder()
+        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        doApiRequest(route: ApiRoute.checkFaucet, data: bodyJson, onResult: onResult)
+    }
+    
+    func getFaucetInfo(onResult: @escaping (FaucetInfo?, Error?) -> ()) {
+        doApiRequest(route: ApiRoute.faucetInfo, data: Data(), onResult: onResult)
+    }
+    
+    func getTwitterInfo(onResult: @escaping (TwitterInfo?, Error?) -> ()) {
+        doApiRequest(route: ApiRoute.twitterInfo, data: Data(), onResult: onResult)
+    }
+    
     func applyForRepostReward(address: String, onResult: @escaping (RewardInfo?, Error?) -> ()) {
         let encoder = JSONEncoder()
         let bodyJson = try! encoder.encode(AddressBody(address: address))
@@ -248,7 +262,6 @@ class HttpRequester {
             if httpResponse.statusCode == HttpRequester.HTTP_OK {
                 do {
                     let result = try JSONDecoder().decode(T.self, from: data)
-                    print("decoded response: \(result)")
                     DispatchQueue.main.async {
                         onResult(result, nil)
                     }

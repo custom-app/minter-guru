@@ -126,14 +126,20 @@ class GlobalViewModel: ObservableObject {
     @Published
     var chosenCollectionInGallery: PrivateCollection?
     
+    @Published
+    var twitterInfo: TwitterInfo?
+    @Published
+    var faucetInfo: FaucetInfo?
+    
     var isPassBought: Bool {
         return true
     }
     
     init() {
-        if let used = UserDefaultsWorker.shared.isFaucetUsed() {
-            faucetUsed = used
-        }
+        //TODO: uncomment
+//        if let used = UserDefaultsWorker.shared.isFaucetUsed() {
+//            faucetUsed = used
+//        }
     }
     
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
@@ -182,11 +188,16 @@ class GlobalViewModel: ObservableObject {
     
     func loadInitialInfo() {
         getPolygonBalance()
+        getMinterBalance()
+        if !faucetUsed {
+            checkFaucetUsage()
+        }
         getPublicTokensCount()
         getPrivateCollectionPrice()
-        getMinterBalance()
         getPrivateCollectionsCount()
-        getPrivateCollections()
+        getFaucetInfo()
+        getTwitterInfo()
+        getRepostRewards()
     }
     
     func clearAccountInfo() {
@@ -207,12 +218,62 @@ class GlobalViewModel: ObservableObject {
     func callFaucet() {
         if let address = walletAccount {
             DispatchQueue.global(qos: .userInitiated).async {
-                HttpRequester.shared.callFaucet(address: "0x85c42264f9d73e940b3dF8f52Db35c3195D3A157") { result, error in
+                HttpRequester.shared.callFaucet(address: address) { result, error in
                     if let error = error {
                         print("got faucet call error: \(error)")
                         //TODO: handle error
                     } else if let result = result {
                         print("faucet sucessfuly used, txid: \(result.id)")
+                    }
+                }
+            }
+        }
+    }
+    
+    func checkFaucetUsage() {
+        if let address = walletAccount {
+            DispatchQueue.global(qos: .userInitiated).async {
+                HttpRequester.shared.checkFaucet(address: address) { result, error in
+                    if let error = error {
+                        print("got faucet check error: \(error)")
+                        //TODO: handle error
+                    } else if let result = result {
+                        print("check faucet response, is available: \(!result.has)")
+                        if result.has {
+                            self.faucetUsed = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getFaucetInfo() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            HttpRequester.shared.getFaucetInfo { result, error in
+                if let error = error {
+                    print("got faucet info error: \(error)")
+                    //TODO: handle error
+                } else if let result = result {
+                    print("got faucet info: \(result)")
+                    withAnimation {
+                        self.faucetInfo = result
+                    }
+                }
+            }
+        }
+    }
+    
+    func getTwitterInfo() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            HttpRequester.shared.getTwitterInfo { result, error in
+                if let error = error {
+                    print("got twitter info error: \(error)")
+                    //TODO: handle error
+                } else if let result = result {
+                    print("got twitter info: \(result)")
+                    withAnimation {
+                        self.twitterInfo = result
                     }
                 }
             }

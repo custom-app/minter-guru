@@ -108,9 +108,10 @@ struct AuthContainer: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 15, height: 15)
-                        Text((connected && !globalVm.isWrongChain) ?
-                             (globalVm.loadedMinterBalance ? Tools.formatUint256(globalVm.minterBalance) : "Loading") :
-                                "tokens are not available")
+                        
+                        let showBalance = connected && !globalVm.isWrongChain
+                        let balance = globalVm.loadedMinterBalance ? Tools.formatUint256(globalVm.minterBalance) : "Loading"
+                        Text(showBalance ? balance : "tokens are not available")
                             .foregroundColor(Colors.mainBlack)
                             .font(.custom("rubik-regular", size: 16))
                             .padding(.leading, 5)
