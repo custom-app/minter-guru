@@ -8,19 +8,20 @@ import "./MinterGuruBaseCollection.sol";
 /// @dev MinterGuruPrivateCollection - collection where only the owner can mint photos
 contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
     uint256 public accessTokenId;                              // access token id
-    MinterGuruCollectionsAccessToken public accessToken;         // Access token contract address
+    MinterGuruCollectionsAccessToken public accessToken;       // Access token contract address
     address public owner;                                      // current owner. changed on access token transfers
     bytes public data;                                         // collection additional data
+    uint256 tokensLimit;                                       // mint limit
 
     /// @dev modifier for checking if call is from the access token contract
     modifier onlyAccessToken() {
-        require(_msgSender() == address(accessToken), "");
+        require(_msgSender() == address(accessToken), "MinterGuruPrivateCollection: allowed to call only from access token");
         _;
     }
 
     /// @dev modifier for checking if call is from the owner
     modifier onlyOwner() {
-        require(_msgSender() == owner, "");
+        require(_msgSender() == owner, "MinterGuruPrivateCollection: not an owner");
         _;
     }
 
@@ -44,6 +45,7 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
         accessToken = _accessToken;
         owner = _owner;
         data = _data;
+        tokensLimit = 100;
     }
 
     /// @dev Mint function. Can called only by the owner
@@ -57,6 +59,7 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
         string memory metaUri,
         bytes memory _data
     ) external onlyOwner {
+        require(id < tokensLimit, "MinterGuruPrivateCollection: limit reached");
         _mint(to, id, metaUri, _data);
     }
 
@@ -70,14 +73,31 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
         bytes memory _data
     ) external onlyOwner returns (uint256) {
         uint256 id = tokensCount;
+        require(id < tokensLimit, "MinterGuruPrivateCollection: limit reached");
         _mint(to, id, metaUri, _data);
         return id;
+    }
+
+    /// @dev Mint batch of tokens. Can called only by the owner
+    /// @param to - tokens receiver
+    /// @param count - tokens quantity to mint
+    /// @param metaUris - metadata uri list
+    /// @param _data - additional token data list
+    function mintBatch(address to, uint256 count, string[] memory metaUris, bytes[] memory _data) external onlyOwner {
+        require(count == metaUris.length, "MinterGuruPrivateCollection: metaUri list length must be equal to count");
+        require(count == _data.length, "MinterGuruPrivateCollection: _data list length must be equal to count");
+        uint256 id = tokensCount;
+        for (uint256 i = 0; i < count; i++) {
+            require(id < tokensLimit, "MinterGuruPrivateCollection: limit reached");
+            _mint(to, id, metaUris[i], _data[i]);
+            id++;
+        }
     }
 
     /// @dev burn function
     /// @param id - token id
     function burn(uint256 id) external {
-        require(ownerOf(id) == _msgSender(), "");
+        require(ownerOf(id) == _msgSender(), "MinterGuruPrivateCollection: not an owner of token");
         _burn(id);
     }
 
@@ -85,7 +105,7 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
     function transferOwnership(address to) external onlyAccessToken {
         uint256 ownerTokensCount = balanceOf(owner);
         for (uint256 i = 0; i < ownerTokensCount; i++) {
-            uint256 id = tokenOfOwnerByIndex(owner, i);
+            uint256 id = tokenOfOwnerByIndex(owner, 0);
             _transfer(owner, to, id);
         }
         owner = to;

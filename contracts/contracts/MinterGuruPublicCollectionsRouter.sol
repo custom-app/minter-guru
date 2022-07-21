@@ -43,9 +43,9 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
         string memory metaUri,
         bytes memory data
     ) external {
-        require(allCollections.length > 0, "PublicCollectionsRouter: there are no collections to mint");
+        require(allCollections.length > 0, "MinterGuruPublicCollectionsRouter: there are no collections to mint");
         MinterGuruPublicCollection collection = collections[version];
-        require(address(collection) != address(0), "PublicCollectionsRouter: unknown version");
+        require(address(collection) != address(0), "MinterGuruPublicCollectionsRouter: unknown version");
         collection.mint(_msgSender(), id, metaUri, data);
         emit PublicMint(collection, _msgSender(), id);
     }
@@ -59,9 +59,9 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
         string memory metaUri,
         bytes memory data
     ) external {
-        require(allCollections.length > 0, "PublicCollectionsRouter: there are no collections to mint");
+        require(allCollections.length > 0, "MinterGuruPublicCollectionsRouter: there are no collections to mint");
         MinterGuruPublicCollection collection = collections[version];
-        require(address(collection) != address(0), "PublicCollectionsRouter: unknown version");
+        require(address(collection) != address(0), "MinterGuruPublicCollectionsRouter: unknown version");
         uint256 id = collection.mintWithoutId(_msgSender(), metaUri, data);
         emit PublicMint(collection, _msgSender(), id);
     }
@@ -99,7 +99,7 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
     /// @dev function for getting id for minting
     /// @return id to mint
     function idToMint(uint256 version) external view returns (uint256) {
-        require(address(collections[version]) != address(0), "PublicCollectionsRouter: unknown version");
+        require(address(collections[version]) != address(0), "MinterGuruPublicCollectionsRouter: unknown version");
         return collections[version].tokensCount();
     }
 
@@ -123,10 +123,10 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
         MinterGuruBaseCollection.TokenData[][] memory tokensRes,
         uint256 total
     ) {
-        require(size <= 1000, "PublicCollectionsRouter: size must be 1000 or lower");
+        require(size <= 1000, "MinterGuruPublicCollectionsRouter: size must be 1000 or lower");
         uint256[] memory counts = _tokenCounts();
         uint256 _total = _totalTokens(counts);
-        require((total == 0 && page == 0) || page * size < _total, "PublicCollectionsRouter: out of bounds");
+        require((total == 0 && page == 0) || page * size < _total, "MinterGuruPublicCollectionsRouter: out of bounds");
 
         bool[] memory mask = new bool[](counts.length);
         uint256 current = 0;

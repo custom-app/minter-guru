@@ -94,7 +94,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         address _vestingAdmin,
         address _gameRewardAdmin
     ) ERC20("MinterGuru", "MIGU") {
-        require(_totalLimit == _liquidityAmount + _vestingAmount + _gameRewardAmount, ": wrong limits");
+        require(_totalLimit == _liquidityAmount + _vestingAmount + _gameRewardAmount, "MinterGuruToken: wrong limits");
         totalLimit = _totalLimit;
         liquidityTotalAmount = _liquidityAmount;
         vestingTotalAmount = _vestingAmount;
@@ -123,6 +123,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
             gameRewardSpent -= toReturn;
         }
         burned += value - toReturn;
+        _spendAllowance(from, _msgSender(), value - toReturn);
         _burn(from, value - toReturn);
     }
 
@@ -138,11 +139,11 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 stepDuration,
         uint256 steps
     ) external onlyRole(VESTING_ADMIN_ROLE) {
-        require(stepValue > 0, "");
-        require(stepDuration > 0, "");
-        require(steps > 0, "");
-        require(vestingRecords[receiver].stepValue == 0, "");
-        require(vestingPendingSpent + stepValue * steps <= vestingTotalAmount, "");
+        require(stepValue > 0, "MinterGuruToken: step value must be positive");
+        require(stepDuration > 0, "MinterGuruToken: step duration must be positive");
+        require(steps > 0, "MinterGuruToken: steps quantity must be positive");
+        require(vestingRecords[receiver].stepValue == 0, "MinterGuruToken: single receive can't have multiple vesting records");
+        require(vestingPendingSpent + stepValue * steps <= vestingTotalAmount, "MinterGuruToken: vesting limit reached");
         vestingRecords[receiver] = VestingRecord(receiver, stepValue, stepDuration, steps, block.timestamp, 0, 0);
         vestingPendingSpent += stepValue * steps;
         emit VestingStarted(receiver, stepValue, stepDuration, steps);
@@ -153,8 +154,8 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// Emits a VestingWithdrawn event and VestingFullWithdrawn if all tokens were released and withdrawn
     function withdrawVesting(uint256 value) external {
         VestingRecord storage record = vestingRecords[_msgSender()];
-        require(record.stepValue > 0, "");
-        require(value <= vestingAvailableToRelease(), "");
+        require(record.stepValue > 0, "MinterGuruToken: vesting record doesn't exist");
+        require(value <= vestingAvailableToRelease(), "MinterGuruToken: value is greater than available amount of tokens");
         _sendTokens(_msgSender(), value);
         record.withdrawn += value;
         if (record.withdrawn == record.stepValue * record.steps) {
@@ -170,7 +171,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// Emits a VestingRevoked event and VestingWithdrawn event if there are some released and not withdrawn tokens
     function revokeVesting(address receiver) external onlyRole(VESTING_ADMIN_ROLE) {
         VestingRecord storage record = vestingRecords[receiver];
-        require(record.stepValue > 0, "");
+        require(record.stepValue > 0, "MinterGuruToken: vesting record doesn't exist");
         record.revokedAt = block.timestamp;
         uint256 availableAfterRevocation = record.stepValue * ((record.revokedAt - record.createdAt) / record.stepDuration);
         vestingPendingSpent -= (record.stepValue * record.steps - availableAfterRevocation);
@@ -186,7 +187,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @return released amount of tokens ready for withdraw
     function vestingAvailableToRelease() public view returns (uint256) {
         VestingRecord storage record = vestingRecords[_msgSender()];
-        require(record.stepValue > 0, "");
+        require(record.stepValue > 0, "MinterGuruToken: vesting record doesn't exist");
         uint256 rightBound = block.timestamp;
         if (record.revokedAt > 0) {
             rightBound = record.revokedAt;
@@ -208,9 +209,9 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256[] memory thresholds,
         uint256[] memory values
     ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
-        require(start < finish, "");
-        require(value < gameRewardTotalAmount - gameRewardSpent, "");
-        require(thresholds.length + 1 == values.length, "");
+        require(start < finish, "MinterGuruToken: start must be less than finish");
+        require(value < gameRewardTotalAmount - gameRewardSpent, "MinterGuruToken: limit reached");
+        require(thresholds.length + 1 == values.length, "MinterGuruToken: thresholds and values sizes unmatch");
         uint256 id = eventsCount;
         eventsCount++;
         currentEvents[id] = GameEvent(value, start, finish, thresholds, values, 0);
@@ -269,8 +270,8 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 id
     ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
         GameEvent storage ev = currentEvents[id];
-        require(ev.value > 0, "");
-        require(block.timestamp > ev.finish, "");
+        require(ev.value > 0, "MinterGuruToken: event doesn't exist");
+        require(block.timestamp > ev.finish, "MinterGuruToken: event has already finished");
         delete currentEvents[id];
         emit GameEventFinished(id);
     }
@@ -280,15 +281,15 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @return expected reward
     function calcGamingReward(uint256 id) public view returns (uint256) {
         GameEvent storage ev = currentEvents[id];
-        require(ev.value > 0, "");
-        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "");
+        require(ev.value > 0, "MinterGuruToken: event doesn't exist");
+        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "MinterGuruToken: event is not active");
         return _calcGamingReward(ev);
     }
 
     function _mintGamingReward(uint256 id, address[] memory receivers) internal {
         GameEvent storage ev = currentEvents[id];
-        require(ev.value > 0, "");
-        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "");
+        require(ev.value > 0, "MinterGuruToken: event doesn't exist");
+        require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "MinterGuruToken: event is not active");
         for (uint256 i = 0; i < receivers.length; i++) {
             address to = receivers[i];
             uint256 value = _calcGamingReward(ev);
