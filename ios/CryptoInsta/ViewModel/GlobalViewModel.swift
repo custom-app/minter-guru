@@ -18,6 +18,7 @@ class GlobalViewModel: ObservableObject {
     //TODO: move to consts
     let deepLinkDelay = 0.25
     let imageSidesMaxRatio = 2.5
+    let requestsInterval: Double = 1
     let mintLabel = "mint"
     let privateMintLabel = "private_mint"
     let purchaseCollectionLabel = "purchase_collection"
@@ -103,8 +104,6 @@ class GlobalViewModel: ObservableObject {
     @Published
     var privateNftsLoaded = false
     
-    private let updateInterval: Double = 1
-    
     private var observingNftsCount = false
     private var nftsRequestTimer: AnyCancellable?
     private var lastNftsCount: Int?
@@ -179,6 +178,30 @@ class GlobalViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func loadInitialInfo() {
+        getPolygonBalance()
+        getPublicTokensCount()
+        getPrivateCollectionPrice()
+        getMinterBalance()
+        getPrivateCollectionsCount()
+        getPrivateCollections()
+    }
+    
+    func clearAccountInfo() {
+        polygonBalance = 0.0
+        polygonBalanceLoaded = false
+        publicTokensCount = 0
+        minterBalance = 0
+        loadedMinterBalance = false
+        publicNfts = []
+        publicNftsLoaded = false
+        privateNfts = []
+        privateNftsLoaded = false
+        pickedPrivateCollection = false
+        pickedCollection = nil
+        chosenCollectionInGallery = nil
     }
     
     func callFaucet() {
@@ -711,8 +734,8 @@ class GlobalViewModel: ObservableObject {
         nftsRequestTimer?.cancel()
         observingNftsCount = true
         lastNftsCount = publicNfts.count
-        nftsRequestTimer = Timer.publish(every: updateInterval,
-                              tolerance: updateInterval/2,
+        nftsRequestTimer = Timer.publish(every: requestsInterval,
+                              tolerance: requestsInterval/2,
                               on: .main,
                               in: .common)
             .autoconnect()
@@ -729,8 +752,8 @@ class GlobalViewModel: ObservableObject {
     func startObservingPrivateTokensCount() {
         privateNftsRequestTimer?.cancel()
         observingPrivateNftsCount = true
-        privateNftsRequestTimer = Timer.publish(every: updateInterval,
-                              tolerance: updateInterval/2,
+        privateNftsRequestTimer = Timer.publish(every: requestsInterval,
+                              tolerance: requestsInterval/2,
                               on: .main,
                               in: .common)
             .autoconnect()
@@ -748,8 +771,8 @@ class GlobalViewModel: ObservableObject {
         collectionsRequestTimer?.cancel()
         observingCollectionsCount = true
         lastCollectionsCount = privateCollections.count
-        collectionsRequestTimer = Timer.publish(every: updateInterval,
-                              tolerance: updateInterval/2,
+        collectionsRequestTimer = Timer.publish(every: requestsInterval,
+                              tolerance: requestsInterval/2,
                               on: .main,
                               in: .common)
             .autoconnect()

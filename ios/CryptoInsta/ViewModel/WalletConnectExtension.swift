@@ -119,12 +119,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                 }
                 showConnectSheet = false
                 if !isWrongChain {
-                    getPolygonBalance()
-                    getPublicTokensCount()
-                    getPrivateCollectionPrice()
-                    getMinterBalance()
-                    getPrivateCollectionsCount()
-                    getPrivateCollections()
+                    loadInitialInfo()
                 }
             }
         }
@@ -155,7 +150,8 @@ extension GlobalViewModel: WalletConnectDelegate {
                 self.session = session
             }
             if accountChanged {
-                //TODO: load new data
+                clearAccountInfo()
+                loadInitialInfo()
             }
         }
     }

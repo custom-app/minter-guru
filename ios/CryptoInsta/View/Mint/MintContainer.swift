@@ -21,9 +21,6 @@ struct MintContainer: View {
     @State
     var showFaucet = false
     
-    @State
-    var showAlert = false
-    
     var body: some View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
