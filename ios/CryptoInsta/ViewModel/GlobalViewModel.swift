@@ -17,6 +17,7 @@ class GlobalViewModel: ObservableObject {
     
     //TODO: move to consts
     let deepLinkDelay = 0.25
+    let imageSidesMaxRatio = 2.5
     let mintLabel = "mint"
     let privateMintLabel = "private_mint"
     let purchaseCollectionLabel = "purchase_collection"
@@ -159,6 +160,17 @@ class GlobalViewModel: ObservableObject {
     }
     
     func handleImagePicked(photo: UIImage) {
+        let sidesRatio = photo.size.height / photo.size.width
+        if sidesRatio > imageSidesMaxRatio || sidesRatio < (1.0 / imageSidesMaxRatio) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.alert = IdentifiableAlert.build(
+                    id: "unacceptable image sides ratio",
+                    title: "Image too elongated",
+                    message: "Max image sides ratio is 1:\(self.imageSidesMaxRatio)"
+                )
+            }
+            return
+        }
         DispatchQueue.global(qos: .userInitiated).async { [self] in
             let compressed = ImageWorker.compressImage(image: photo)
             DispatchQueue.main.async {
