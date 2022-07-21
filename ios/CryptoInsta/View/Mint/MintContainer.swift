@@ -281,8 +281,8 @@ struct MintContainer: View {
                                     .foregroundColor(Colors.mainWhite)
                                     .padding(.vertical, 17)
                                     .padding(.horizontal, 60)
-                                    .background(LinearGradient(colors: [zeroBalance ? Colors.darkGrey : Colors.darkGreen,
-                                                                        zeroBalance ? Colors.darkGrey : Colors.lightGreen],
+                                    .background(LinearGradient(colors: [zeroBalance ? Colors.middleGrey : Colors.darkGreen,
+                                                                        zeroBalance ? Colors.middleGrey : Colors.lightGreen],
                                                                startPoint: .leading,
                                                                endPoint: .trailing))
                                     .cornerRadius(32)

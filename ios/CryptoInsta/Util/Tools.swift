@@ -67,4 +67,18 @@ class Tools {
         }
         return Constants.twitterCharacters.isSuperset(of: CharacterSet(charactersIn: nickname))
     }
+    
+    static func calcTodayRewards(rewards: [RewardInfo]) -> Int {
+        let now = Date()
+        let dayStart = now.timestamp() - now.timestamp() % (24 * 60 * 60)
+        var count = 0
+        for reward in rewards {
+            if reward.createdAt > dayStart {
+                count += 1
+            } else {
+                break
+            }
+        }
+        return count
+    }
 }

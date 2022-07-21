@@ -19,7 +19,11 @@ class Colors {
         Color(hex: "#858585")
     }
     
-    static var darkGrey: Color {
+    static var lightGrey: Color {
+        Color(hex: "#EAEAEA")
+    }
+    
+    static var middleGrey: Color {
         Color(hex: "#C0C0C0")
     }
     

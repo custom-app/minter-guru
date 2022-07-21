@@ -53,6 +53,11 @@ struct MinterInfoScreen: View {
                     .foregroundColor(Colors.mainBlack)
                     .font(.custom("rubik-regular", size: 17))
                     .padding(.top, 12)
+                
+                if let twitterInfo = globalVm.twitterInfo, let rewards = globalVm.rewards {
+                    RepostsInfo(info: twitterInfo, rewards: rewards)
+                        .padding(.top, 20)
+                }
             }
             .padding(20)
             .background(Colors.mainWhite)
@@ -122,6 +127,79 @@ struct MinterInfoScreen: View {
         .background(Colors.mainWhite.ignoresSafeArea())
         .alert(item: $alert) { alert in
             alert.alert()
+        }
+    }
+}
+
+struct RepostsInfo: View {
+    
+    let info: TwitterInfo
+    let rewards: [RewardInfo]
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            Rectangle()
+                .fill(Colors.lightGrey)
+                .frame(height: 1)
+
+            HStack(spacing: 0) {
+
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack {
+                        Text("Earned today:")
+                            .foregroundColor(Colors.mainBlack)
+                            .font(.custom("rubik-bold", size: 16))
+                        Spacer()
+                    }
+                    HStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            Image("ic_cross")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+
+                            Text(String(Tools.calcTodayRewards(rewards: rewards)))
+                                .foregroundColor(Colors.mainBlack)
+                                .font(.custom("rubik-regular", size: 16))
+                                .padding(.leading, 5)
+                        }
+                        Spacer()
+                    }
+                    .padding(.leading, 2)
+                }
+                .frame(maxWidth: .infinity)
+
+                Rectangle()
+                    .fill(Colors.lightGrey)
+                    .frame(width: 1, height: 46)
+
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Daily limit:")
+                            .foregroundColor(Colors.mainGrey)
+                            .font(.custom("rubik-bold", size: 16))
+                        Spacer()
+                    }
+                    HStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            Image("ic_cross")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+
+                            Text(String(info.personalLimit))
+                                .foregroundColor(Colors.mainGrey)
+                                .font(.custom("rubik-regular", size: 16))
+                                .padding(.leading, 5)
+                        }
+                        Spacer()
+                    }
+                    .padding(.leading, 2)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.leading, 25)
+            }
+            .padding(.top,  8)
         }
     }
 }

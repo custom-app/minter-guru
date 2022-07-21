@@ -31,7 +31,7 @@ struct BottomMenu: View {
                                 Image("ic_wallet")
                                     .resizable()
                                     .renderingMode(.template)
-                                    .foregroundColor(globalVm.currentTab == .wallet ? Colors.mainWhite : Colors.darkGrey)
+                                    .foregroundColor(globalVm.currentTab == .wallet ? Colors.mainWhite : Colors.middleGrey)
                                     .frame(width: 0.054*width, height: 0.0464*width)
                             }
                             .frame(width: 0.213*width, height: 0.08*width)
@@ -64,7 +64,7 @@ struct BottomMenu: View {
                                 Image("ic_plus")
                                     .resizable()
                                     .renderingMode(.template)
-                                    .foregroundColor(globalVm.currentTab == .mint ? Colors.mainWhite : Colors.darkGrey)
+                                    .foregroundColor(globalVm.currentTab == .mint ? Colors.mainWhite : Colors.middleGrey)
                                     .frame(width: 0.0728*width, height: 0.072*width)
                             }
                             .compositingGroup()
@@ -81,7 +81,7 @@ struct BottomMenu: View {
                                 Image("ic_gallery")
                                     .resizable()
                                     .renderingMode(.template)
-                                    .foregroundColor(globalVm.currentTab == .gallery ? Colors.mainWhite : Colors.darkGrey)
+                                    .foregroundColor(globalVm.currentTab == .gallery ? Colors.mainWhite : Colors.middleGrey)
                                     .frame(width: 0.059*width, height: 0.059*width)
                             }
                             .frame(width: 0.213*width, height: 0.08*width)

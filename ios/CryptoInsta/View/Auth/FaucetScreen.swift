@@ -161,7 +161,7 @@ struct FaucetUnusableView: View {
                 .foregroundColor(Colors.mainWhite)
                 .padding(.vertical, 17)
                 .padding(.horizontal, 42)
-                .background(Colors.darkGrey)
+                .background(Colors.middleGrey)
                 .cornerRadius(32)
                 .padding(.top, 50)
         }

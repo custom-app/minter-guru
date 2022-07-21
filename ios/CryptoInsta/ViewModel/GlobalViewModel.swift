@@ -120,6 +120,8 @@ class GlobalViewModel: ObservableObject {
     @Published
     var faucetInfo: FaucetInfo?
     @Published
+    var rewards: [RewardInfo]?
+    @Published
     var faucetProcessing = false
     @Published
     var faucetFinished = false
@@ -318,6 +320,7 @@ class GlobalViewModel: ObservableObject {
                         //TODO: handle error
                     } else if let result = result {
                         print("got rewards list: \(result)")
+                        self.rewards = result
                     }
                 }
             }
