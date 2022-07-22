@@ -49,7 +49,7 @@ struct MinterInfoScreen: View {
                     .foregroundColor(Colors.mainBlack)
                     .font(.custom("rubik-regular", size: 17))
                 
-                Text("Just link your twitter below and share photos")
+                Text("Just link your twitter below and share photos. Tokens will be sent 24 hours after publication")
                     .foregroundColor(Colors.mainBlack)
                     .font(.custom("rubik-regular", size: 17))
                     .padding(.top, 12)
@@ -66,6 +66,20 @@ struct MinterInfoScreen: View {
             .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
             .padding(.top, 50)
             .padding(.horizontal, 26)
+            
+            if let info = globalVm.twitterInfo, !info.open || info.spent == info.limit {
+                if !info.open {
+                    Tip(text: "The issuance of tokens for tweets is temporarily suspended",
+                        backgroundColor: Colors.paleRed)
+                    .padding(.top, 25)
+                    .padding(.horizontal, 26)
+                } else {
+                    Tip(text: "Total tweet reward limit reached for today",
+                        backgroundColor: Colors.paleRed)
+                    .padding(.top, 25)
+                    .padding(.horizontal, 26)
+                }
+            }
             
             TextField("", text: $twitterName)
                 .keyboardType(.twitter)

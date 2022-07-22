@@ -73,7 +73,7 @@ class Tools {
         let dayStart = now.timestamp() - now.timestamp() % (24 * 60 * 60)
         var count = 0
         for reward in rewards {
-            if reward.createdAt > dayStart {
+            if reward.createdAt >= dayStart {
                 count += 1
             } else {
                 break
