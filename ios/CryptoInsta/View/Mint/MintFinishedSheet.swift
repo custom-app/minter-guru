@@ -88,21 +88,23 @@ struct MintFinishedSheet: View {
                             .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                     }
                     
-                    Tip(text: "You can earn Minter Guru tokens by sharing photos on social networks")
-                        .padding(.horizontal, 26)
-                        .padding(.top, 25)
+                    if globalVm.isRepostRewarded() {
+                        Tip(text: "You can earn Minter Guru tokens by sharing photos on social networks")
+                            .padding(.horizontal, 26)
+                            .padding(.top, 25)
                     
-                    Button {
-                        showMinterInfo = true
-                    } label: {
-                        Text("More info")
-                            .foregroundColor(Colors.mainGreen)
-                            .font(.custom("rubik-bold", size: 16))
-                    }
-                    .padding(.vertical, 10)
-                    .sheet(isPresented: $showMinterInfo) {
-                        MinterInfoScreen()
-                            .environmentObject(globalVm)
+                        Button {
+                            showMinterInfo = true
+                        } label: {
+                            Text("More info")
+                                .foregroundColor(Colors.mainGreen)
+                                .font(.custom("rubik-bold", size: 16))
+                        }
+                        .padding(.vertical, 10)
+                        .sheet(isPresented: $showMinterInfo) {
+                            MinterInfoScreen()
+                                .environmentObject(globalVm)
+                        }
                     }
                 }
             }

@@ -134,21 +134,23 @@ struct NftInfoSheet: View {
                             .ignoresSafeArea()
                     }
                     
-                    Tip(text: "You can earn Minter Guru tokens by sharing photos on social networks")
-                        .padding(.horizontal, 26)
-                        .padding(.top, 25)
-                    
-                    Button {
-                        showMinterInfo = true
-                    } label: {
-                        Text("More info")
-                            .foregroundColor(Colors.mainGreen)
-                            .font(.custom("rubik-bold", size: 16))
-                    }
-                    .padding(.vertical, 10)
-                    .sheet(isPresented: $showMinterInfo) {
-                        MinterInfoScreen()
-                            .environmentObject(globalVm)
+                    if globalVm.isRepostRewarded() {
+                        Tip(text: "You can earn Minter Guru tokens by sharing photos on social networks")
+                            .padding(.horizontal, 26)
+                            .padding(.top, 25)
+                        
+                        Button {
+                            showMinterInfo = true
+                        } label: {
+                            Text("More info")
+                                .foregroundColor(Colors.mainGreen)
+                                .font(.custom("rubik-bold", size: 16))
+                        }
+                        .padding(.vertical, 10)
+                        .sheet(isPresented: $showMinterInfo) {
+                            MinterInfoScreen()
+                                .environmentObject(globalVm)
+                        }
                     }
                 }
             }

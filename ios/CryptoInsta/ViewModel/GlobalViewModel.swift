@@ -224,6 +224,15 @@ class GlobalViewModel: ObservableObject {
         chosenCollectionInGallery = nil
     }
     
+    func isRepostRewarded() -> Bool {
+        if let rewards = rewards, let info = twitterInfo {
+            let todayRewards = Tools.calcTodayRewards(rewards: rewards)
+            return todayRewards < info.personalLimit && info.open && info.spent < info.limit
+        } else {
+            return true
+        }
+    }
+    
     func callFaucet() {
         DispatchQueue.main.async {
             withAnimation {
@@ -304,6 +313,7 @@ class GlobalViewModel: ObservableObject {
                         //TODO: handle error
                     } else if let result = result {
                         print("reward successfully requested: \(result)")
+                        self.rewards?.insert(result, at: 0)
                     }
                 }
             }
