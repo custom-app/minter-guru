@@ -7,6 +7,8 @@ import "./MinterGuruBaseCollection.sol";
 
 /// @dev MinterGuruPrivateCollection - collection where only the owner can mint photos
 contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
     uint256 public accessTokenId;                              // access token id
     MinterGuruCollectionsAccessToken public accessToken;       // Access token contract address
     address public owner;                                      // current owner. changed on access token transfers
@@ -46,6 +48,7 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
         owner = _owner;
         data = _data;
         tokensLimit = 100;
+        emit OwnershipTransferred(address(0), owner);
     }
 
     /// @dev Mint function. Can called only by the owner
@@ -103,12 +106,14 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
 
     /// @dev function for transferring all owned tokens in collection
     function transferOwnership(address to) external onlyAccessToken {
-        uint256 ownerTokensCount = balanceOf(owner);
+        address prevOwner = owner;
+        uint256 ownerTokensCount = balanceOf(prevOwner);
         for (uint256 i = 0; i < ownerTokensCount; i++) {
-            uint256 id = tokenOfOwnerByIndex(owner, 0);
-            _transfer(owner, to, id);
+            uint256 id = tokenOfOwnerByIndex(prevOwner, 0);
+            _transfer(prevOwner, to, id);
         }
         owner = to;
+        emit OwnershipTransferred(prevOwner, owner);
     }
 
     /// @dev callback implementation for updating collections sets in access token contract

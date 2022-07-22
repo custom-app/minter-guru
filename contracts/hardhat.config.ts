@@ -30,6 +30,11 @@ if (fs.existsSync(".mumbai-events-secret")) {
     fs.readFileSync(".mumbai-events-secret").toString().trim()
   );
 }
+if (fs.existsSync(".mumbai-test-account")) {
+  mumbaiAccounts.push(
+    fs.readFileSync(".mumbai-test-account").toString().trim()
+  );
+}
 const mumbaiConfig: HttpNetworkUserConfig = {
   url: "https://matic-mumbai.chainstacklabs.com/",
   chainId: 80001,
