@@ -76,6 +76,68 @@ struct GalleryContainer: View {
                             .padding(.horizontal, 26)
                         }
                     }
+                    
+                    if globalVm.showSearch() {
+                        let searchEmpty = globalVm.nftSearch.isEmpty
+                        
+                        TextField("", text: $globalVm.nftSearch.animation())
+                            .font(.custom("rubik-bold", size: 17))
+                            .placeholder(when: globalVm.nftSearch.isEmpty) {
+                                HStack {
+                                    Text("Nft name")
+                                        .font(.custom("rubik-bold", size: 17))
+                                        .foregroundColor(Colors.mainGrey)
+                                    Spacer()
+                                }
+                            }
+                            .foregroundColor(Colors.mainBlack)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 13)
+                            .padding(.trailing, searchEmpty ? 35 : 65)
+                            .background(Colors.mainWhite)
+                            .cornerRadius(32)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 32)
+                                    .stroke(Colors.mainGreen, lineWidth: 2)
+                            )
+                            .overlay(
+                             HStack {
+                                 Spacer()
+                                 Button {
+                                     hideKeyboard()
+                                 } label: {
+                                     Image("ic_magnifier")
+                                         .renderingMode(.template)
+                                         .resizable()
+                                         .scaledToFit()
+                                         .foregroundColor(Colors.mainGreen)
+                                         .frame(width: 22, height: 22)
+                                 }
+                                 .padding(.trailing, searchEmpty ? 16 : 6)
+                                 
+                                 if !searchEmpty {
+                                     Button {
+                                         hideKeyboard()
+                                         withAnimation {
+                                             globalVm.nftSearch = ""
+                                         }
+                                     } label: {
+                                         Image("ic_cross_light")
+                                             .renderingMode(.template)
+                                             .resizable()
+                                             .scaledToFit()
+                                             .foregroundColor(Colors.mainGreen)
+                                             .frame(width: 22, height: 22)
+                                     }
+                                     .padding(.trailing, 16)
+                                 }
+                             }
+                            )
+                            .padding(.horizontal, 26)
+                            .padding(.top, 15)
+                    }
                     if globalVm.privateCollectionsInGallery {
                         if globalVm.refreshingPrivateNfts {
                             LoadingScreen(text: "")
@@ -123,29 +185,42 @@ struct GalleryContainer: View {
                                 } else {
                                     let nfts = globalVm.chosenCollectionInGallery == nil ? globalVm.privateNfts :
                                     globalVm.privateNfts.filter({ $0.contractAddress == globalVm.chosenCollectionInGallery?.address })
-                                    if nfts.isEmpty {
-                                        EmptyCollectionView(text: "This collection is empty")
-                                            .frame(width: geometry.size.width, height: geometry.size.height - 300)
-                                    } else {
-                                        LazyVStack(alignment: .leading, spacing: 0) {
-                                            ForEach(nfts) { nft in
-                                                let last = nfts.last ?? Nft.empty()
-                                                NftListView(nft: nft,
-                                                            selectedNft: $selectedNft,
-                                                            isLast: last == nft)
-                                            }
+                                    let filteredNfts = globalVm.nftSearch.isEmpty ? nfts :
+                                        nfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) })
+                                    if filteredNfts.isEmpty && !nfts.isEmpty {
+                                        VStack(spacing: 0) {
+                                            Text("There is no NFTs with this name")
+                                                .foregroundColor(Colors.mainGrey)
+                                                .multilineTextAlignment(.center)
+                                                .font(.custom("rubik-bold", size: 19))
+                                                .padding(.horizontal, 20)
                                         }
-                                        .padding(20)
-                                        .background(Colors.mainWhite)
-                                        .cornerRadius(30, corners: [.topLeft, .bottomRight])
-                                        .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                        .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
-                                        .padding(.top, 25)
-                                        .padding(.horizontal, 26)
-                                        .sheet(item: $selectedNft,
-                                               onDismiss: { selectedNft = nil }) { nft in
-                                            if let index = globalVm.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
-                                                NftInfoSheet(nft: $globalVm.privateNfts[index])
+                                        .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                    }  else {
+                                        if nfts.isEmpty {
+                                            EmptyCollectionView(text: "This collection is empty")
+                                                .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                        } else {
+                                            LazyVStack(alignment: .leading, spacing: 0) {
+                                                ForEach(filteredNfts) { nft in
+                                                    let last = filteredNfts.last ?? Nft.empty()
+                                                    NftListView(nft: nft,
+                                                                selectedNft: $selectedNft,
+                                                                isLast: last == nft)
+                                                }
+                                            }
+                                            .padding(20)
+                                            .background(Colors.mainWhite)
+                                            .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                                            .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                                            .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                                            .padding(.top, 25)
+                                            .padding(.horizontal, 26)
+                                            .sheet(item: $selectedNft,
+                                                   onDismiss: { selectedNft = nil }) { nft in
+                                                if let index = globalVm.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
+                                                    NftInfoSheet(nft: $globalVm.privateNfts[index])
+                                                }
                                             }
                                         }
                                     }
@@ -157,29 +232,42 @@ struct GalleryContainer: View {
                                 LoadingScreen(text: "")
                                     .frame(width: geometry.size.width, height: geometry.size.height - 220)
                         } else {
-                            if globalVm.publicNfts.isEmpty {
-                                EmptyCollectionView(text: "There are no your nfts in the collection")
-                                .frame(width: geometry.size.width, height: geometry.size.height - 220)
-                            } else {
-                                LazyVStack(alignment: .leading, spacing: 0) {
-                                    ForEach(globalVm.publicNfts) { nft in
-                                        let last = globalVm.publicNfts.last ?? Nft.empty()
-                                        NftListView(nft: nft,
-                                                    selectedNft: $selectedNft,
-                                                    isLast: last == nft)
-                                    }
+                            let filteredNfts = globalVm.nftSearch.isEmpty ? globalVm.publicNfts :
+                                globalVm.publicNfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) })
+                            if filteredNfts.isEmpty && !globalVm.publicNfts.isEmpty {
+                                VStack(spacing: 0) {
+                                    Text("There is no NFTs with this name")
+                                        .foregroundColor(Colors.mainGrey)
+                                        .multilineTextAlignment(.center)
+                                        .font(.custom("rubik-bold", size: 19))
+                                        .padding(.horizontal, 20)
                                 }
-                                .padding(20)
-                                .background(Colors.mainWhite)
-                                .cornerRadius(30, corners: [.topLeft, .bottomRight])
-                                .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
-                                .padding(.top, 25)
-                                .padding(.horizontal, 26)
-                                .sheet(item: $selectedNft,
-                                       onDismiss: { selectedNft = nil }) { nft in
-                                    if let index = globalVm.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
-                                        NftInfoSheet(nft: $globalVm.publicNfts[index])
+                                .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                            } else {
+                                if globalVm.publicNfts.isEmpty {
+                                    EmptyCollectionView(text: "There are no your nfts in the collection")
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 220)
+                                } else {
+                                    LazyVStack(alignment: .leading, spacing: 0) {
+                                        ForEach(filteredNfts) { nft in
+                                            let last = filteredNfts.last ?? Nft.empty()
+                                            NftListView(nft: nft,
+                                                        selectedNft: $selectedNft,
+                                                        isLast: last == nft)
+                                        }
+                                    }
+                                    .padding(20)
+                                    .background(Colors.mainWhite)
+                                    .cornerRadius(30, corners: [.topLeft, .bottomRight])
+                                    .cornerRadius(10, corners: [.bottomLeft, .topRight])
+                                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                                    .padding(.top, 25)
+                                    .padding(.horizontal, 26)
+                                    .sheet(item: $selectedNft,
+                                           onDismiss: { selectedNft = nil }) { nft in
+                                        if let index = globalVm.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
+                                            NftInfoSheet(nft: $globalVm.publicNfts[index])
+                                        }
                                     }
                                 }
                             }

@@ -114,6 +114,8 @@ class GlobalViewModel: ObservableObject {
     var privateCollectionsInGallery = false
     @Published
     var chosenCollectionInGallery: PrivateCollection?
+    @Published
+    var nftSearch = ""
     
     @Published
     var twitterInfo: TwitterInfo?
@@ -230,6 +232,16 @@ class GlobalViewModel: ObservableObject {
             return todayRewards < info.personalLimit && info.open && info.spent < info.limit
         } else {
             return true
+        }
+    }
+    
+    func showSearch() -> Bool {
+        if privateCollectionsInGallery {
+            let nfts = chosenCollectionInGallery == nil ? privateNfts :
+                       privateNfts.filter({ $0.contractAddress == chosenCollectionInGallery?.address })
+            return !nfts.isEmpty
+        } else {
+            return !publicNfts.isEmpty
         }
     }
     
