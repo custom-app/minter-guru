@@ -141,7 +141,7 @@ struct GalleryContainer: View {
                     if globalVm.privateCollectionsInGallery {
                         if globalVm.refreshingPrivateNfts {
                             LoadingScreen(text: "")
-                                .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                         } else {
                             if globalVm.privateCollections.isEmpty {
                                 VStack(spacing: 0) {
@@ -177,11 +177,11 @@ struct GalleryContainer: View {
                                             .environmentObject(globalVm)
                                     }
                                 }
-                                .frame(width: geometry.size.width, height: geometry.size.height - 220)
+                                .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                             } else {
                                 if globalVm.privateNfts.isEmpty {
                                     EmptyCollectionView(text: "Your private collections are empty")
-                                        .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                        .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                                 } else {
                                     let nfts = globalVm.chosenCollectionInGallery == nil ? globalVm.privateNfts :
                                     globalVm.privateNfts.filter({ $0.contractAddress == globalVm.chosenCollectionInGallery?.address })
@@ -195,11 +195,11 @@ struct GalleryContainer: View {
                                                 .font(.custom("rubik-bold", size: 19))
                                                 .padding(.horizontal, 20)
                                         }
-                                        .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                        .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                                     }  else {
                                         if nfts.isEmpty {
                                             EmptyCollectionView(text: "This collection is empty")
-                                                .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                                .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                                         } else {
                                             LazyVStack(alignment: .leading, spacing: 0) {
                                                 ForEach(filteredNfts) { nft in
@@ -230,7 +230,7 @@ struct GalleryContainer: View {
                     } else {
                         if globalVm.refreshingPublicNfts {
                                 LoadingScreen(text: "")
-                                    .frame(width: geometry.size.width, height: geometry.size.height - 220)
+                                    .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                         } else {
                             let filteredNfts = globalVm.nftSearch.isEmpty ? globalVm.publicNfts :
                                 globalVm.publicNfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) })
@@ -242,11 +242,11 @@ struct GalleryContainer: View {
                                         .font(.custom("rubik-bold", size: 19))
                                         .padding(.horizontal, 20)
                                 }
-                                .frame(width: geometry.size.width, height: geometry.size.height - 300)
+                                .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                             } else {
                                 if globalVm.publicNfts.isEmpty {
                                     EmptyCollectionView(text: "There are no your nfts in the collection")
-                                    .frame(width: geometry.size.width, height: geometry.size.height - 220)
+                                    .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                                 } else {
                                     LazyVStack(alignment: .leading, spacing: 0) {
                                         ForEach(filteredNfts) { nft in
@@ -277,6 +277,17 @@ struct GalleryContainer: View {
                 }
             }
         }
+    }
+    
+    func calcWindowHeight(fullHeight: CGFloat) -> CGFloat {
+        var res = fullHeight - 220
+        if globalVm.privateCollectionsInGallery && globalVm.privateCollectionsLoaded && !globalVm.privateCollections.isEmpty {
+            res -= 80
+        }
+        if globalVm.showSearch() {
+            res -= 80
+        }
+        return res
     }
 }
 

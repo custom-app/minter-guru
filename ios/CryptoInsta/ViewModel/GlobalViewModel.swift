@@ -224,6 +224,7 @@ class GlobalViewModel: ObservableObject {
         pickedPrivateCollection = false
         pickedCollection = nil
         chosenCollectionInGallery = nil
+        privateCollections = []
     }
     
     func isRepostRewarded() -> Bool {
