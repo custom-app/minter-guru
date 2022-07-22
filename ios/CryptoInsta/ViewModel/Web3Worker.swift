@@ -449,6 +449,46 @@ class Web3Worker: ObservableObject {
         }
     }
     
+    func getAllowance(owner: String, spender: String, onResult: @escaping (BigUInt, Error?) -> ()) {
+        if let ownerAddress = EthereumAddress(owner), let spenderAddress = EthereumAddress(spender) {
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                do {
+                    var options = TransactionOptions.defaultOptions
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+                    let parameters: [AnyObject] = [ownerAddress as AnyObject,
+                                                   spenderAddress as AnyObject]
+                    let tx = minterContractWeb3.read(
+                        "allowance",
+                        parameters: parameters,
+                        extraData: Data(),
+                        transactionOptions: options)!
+                    let result = try tx.call()
+                    
+                    print("Got allowance response:\n\(result)")
+                    if let success = result["_success"] as? Bool, !success {
+                        DispatchQueue.main.async {
+                            onResult(0, InternalError.unsuccessfullСontractRead(description: "get allowance: \(result)"))
+                        }
+                    } else {
+                        let balance = result["0"] as! BigUInt
+                        DispatchQueue.main.async {
+                            onResult(balance, nil)
+                        }
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        onResult(0, error)
+                    }
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                onResult(0, InternalError.invalidAddress(address: owner))
+            }
+        }
+    }
+    
     func mintData(version: BigUInt, id: BigUInt, metaUrl: String, data: Data) -> String? {
         return encodeFunctionData(contract: routerContract,
                                   method: "mint",
@@ -481,6 +521,14 @@ class Web3Worker: ObservableObject {
                                                name as AnyObject,
                                                symbol as AnyObject,
                                                data as AnyObject])?.toHexString(withPrefix: true)
+    }
+    
+    func approveData(spender: String, amount: BigUInt) -> String? {
+        let address = EthereumAddress(spender)!
+        return encodeFunctionData(contract: minterContract,
+                                  method: "approve",
+                                  parameters: [address as AnyObject,
+                                               amount as AnyObject])?.toHexString(withPrefix: true)
     }
     
     private func encodeFunctionData(contract: EthereumContract, method: String, parameters: [AnyObject] = [AnyObject]()) -> Data? {

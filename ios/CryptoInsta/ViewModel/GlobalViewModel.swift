@@ -93,6 +93,10 @@ class GlobalViewModel: ObservableObject {
     var minterBalance: BigUInt = 0
     @Published
     var loadedMinterBalance = false
+    @Published
+    var allowance: BigUInt = 0
+    @Published
+    var allowanceLoaded = false
     
     @Published
     var publicNfts: [Nft] = []
@@ -127,6 +131,7 @@ class GlobalViewModel: ObservableObject {
     var faucetProcessing = false
     @Published
     var faucetFinished = false
+    
     
     private var observingNftsCount = false
     private var nftsRequestTimer: AnyCancellable?
@@ -209,6 +214,7 @@ class GlobalViewModel: ObservableObject {
         getFaucetInfo()
         getTwitterInfo()
         getRepostRewards()
+        getAllowance()
     }
     
     func clearAccountInfo() {
@@ -722,6 +728,25 @@ class GlobalViewModel: ObservableObject {
                                 self?.getPrivateCollections()
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+    
+    func getAllowance() {
+        if let address = walletAccount {
+            print("requesting allowance")
+            let accessTokenAddress = Constants.accessTokenAddress
+            web3.getAllowance(owner: address, spender: accessTokenAddress) { [weak self] allowance, error in
+                if let error = error {
+                    print("get allowance error: \(error)")
+                    //TODO: handle error?
+                } else {
+                    print("got allowance: \(allowance)")
+                    withAnimation {
+                        self?.allowance = allowance
+                        self?.allowanceLoaded = true
                     }
                 }
             }

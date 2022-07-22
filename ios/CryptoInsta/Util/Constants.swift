@@ -43,12 +43,12 @@ struct Constants {
     
     struct AccessTokenContract {
         static let Mainnet = ""
-        static let Testnet = "0x49d67D7D4a52D05129a77d650BCb4c0F55efc892"
+        static let Testnet = "0x7E0eF916c3Aa570902bb1f5FcB162146948371A3"
     }
     
     struct MinterContract {
         static let Mainnet = ""
-        static let Testnet = "0xbE4e7319234bF56c18dE2CEa057c3dB330A2b76C"
+        static let Testnet = "0x6577048cB47Bbe4eC6573Ae38456Ca5f99767b2C"
     }
     
     struct BackendEndpoint {

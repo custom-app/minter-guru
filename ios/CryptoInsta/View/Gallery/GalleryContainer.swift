@@ -285,7 +285,7 @@ struct GalleryContainer: View {
             res -= 80
         }
         if globalVm.showSearch() {
-            res -= 80
+            res -= 100
         }
         return res
     }
