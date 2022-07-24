@@ -100,13 +100,13 @@ describe("Private collection", async () => {
   it("mint batch should be successful", async () => {
     const metaUris: string[] = [];
     const data: BytesLike[] = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 20; i++) {
       metaUris.push("");
       data.push("0x");
     }
     await boughtCollection
       .connect(accounts[4])
-      .mintBatch(await accounts[4].getAddress(), BN.from(100), metaUris, data);
+      .mintBatch(await accounts[4].getAddress(), BN.from(20), metaUris, data);
   });
 
   it("transfer should be successful", async () => {

@@ -16,7 +16,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 revokedAt;                   // revocation timestamp
     }
 
-    /// @dev GameEvent - struct with some gaming activity details
+    /// @dev CommunityEvent - struct with some gaming activity details
     /// Reward calculates as follows:
     /// expectedSupply = ((now - start) / duration) * value
     /// eventRate = currentSupply / expectedSupply
@@ -25,7 +25,8 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// For each interval we have token value in values list, so length of values must equal to length(thresholds)+1
     ///
     /// There is one exception from above algorythm. If less then 20% of event passed, then reward will equal to reward for interval, which includes 100%
-    struct GameEvent {
+    struct CommunityEvent {
+        uint256 id;                             // event id
         uint256 value;                          // total value to distribute
         uint256 start;                          // start of event - unix timestamp in seconds
         uint256 finish;                         // end of event - unix timestamp in seconds
@@ -46,42 +47,33 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @dev VestingRevoked - event emitted when vesting of receiver is revoked
     event VestingRevoked(address indexed receiver, uint256 totalValue);
 
-    /// @dev GameEventCreated - event emitted when game event is created
-    event GameEventCreated(uint256 indexed id, uint256 value, uint256 start, uint256 finish,
+    /// @dev CommunityEventCreated - event emitted when game event is created
+    event CommunityEventCreated(uint256 indexed id, uint256 value, uint256 start, uint256 finish,
         uint256[] thresholds, uint256[] values);
 
-    /// @dev GameEventFinished - event emitted when all tokens from event will be distributed
-    event GameEventFinished(uint256 indexed id);
+    /// @dev CommunityEventFinished - event emitted when all tokens from event will be distributed
+    event CommunityEventFinished(uint256 indexed id);
 
     // constants
     bytes32 public constant LIQUIDITY_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000001;
     bytes32 public constant VESTING_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000002;
-    bytes32 public constant GAME_REWARD_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000003;
+    bytes32 public constant COMMUNITY_REWARD_ADMIN_ROLE = 0x0000000000000000000000000000000000000000000000000000000000000003;
     uint256 public constant PERCENT_MULTIPLIER = 10000;  // 100 means 1%. Example: 2/10 - 2*10000/10 = 2000 which is 20%
 
-    // token limits
-    // liquidityTotalAmount + vestingTotalAmount + gameRewardTotalAmount = totalLimit
-    uint256 public totalLimit;                     // limit of minting tokens amount
-    uint256 public liquidityTotalAmount;           // amount of tokens for liquidity
-    uint256 public vestingTotalAmount;             // amount of tokens for vesting
-    uint256 public gameRewardTotalAmount;          // amount of tokens for rewards in game activities
-
-    // spent tokens
-    // liquidityTotalAmount + vestingSpent + gameRewardSpent - burned = totalSupply()
-    uint256 public vestingSpent;             // tokens minted for vesting
-    uint256 public vestingPendingSpent;      // tokens locked for vesting (minted + locked)
-    uint256 public gameRewardSpent;          // tokens minted for rewards in game activities
-    uint256 public burned;                   // amount of burned tokens
+    uint256 public totalLimit;                         // limit of minting tokens amount
+    uint256 public vestingLeftSupply;                  // tokens locked for vesting (minted + locked)
+    uint256 public communityRewardLeftSupply;          // tokens minted for rewards in game activities
+    uint256 public burned;                             // amount of burned tokens
 
     uint256 eventsCount = 0;                                          // total count of events
-    mapping(uint256 => GameEvent) public currentEvents;               // current game event
+    mapping(uint256 => CommunityEvent) public currentEvents;          // current game event
     mapping(address => VestingRecord) public vestingRecords;          // vestings
 
     /// @dev constructor
     /// @param _totalLimit - limit of amount of minted tokens
     /// @param _liquidityAmount - amount for liquidity
     /// @param _vestingAmount - amount for vesting program
-    /// @param _gameRewardAmount - amount for rewards in gaming events
+    /// @param _communityRewardAmount - amount for rewards in community events
     /// @param _liquidityAdmin - account, which will receive liquidity tokens
     /// @param _vestingAdmin - account, which will have permission to create/revoke vesting
     /// @param _gameRewardAdmin - account, which will have permission to create gaming events and mint rewards
@@ -89,20 +81,19 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 _totalLimit,
         uint256 _liquidityAmount,
         uint256 _vestingAmount,
-        uint256 _gameRewardAmount,
+        uint256 _communityRewardAmount,
         address _liquidityAdmin,
         address _vestingAdmin,
         address _gameRewardAdmin
     ) ERC20("MinterGuru", "MIGU") {
-        require(_totalLimit == _liquidityAmount + _vestingAmount + _gameRewardAmount, "MinterGuruToken: wrong limits");
+        require(_totalLimit == _liquidityAmount + _vestingAmount + _communityRewardAmount, "MinterGuruToken: wrong limits");
         totalLimit = _totalLimit;
-        liquidityTotalAmount = _liquidityAmount;
-        vestingTotalAmount = _vestingAmount;
-        gameRewardTotalAmount = _gameRewardAmount;
+        vestingLeftSupply = _vestingAmount;
+        communityRewardLeftSupply = _communityRewardAmount;
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _grantRole(LIQUIDITY_ADMIN_ROLE, _liquidityAdmin);
         _grantRole(VESTING_ADMIN_ROLE, _vestingAdmin);
-        _grantRole(GAME_REWARD_ADMIN_ROLE, _gameRewardAdmin);
+        _grantRole(COMMUNITY_REWARD_ADMIN_ROLE, _gameRewardAdmin);
         _mint(_liquidityAdmin, _liquidityAmount);
     }
 
@@ -110,17 +101,14 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @param from - spending account
     /// @param value - spending value
     function burnWithOptionalReturn(address from, uint256 value) external {
-        uint256 rate = PERCENT_MULTIPLIER * burned / totalSupply();
+        uint256 rate = PERCENT_MULTIPLIER * burned / totalLimit;
         uint256 toReturn = (rate * value) / PERCENT_MULTIPLIER;
         if (toReturn > value / 2) {
             toReturn = value / 2;
         }
         if (toReturn > 0) {
-            if (toReturn > gameRewardSpent) {
-                toReturn = gameRewardSpent;
-            }
             transferFrom(from, address(this), toReturn);
-            gameRewardSpent -= toReturn;
+            communityRewardLeftSupply += toReturn;
         }
         burned += value - toReturn;
         _spendAllowance(from, _msgSender(), value - toReturn);
@@ -143,9 +131,9 @@ contract MinterGuruToken is AccessControl, ERC20 {
         require(stepDuration > 0, "MinterGuruToken: step duration must be positive");
         require(steps > 0, "MinterGuruToken: steps quantity must be positive");
         require(vestingRecords[receiver].stepValue == 0, "MinterGuruToken: single receive can't have multiple vesting records");
-        require(vestingPendingSpent + stepValue * steps <= vestingTotalAmount, "MinterGuruToken: vesting limit reached");
+        require(stepValue * steps <= vestingLeftSupply, "MinterGuruToken: vesting limit reached");
         vestingRecords[receiver] = VestingRecord(receiver, stepValue, stepDuration, steps, block.timestamp, 0, 0);
-        vestingPendingSpent += stepValue * steps;
+        vestingLeftSupply -= stepValue * steps;
         emit VestingStarted(receiver, stepValue, stepDuration, steps);
     }
 
@@ -162,7 +150,6 @@ contract MinterGuruToken is AccessControl, ERC20 {
             emit VestingFullWithdrawn(_msgSender(), record.withdrawn);
             delete vestingRecords[_msgSender()];
         }
-        vestingSpent += value;
         emit VestingWithdrawn(_msgSender(), value);
     }
 
@@ -174,7 +161,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         require(record.stepValue > 0, "MinterGuruToken: vesting record doesn't exist");
         record.revokedAt = block.timestamp;
         uint256 availableAfterRevocation = record.stepValue * ((record.revokedAt - record.createdAt) / record.stepDuration);
-        vestingPendingSpent -= (record.stepValue * record.steps - availableAfterRevocation);
+        vestingLeftSupply += (record.stepValue * record.steps - availableAfterRevocation);
         if (availableAfterRevocation > record.withdrawn) {
             _sendTokens(receiver, availableAfterRevocation - record.withdrawn);
             emit VestingWithdrawn(receiver, availableAfterRevocation - record.withdrawn);
@@ -195,12 +182,12 @@ contract MinterGuruToken is AccessControl, ERC20 {
         return record.stepValue * ((rightBound - record.createdAt) / record.stepDuration) - record.withdrawn;
     }
 
-    /// @dev
+    /// @dev Create community event
     /// @param value - total value for event
     /// @param start - start of the event
     /// @param finish - finish of the event
-    /// @param thresholds - thresholds for GameEvent. See GameEvent docs
-    /// @param values - values for GameEvent. See GameEvent docs
+    /// @param thresholds - thresholds for CommunityEvent. See GameEvent docs
+    /// @param values - values for CommunityEvent. See CommunityEvent docs
     /// Emits a GameEventCreated event
     function createEvent(
         uint256 value,
@@ -208,24 +195,24 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 finish,
         uint256[] memory thresholds,
         uint256[] memory values
-    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
+    ) external onlyRole(COMMUNITY_REWARD_ADMIN_ROLE) {
         require(start < finish, "MinterGuruToken: start must be less than finish");
-        require(value < gameRewardTotalAmount - gameRewardSpent, "MinterGuruToken: limit reached");
+        require(value <= communityRewardLeftSupply, "MinterGuruToken: limit reached");
         require(thresholds.length + 1 == values.length, "MinterGuruToken: thresholds and values sizes unmatch");
         uint256 id = eventsCount;
         eventsCount++;
-        currentEvents[id] = GameEvent(value, start, finish, thresholds, values, 0);
-        emit GameEventCreated(id, value, start, finish, thresholds, values);
+        currentEvents[id] = CommunityEvent(id, value, start, finish, thresholds, values, 0);
+        emit CommunityEventCreated(id, value, start, finish, thresholds, values);
     }
 
     /// @dev Check if there is enough supply for batch of the receivers
-    /// @param id - id of GameEvent
+    /// @param id - id of CommunityEvent
     /// @param receiversCount - quantity of the receivers of the tokens
     function canMint(
         uint256 id,
         uint256 receiversCount
     ) external view returns (uint256) {
-        GameEvent memory ev = currentEvents[id];
+        CommunityEvent memory ev = currentEvents[id];
         if (ev.value == 0) {
             return 0;
         }
@@ -239,67 +226,96 @@ contract MinterGuruToken is AccessControl, ERC20 {
         return receiversCount;
     }
 
-    /// @dev Mint GameEvent reward tokens
-    /// @param id - id of GameEvent
+    /// @dev Mint CommunityEvent reward tokens
+    /// @param id - id of CommunityEvent
     /// @param to - receiver of tokens
-    /// Emits a GameEventFinished event if supply fully minted
-    function mintGamingAward(
+    /// Emits a CommunityEventFinished event if supply fully minted
+    function mintCommunityReward(
         uint256 id,
         address to
-    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
+    ) external onlyRole(COMMUNITY_REWARD_ADMIN_ROLE) {
         address[] memory receivers = new address[](1);
         receivers[0] = to;
-        _mintGamingReward(id, receivers);
+        _mintCommunityReward(id, receivers);
     }
 
-    /// @dev Mint GameEvent reward tokens for batch of addresses
-    /// @param id - id of GameEvent
+    /// @dev Mint CommunityEvent reward tokens for batch of addresses
+    /// @param id - id of CommunityEvent
     /// @param receivers - receivers of tokens
-    /// Emits a GameEventFinished event if supply fully minted
-    function mintGamingAwardForMultiple(
+    /// Emits a CommunityEventFinished event if supply fully minted
+    function mintCommunityRewardForMultiple(
         uint256 id,
         address[] calldata receivers
-    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
-        _mintGamingReward(id, receivers);
+    ) external onlyRole(COMMUNITY_REWARD_ADMIN_ROLE) {
+        _mintCommunityReward(id, receivers);
     }
 
     /// @dev Finish event. Only for expired events in which not full supply was distributed
-    /// @param id - id of GameEvent
-    /// Emits a GameEventFinished event
+    /// @param id - id of CommunityEvent
+    /// Emits a CommunityEventFinished event
     function finishEvent(
         uint256 id
-    ) external onlyRole(GAME_REWARD_ADMIN_ROLE) {
-        GameEvent storage ev = currentEvents[id];
+    ) external onlyRole(COMMUNITY_REWARD_ADMIN_ROLE) {
+        CommunityEvent storage ev = currentEvents[id];
         require(ev.value > 0, "MinterGuruToken: event doesn't exist");
-        require(block.timestamp > ev.finish, "MinterGuruToken: event has already finished");
-        delete currentEvents[id];
-        emit GameEventFinished(id);
+        _finishEvent(ev);
+    }
+
+    /// @dev Top up community reward pool
+    /// @param value - value to transfer
+    function topUpCommunityRewardPool(uint256 value) external {
+        require(balanceOf(_msgSender()) >= value, "MinterGuruToken: insufficient funds");
+        transferFrom(_msgSender(), address(this), value);
+        communityRewardLeftSupply += value;
+    }
+
+    /// @dev Top up vesting pool
+    /// @param value - value to transfer
+    function topUpVestingPool(uint256 value) external {
+        require(balanceOf(_msgSender()) >= value, "MinterGuruToken: insufficient funds");
+        transferFrom(_msgSender(), address(this), value);
+        vestingLeftSupply += value;
     }
 
     /// @dev Calculate pending reward for GameEvent
-    /// @param id - id of GameEvent
+    /// @param id - id of CommunityEvent
     /// @return expected reward
-    function calcGamingReward(uint256 id) public view returns (uint256) {
-        GameEvent storage ev = currentEvents[id];
+    function calcCommunityReward(uint256 id) public view returns (uint256) {
+        CommunityEvent storage ev = currentEvents[id];
         require(ev.value > 0, "MinterGuruToken: event doesn't exist");
         require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "MinterGuruToken: event is not active");
         return _calcGamingReward(ev);
     }
 
-    function _mintGamingReward(uint256 id, address[] memory receivers) internal {
-        GameEvent storage ev = currentEvents[id];
+    /// @dev Finish event internal func
+    /// @param ev - CommunityEvent to finish
+    /// Emits a CommunityEventFinished event
+    function _finishEvent(
+        CommunityEvent storage ev
+    ) internal {
+        if (ev.value - ev.currentSupply > 0) {
+            communityRewardLeftSupply += (ev.value - ev.currentSupply);
+        }
+        delete currentEvents[ev.id];
+        emit CommunityEventFinished(ev.id);
+    }
+
+    /// @dev mint community reward helper function
+    /// @param id - id of community event
+    /// @param receivers - list of receivers
+    function _mintCommunityReward(uint256 id, address[] memory receivers) internal {
+        CommunityEvent storage ev = currentEvents[id];
         require(ev.value > 0, "MinterGuruToken: event doesn't exist");
         require(ev.start <= block.timestamp && block.timestamp <= ev.finish, "MinterGuruToken: event is not active");
         for (uint256 i = 0; i < receivers.length; i++) {
             address to = receivers[i];
             uint256 value = _calcGamingReward(ev);
             _sendTokens(to, value);
-            gameRewardSpent += value;
+            communityRewardLeftSupply -= value;
             ev.currentSupply += value;
             if (ev.currentSupply == ev.value) {
                 require(i == receivers.length - 1, "MinterGuruToken: supply finished");
-                delete currentEvents[id];
-                emit GameEventFinished(id);
+                _finishEvent(ev);
             }
         }
     }
@@ -307,7 +323,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @dev Calculate pending reward for GameEvent helper function
     /// @param ev - GameEvent to check
     /// @return expected reward
-    function _calcGamingReward(GameEvent memory ev) internal view returns (uint256) {
+    function _calcGamingReward(CommunityEvent memory ev) internal view returns (uint256) {
         if ((10 * (block.timestamp - ev.start)) / (ev.finish - ev.start) < 2) {
             return _findGamingReward(ev, PERCENT_MULTIPLIER);
         }
@@ -345,7 +361,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @param percent - percent to check
     /// @return expected reward
     function _findGamingReward(
-        GameEvent memory ev,
+        CommunityEvent memory ev,
         uint256 percent
     ) internal pure returns (uint256) {
         for (uint256 i = 0; i < ev.thresholds.length; i++) {

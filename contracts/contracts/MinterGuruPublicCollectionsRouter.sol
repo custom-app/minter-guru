@@ -12,7 +12,7 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
     /// @dev PublicCollectionData - public collection data
     struct PublicCollectionData {
         MinterGuruPublicCollection contractAddress;        // address of contract
-        uint256 version;                         // version
+        uint256 version;                                   // version
     }
 
     /// @dev emitted when new public collection is cloned
@@ -24,7 +24,7 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
     MinterGuruPublicCollection public implementation;                        // public collection contract implementation for cloning
     mapping(uint256 => MinterGuruPublicCollection) public collections;       // current public collections for each version
     MinterGuruPublicCollection[] public allCollections;                      // list of all cloned collections
-    uint256 public currentVersion = 0;                             // current version
+    uint256 public currentVersion = 0;                                       // current version
 
     /// @dev constructor
     /// @param _implementation - address of PublicCollection contract for cloning

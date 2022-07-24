@@ -193,7 +193,7 @@ contract MinterGuruCollectionsAccessToken is ERC721Enumerable, AccessControl {
         uint256 tokenId
     ) internal virtual override(ERC721) {
         super._afterTokenTransfer(from, to, tokenId);
-        if (from != address(0) && to != address(0) && !to.isContract()) {
+        if (from != address(0) && to != address(0)) {
             tokenCollections[tokenId].transferOwnership(to);
         }
         if (from != address(0)) {

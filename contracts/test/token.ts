@@ -45,6 +45,7 @@ describe("Token gaming event", async () => {
   it("get event should return correct values", async () => {
     const ev = await tokenInstance.currentEvents(BN.from(0));
     expect(ev).deep.eq([
+      BN.from(0),
       BN.from(300),
       BN.from(eventStart),
       BN.from(eventStart + 3600),
