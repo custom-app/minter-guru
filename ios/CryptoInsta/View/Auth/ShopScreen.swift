@@ -28,9 +28,11 @@ struct ShopScreen: View {
                     VStack(spacing: 0) {
                         if globalVm.purchasingInProgress {
                             VStack(spacing: 0) {
-                                Text("Purchasing in progress")
+                                
+                                Text(globalVm.allowance >= globalVm.privateCollectionPrice ? "Purchasing in progress" : "Processing permission to use tokens")
                                     .font(.custom("rubik-bold", size: 28))
                                     .foregroundColor(Colors.mainBlack)
+                                    .multilineTextAlignment(.center)
                                 
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
@@ -165,8 +167,17 @@ struct ShopScreen: View {
                                 .padding(.top, 50)
                                 .disabled(globalVm.purchasingInProgress)
                             
+                            let enoughtAllowance = globalVm.allowance >= globalVm.privateCollectionPrice
+                            
                             Button {
-                                globalVm.purchaseCollection(collectionData: PrivateCollectionData(name: collectionName))
+                                withAnimation {
+                                    globalVm.purchasingInProgress = true
+                                }
+                                if enoughtAllowance {
+                                    globalVm.purchaseCollection(collectionData: PrivateCollectionData(name: collectionName))
+                                } else {
+                                    globalVm.approveTokens()
+                                }
                             } label: {
                                 Text("Create")
                                     .font(.custom("rubik-bold", size: 17))
@@ -179,7 +190,11 @@ struct ShopScreen: View {
                                     .cornerRadius(32)
                                     .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
                             }
-                            .padding(.vertical, 50)
+                            .padding(.top, 50)
+                            
+                            Tip(text: enoughtAllowance ? "Now you are ready to create collection!" :
+                                    "First you need to give access to the use of MIGU tokens, and then make a purchase")
+                                .padding(.vertical, 25)
                         }
                     }
                     .padding(.horizontal, 26)

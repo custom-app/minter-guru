@@ -21,6 +21,7 @@ class GlobalViewModel: ObservableObject {
     let requestsInterval: Double = 1
     let mintLabel = "mint"
     let privateMintLabel = "private_mint"
+    let approveTokensLabel = "approve_tokens"
     let purchaseCollectionLabel = "purchase_collection"
     
     @Published
@@ -146,6 +147,9 @@ class GlobalViewModel: ObservableObject {
     
     private var observingBalance = false
     private var balanceRequestTimer: AnyCancellable?
+    
+    private var observingAllowance = false
+    private var allowanceRequestTimer: AnyCancellable?
     
     var isPassBought: Bool {
         return true
@@ -748,6 +752,13 @@ class GlobalViewModel: ObservableObject {
                         self?.allowance = allowance
                         self?.allowanceLoaded = true
                     }
+                    if let observing = self?.observingAllowance, observing, allowance >= self?.privateCollectionPrice ?? 0 {
+                        print("allowance updated")
+                        self?.stopObservingAllowance()
+                        withAnimation {
+                            self?.purchasingInProgress = false
+                        }
+                    }
                 }
             }
         }
@@ -788,6 +799,22 @@ class GlobalViewModel: ObservableObject {
             }
         } else {
             print("Invalid address for private mint")
+            //TODO: handle error
+        }
+    }
+    
+    func approveTokens() {
+        do {
+            guard let data = web3.approveData(spender: Constants.accessTokenAddress, amount: privateCollectionPrice-allowance) else {
+                //TODO: handle error
+                return
+            }
+            withAnimation {
+                self.purchasingInProgress = true
+            }
+            prepareAndSendTx(to: Constants.minterAddress, data: data, label: approveTokensLabel)
+        } catch {
+            print("Error encoding approve data: \(error)")
             //TODO: handle error
         }
     }
@@ -842,6 +869,8 @@ class GlobalViewModel: ObservableObject {
                     switch label {
                     case self?.mintLabel:
                         self?.startObservingTokensCount()
+                    case self?.approveTokensLabel:
+                        self?.startObservingAllowance()
                     case self?.purchaseCollectionLabel:
                         self?.startObservingPrivateCollections()
                     case self?.privateMintLabel:
@@ -934,6 +963,24 @@ class GlobalViewModel: ObservableObject {
     func stopObservingBalance() {
         observingBalance = false
         balanceRequestTimer?.cancel()
+    }
+    
+    func startObservingAllowance() {
+        allowanceRequestTimer?.cancel()
+        observingAllowance = true
+        allowanceRequestTimer = Timer.publish(every: requestsInterval,
+                              tolerance: requestsInterval/2,
+                              on: .main,
+                              in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.getAllowance()
+        }
+    }
+    
+    func stopObservingAllowance() {
+        observingAllowance = false
+        allowanceRequestTimer?.cancel()
     }
     
     func refreshPublicNfts() {
