@@ -196,6 +196,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256[] memory thresholds,
         uint256[] memory values
     ) external onlyRole(COMMUNITY_REWARD_ADMIN_ROLE) {
+        require(start >= block.timestamp, "MinterGuruToken: event start must not be in the past");
         require(start < finish, "MinterGuruToken: start must be less than finish");
         require(value <= communityRewardLeftSupply, "MinterGuruToken: limit reached");
         require(thresholds.length + 1 == values.length, "MinterGuruToken: thresholds and values sizes unmatch");

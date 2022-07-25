@@ -14,7 +14,6 @@ import {
   MinterGuruPrivateCollection__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
-import {BytesLike} from "@ethersproject/bytes";
 
 const genRanHex = (size: number) =>
   [...Array(size)]
@@ -99,7 +98,7 @@ describe("Private collection", async () => {
 
   it("mint batch should be successful", async () => {
     const metaUris: string[] = [];
-    const data: BytesLike[] = [];
+    const data = [];
     for (let i = 0; i < 20; i++) {
       metaUris.push("");
       data.push("0x");
