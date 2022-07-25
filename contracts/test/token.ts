@@ -8,7 +8,6 @@ import {
   MinterGuruToken__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
-import { before } from "mocha";
 
 describe("Token community event", async () => {
   let accounts: Signer[];
