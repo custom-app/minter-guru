@@ -127,11 +127,15 @@ class GlobalViewModel: ObservableObject {
     @Published
     var faucetInfo: FaucetInfo?
     @Published
+    var twitterFollowInfo: TwitterFollowInfo?
+    @Published
     var rewards: [RewardInfo]?
     @Published
     var faucetProcessing = false
     @Published
     var faucetFinished = false
+    @Published
+    var twitterFollowRewardReceived = false
     
     
     private var observingNftsCount = false
@@ -157,9 +161,9 @@ class GlobalViewModel: ObservableObject {
     
     init() {
         //TODO: uncomment
-//        if let used = UserDefaultsWorker.shared.isFaucetUsed() {
-//            faucetUsed = used
-//        }
+        if let used = UserDefaultsWorker.shared.isFaucetUsed() {
+            faucetUsed = used
+        }
     }
     
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
@@ -217,7 +221,9 @@ class GlobalViewModel: ObservableObject {
         getPrivateCollectionsCount()
         getFaucetInfo()
         getTwitterInfo()
+        getTwitterFollowInfo()
         getRepostRewards()
+        checkTwitterFollow()
         getAllowance()
     }
     
@@ -354,6 +360,62 @@ class GlobalViewModel: ObservableObject {
                     } else if let result = result {
                         print("got rewards list: \(result)")
                         self.rewards = result
+                    }
+                }
+            }
+        }
+    }
+    
+    func getTwitterFollowInfo() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            HttpRequester.shared.getTwitterFollowInfo { result, error in
+                if let error = error {
+                    print("got twitter follow info error: \(error)")
+                    //TODO: handle error
+                } else if let result = result {
+                    print("got twitter follow info: \(result)")
+                    withAnimation {
+                        self.twitterFollowInfo = result
+                    }
+                }
+            }
+        }
+    }
+    
+    func checkTwitterFollow() {
+        if let address = walletAccount {
+            DispatchQueue.global(qos: .userInitiated).async {
+                HttpRequester.shared.checkTwitterFollow(address: address) { result, error in
+                    if let error = error {
+                        print("got check follow error: \(error)")
+                        //TODO: handle error
+                    } else if let result = result {
+                        print("twitter follow result: \(result)")
+                        withAnimation {
+                            self.twitterFollowRewardReceived = true
+                        }
+                    } else {
+                        withAnimation {
+                            self.twitterFollowRewardReceived = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func applyForFollowReward() {
+        if let address = walletAccount {
+            DispatchQueue.global(qos: .userInitiated).async {
+                HttpRequester.shared.applyForTwitterFollow(address: address) { result, error in
+                    if let error = error {
+                        print("apply for follow reward error: \(error)")
+                        //TODO: handle error
+                    } else if let result = result {
+                        print("follow reward successfully requested: \(result)")
+                        withAnimation {
+                            self.twitterFollowRewardReceived = true
+                        }
                     }
                 }
             }
@@ -836,7 +898,6 @@ class GlobalViewModel: ObservableObject {
                 withAnimation {
                     self.purchasingInProgress = true
                 }
-                print("sending tx")
                 prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
             } catch {
                 print("Error encoding PrivatecollectionData: \(error)")

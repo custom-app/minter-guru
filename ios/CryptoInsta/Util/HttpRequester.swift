@@ -227,6 +227,21 @@ class HttpRequester {
         doApiRequest(route: ApiRoute.twitterRewards, data: bodyJson, onResult: onResult)
     }
     
+    func applyForTwitterFollow(address: String, onResult: @escaping (TwitterFollowReward?, Error?) -> ()) {
+        let encoder = JSONEncoder()
+        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        doApiRequest(route: ApiRoute.applyForTwitterFollow, data: bodyJson, onResult: onResult)
+    }
+    
+    func checkTwitterFollow(address: String, onResult: @escaping (TwitterFollowReward?, Error?) -> ()) {
+        let encoder = JSONEncoder()
+        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        doApiRequest(route: ApiRoute.checkTwitterFollow, data: bodyJson, onResult: onResult)
+    }
+    
+    func getTwitterFollowInfo(onResult: @escaping (TwitterFollowInfo?, Error?) -> ()) {
+        doApiRequest(route: ApiRoute.twitterFollowInfo, data: Data(), onResult: onResult)
+    }
     
     func doApiRequest<T: Decodable>(route: ApiRoute, data: Data, onResult: @escaping (T?, Error?) -> Void) {
         let url = URL(string: Constants.backendUrl + route.rawValue)!
@@ -274,7 +289,13 @@ class HttpRequester {
                             onResult(nil, InternalError.minterApiError(error: error))
                         }
                     } catch {
-                        print("error decoding minter error: \(error)")
+                        if let dataStr = String(data: data, encoding: .utf8), dataStr == "null" {
+                            DispatchQueue.main.async {
+                                onResult(nil, nil)
+                            }
+                        } else {
+                            print("error decoding minter error: \(error)")
+                        }
                     }
                 }
             } else {

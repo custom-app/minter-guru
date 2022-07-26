@@ -12,4 +12,6 @@ struct TwitterInfo: Codable {
     let limit: Int
     let spent: Int
     let personalLimit: Int
+    let personalTotalLimit: Int
+    let value: String
 }

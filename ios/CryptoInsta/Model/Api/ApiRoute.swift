@@ -16,4 +16,8 @@ enum ApiRoute: String {
     case twitterInfo = "/twitter/config"
     case applyForTwitter = "/twitter/by_address"
     case twitterRewards = "/twitter/get_records/by_address"
+    
+    case twitterFollowInfo = "/twitter_follow/config"
+    case checkTwitterFollow = "/twitter_follow/get_record/by_address"
+    case applyForTwitterFollow = "/twitter_follow/by_address"
 }
