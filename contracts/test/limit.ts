@@ -97,68 +97,25 @@ describe("Private collection", async () => {
       .withArgs(boughtCollection.address, BN.from(0));
   });
 
-  it("self collections should be not empty after purchase", async () => {
-    const collections = await accessTokenInstance
-      .connect(accounts[4])
-      .getSelfCollections(BN.from(0), BN.from(10));
-    expect(collections).deep.eq([
-      [[BN.from(0), boughtCollection.address, "0xaa"]],
-      [BN.from(0)],
-    ]);
-  });
-
-  it("mint should be successful", async () => {
+  it("mint batch should be successful", async () => {
+    const metaUris: string[] = [];
+    const data = [];
+    for (let i = 0; i < 20; i++) {
+      metaUris.push("");
+      data.push("0x");
+    }
     await boughtCollection
       .connect(accounts[4])
-      .mint(await accounts[4].getAddress(), BN.from(0), "meta", "0x33");
+      .mintBatch(await accounts[4].getAddress(), BN.from(20), metaUris, data);
   });
 
-  it("get owned tokens should be successful", async () => {
-    const tokens = await boughtCollection
+  it("transfer should be successful", async () => {
+    await accessTokenInstance
       .connect(accounts[4])
-      .getSelfTokens(BN.from(0), BN.from(10));
-    expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]], BN.from(1)]);
-  });
-
-  it("get all tokens should be successful", async () => {
-    const tokens = await boughtCollection
-      .connect(accounts[0])
-      .getAllTokens(BN.from(0), BN.from(10));
-    expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]], BN.from(1)]);
-  });
-
-  it("self collections should be not empty after mint", async () => {
-    const collections = await accessTokenInstance
-      .connect(accounts[4])
-      .getSelfCollections(BN.from(0), BN.from(10));
-    expect(collections).deep.eq([
-      [[BN.from(0), boughtCollection.address, "0xaa"]],
-      [BN.from(1)],
-    ]);
-  });
-
-  it("self tokens should be not empty after mint", async () => {
-    const tokens = await accessTokenInstance
-      .connect(accounts[4])
-      .getSelfTokens([BN.from(0)], [BN.from(0)], [BN.from(10)]);
-    expect(tokens).deep.eq([[[BN.from(0), "meta", "0x33"]]]);
-  });
-
-  it("mint without id should be successful", async () => {
-    await boughtCollection
-      .connect(accounts[4])
-      .mintWithoutId(await accounts[4].getAddress(), "meta2", "0x3322");
-  });
-
-  it("self tokens should be correct after second", async () => {
-    const tokens = await accessTokenInstance
-      .connect(accounts[4])
-      .getSelfTokens([BN.from(0)], [BN.from(0)], [BN.from(10)]);
-    expect(tokens).deep.eq([
-      [
-        [BN.from(0), "meta", "0x33"],
-        [BN.from(1), "meta2", "0x3322"],
-      ],
-    ]);
+      .transferFrom(
+        await accounts[4].getAddress(),
+        await accounts[0].getAddress(),
+        BN.from(0)
+      );
   });
 });

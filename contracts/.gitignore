@@ -12,3 +12,6 @@ artifacts
 .mumbai-liquidity-secret
 .mumbai-vesting-secret
 .mumbai-events-secret
+.mumbai-test-account
+contract-metadata.json
+token-metadata.json
