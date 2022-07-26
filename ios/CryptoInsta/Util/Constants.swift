@@ -13,6 +13,7 @@ struct Constants {
     static let twitterLink = "https://twitter.com/"
     static let sessionKey = "session_key"
     static let currentVersion = 0
+    static let privateCollectionMeta = "ipfs://QmcENYH7SZhGi1Qu4GwRfBvvxnXh12nLmntvg8votDrka3"
     
     struct Bridges {
         static let Gnosis = "https://safe-walletconnect.gnosis.io/"
@@ -38,17 +39,17 @@ struct Constants {
     
     struct RouterContract {
         static let Mainnet = ""
-        static let Testnet = "0x86F246ed3ff1A5D1e2752A4957e3047fc6CFD4b3"
+        static let Testnet = "0x551750045d9DeC7Fb5023E96c9543492395af946"
     }
     
     struct AccessTokenContract {
         static let Mainnet = ""
-        static let Testnet = "0x7E0eF916c3Aa570902bb1f5FcB162146948371A3"
+        static let Testnet = "0xe8e273aA17227972709B9FE389871C74e9f8C382"
     }
     
     struct MinterContract {
         static let Mainnet = ""
-        static let Testnet = "0x6577048cB47Bbe4eC6573Ae38456Ca5f99767b2C"
+        static let Testnet = "0x3962276a988347A1DD8EBEa5f0ea44798d09803D"
     }
     
     struct BackendEndpoint {

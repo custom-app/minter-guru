@@ -362,7 +362,7 @@ class GlobalViewModel: ObservableObject {
     
     func uploadImageToIpfs(image: UIImage,
                            name: String,
-                           quality: Double = 0.85) {
+                           quality: Double = 0.9) {
         if let address = walletAccount, address.count > 2 {
             print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in
@@ -826,6 +826,8 @@ class GlobalViewModel: ObservableObject {
                 let salt = Tools.sha256(data: (address + "\(Date())").data(using: .utf8)!)
                 guard let data = web3.purchasePrivateCollectionData(salt: salt,
                                                                     name: collectionData.name,
+                                                                    collectionMeta: Constants.privateCollectionMeta,
+                                                                    accessTokenMeta: Constants.privateCollectionMeta,
                                                                     symbol: "",
                                                                     data: data) else {
                     //TODO: handle error
@@ -834,6 +836,7 @@ class GlobalViewModel: ObservableObject {
                 withAnimation {
                     self.purchasingInProgress = true
                 }
+                print("sending tx")
                 prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
             } catch {
                 print("Error encoding PrivatecollectionData: \(error)")

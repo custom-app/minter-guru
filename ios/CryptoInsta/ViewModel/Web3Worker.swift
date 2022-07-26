@@ -514,11 +514,18 @@ class Web3Worker: ObservableObject {
                                                data as AnyObject])?.toHexString(withPrefix: true)
     }
     
-    func purchasePrivateCollectionData(salt: Data, name: String, symbol: String, data: Data) -> String? {
+    func purchasePrivateCollectionData(salt: Data,
+                                       name: String,
+                                       collectionMeta: String,
+                                       accessTokenMeta: String,
+                                       symbol: String,
+                                       data: Data) -> String? {
         return encodeFunctionData(contract: accessTokenContract,
                                   method: "purchasePrivateCollection",
                                   parameters: [salt as AnyObject,
                                                name as AnyObject,
+                                               collectionMeta as AnyObject,
+                                               accessTokenMeta as AnyObject,
                                                symbol as AnyObject,
                                                data as AnyObject])?.toHexString(withPrefix: true)
     }

@@ -127,6 +127,11 @@
           "internalType": "string",
           "name": "symbol",
           "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_contractMetaUri",
+          "type": "string"
         }
       ],
       "name": "createCollectionClone",

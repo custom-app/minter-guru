@@ -12,6 +12,11 @@
           "type": "string"
         },
         {
+          "internalType": "string",
+          "name": "_contractMetaUri",
+          "type": "string"
+        },
+        {
           "internalType": "contract MinterGuruToken",
           "name": "_token",
           "type": "address"
@@ -103,6 +108,25 @@
         }
       ],
       "name": "CollectionPurchased",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
       "type": "event"
     },
     {
@@ -263,6 +287,19 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "contractURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
         }
       ],
       "stateMutability": "view",
@@ -491,6 +528,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -546,12 +596,29 @@
           "type": "string"
         },
         {
+          "internalType": "string",
+          "name": "_contractMetaUri",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "accessTokenMetaUri",
+          "type": "string"
+        },
+        {
           "internalType": "bytes",
           "name": "data",
           "type": "bytes"
         }
       ],
       "name": "purchasePrivateCollection",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -670,6 +737,19 @@
         }
       ],
       "name": "setCollectionPrice",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_contractMetaUri",
+          "type": "string"
+        }
+      ],
+      "name": "setContractMetaUri",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -814,6 +894,25 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenUris",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "tokensCount",
       "outputs": [
@@ -866,6 +965,19 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "from",
           "type": "address"
         },
@@ -885,4 +997,4 @@
       "stateMutability": "nonpayable",
       "type": "function"
     }
-]
+  ]
