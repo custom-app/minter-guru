@@ -3,11 +3,6 @@ import { MinterGuruCollectionsAccessToken__factory } from "../typechain";
 import * as hre from "hardhat";
 import { program } from "commander";
 
-const genRanHex = (size: number) =>
-  [...Array(size)]
-    .map(() => Math.floor(Math.random() * 16).toString(16))
-    .join("");
-
 async function main() {
   program
     .option("-token, --token <string>")
@@ -19,8 +14,6 @@ async function main() {
   const accounts = await hre.ethers.getSigners();
   const factory = new MinterGuruCollectionsAccessToken__factory(accounts[0]);
   const instance = factory.attach(args.token);
-  const salt = genRanHex(64);
-  console.log(salt);
   const tx = await instance
     .connect(accounts[4])
     .transferFrom(

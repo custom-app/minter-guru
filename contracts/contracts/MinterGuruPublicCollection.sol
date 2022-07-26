@@ -11,13 +11,17 @@ contract MinterGuruPublicCollection is MinterGuruBaseCollection {
     /// @dev Initialize function
     /// @param name - name of the token
     /// @param symbol - symbol of the token
+    /// @param _contractMetaUri - contract-level metadata uri
+    /// @param _owner - collection owner
     /// @param _version - contract version
     function initialize(
         string memory name,
         string memory symbol,
+        string memory _contractMetaUri,
+        address _owner,
         uint256 _version
     ) external initializer {
-        __MinterCollection_init(name, symbol);
+        __MinterCollection_init(name, symbol, _contractMetaUri, _owner);
         version = _version;
     }
 
@@ -39,6 +43,7 @@ contract MinterGuruPublicCollection is MinterGuruBaseCollection {
     /// @param to - token receiver
     /// @param metaUri - metadata uri
     /// @param _data - additional token data
+    /// @return id of minted token
     function mintWithoutId(
         address to,
         string memory metaUri,

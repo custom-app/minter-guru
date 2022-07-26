@@ -15,7 +15,10 @@ import {
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
 // eslint-disable-next-line node/no-missing-import
-import { createPrivateCollectionsAccessToken, createMinterGuruToken } from "./util";
+import {
+  createPrivateCollectionsAccessToken,
+  createMinterGuruToken,
+} from "./util";
 
 async function createPublicRouter(account: Signer) {
   const factory = new MinterGuruPublicCollection__factory(account);
@@ -31,7 +34,12 @@ async function createPublicRouter(account: Signer) {
     [...Array(size)]
       .map(() => Math.floor(Math.random() * 16).toString(16))
       .join("");
-  await router.createCollectionClone("0x" + genRanHex(64), "test", "TEST");
+  await router.createCollectionClone(
+    "0x" + genRanHex(64),
+    "test",
+    "TEST",
+    "ipfs://bafkreibba2qhrnyqxbs4klnvijhoa3c77hhhrglo54afuvb4likcs2sfi4"
+  );
 }
 
 async function main() {

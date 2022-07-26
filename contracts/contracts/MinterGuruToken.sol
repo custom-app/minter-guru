@@ -188,7 +188,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @param finish - finish of the event
     /// @param thresholds - thresholds for CommunityEvent. See GameEvent docs
     /// @param values - values for CommunityEvent. See CommunityEvent docs
-    /// Emits a GameEventCreated event
+    /// Emits a CommunityEventCreated event
     function createEvent(
         uint256 value,
         uint256 start,
@@ -209,6 +209,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     /// @dev Check if there is enough supply for batch of the receivers
     /// @param id - id of CommunityEvent
     /// @param receiversCount - quantity of the receivers of the tokens
+    /// @return allowed number of receivers (less or equal to receiversCount param)
     function canMint(
         uint256 id,
         uint256 receiversCount

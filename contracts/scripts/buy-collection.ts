@@ -20,7 +20,13 @@ async function main() {
   console.log(salt);
   const tx = await instance
     .connect(accounts[4])
-    .purchasePrivateCollection("0x" + salt, "Shlesh", "SHLS", "0x");
+    .purchasePrivateCollection(
+      "0x" + salt,
+      "Sesh",
+      "SHS",
+      "ipfs://bafkreibba2qhrnyqxbs4klnvijhoa3c77hhhrglo54afuvb4likcs2sfi4",
+      "0x"
+    );
   console.log("purchase txid: ", tx.hash);
   const predictedAddress = await instance
     .connect(accounts[4])

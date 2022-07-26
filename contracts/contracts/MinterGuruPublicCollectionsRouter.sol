@@ -28,7 +28,9 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
 
     /// @dev constructor
     /// @param _implementation - address of PublicCollection contract for cloning
-    constructor(MinterGuruPublicCollection _implementation) {
+    constructor(
+        MinterGuruPublicCollection _implementation
+    ) {
         implementation = _implementation;
     }
 
@@ -37,6 +39,7 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
     /// @param id - token id
     /// @param metaUri - token metadata uri
     /// @param data - additional data
+    /// Emits PublicMint event
     function mint(
         uint256 version,
         uint256 id,
@@ -54,6 +57,7 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
     /// @param version - collection version
     /// @param metaUri - token metadata uri
     /// @param data - additional data
+    /// Emits PublicMint event
     function mintWithoutId(
         uint256 version,
         string memory metaUri,
@@ -70,13 +74,16 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
     /// @param salt - salt value for cloning
     /// @param name - name of the token
     /// @param symbol - symbol of the token
+    /// @param _contractMetaUri - contract-level metadata uri
+    /// Emits CollectionCreated event
     function createCollectionClone(
         bytes32 salt,
         string memory name,
-        string memory symbol
+        string memory symbol,
+        string memory _contractMetaUri
     ) external onlyOwner {
         MinterGuruPublicCollection instance = MinterGuruPublicCollection(address(implementation).cloneDeterministic(salt));
-        instance.initialize(name, symbol, currentVersion);
+        instance.initialize(name, symbol, _contractMetaUri, _msgSender(), currentVersion);
         collections[currentVersion] = instance;
         allCollections.push() = instance;
         emit CollectionCreated(instance, currentVersion);
@@ -103,18 +110,13 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
         return collections[version].tokensCount();
     }
 
-    /// @dev function for calculating total amount of owned tokens in all collections
-    /// @return res - amount of owned tokens in all collections
-    function totalTokens() public view returns (uint256 res) {
-        return _totalTokens(_tokenCounts());
-    }
-
     /// @dev function for retrieving token lists grouped by collection. It uses basic pagination method.
     /// @param page - page number (starting from zero)
     /// @param size - size of the page
     /// @return collectionsRes - list of collections
     /// @return tokensRes - list of lists of tokens
     /// @return total - owned tokens count
+    /// @notice This function is potentially unsafe, since it doesn't guarantee order (use fixed block number)
     function getSelfPublicTokens(
         uint256 page,
         uint256 size
@@ -168,6 +170,12 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
             current += counts[i];
         }
         return _buildSelfTokensResult(mask, res, _total);
+    }
+
+    /// @dev function for calculating total amount of owned tokens in all collections
+    /// @return res - amount of owned tokens in all collections
+    function totalTokens() public view returns (uint256 res) {
+        return _totalTokens(_tokenCounts());
     }
 
     /// @dev function for calculating total amount of owned tokens in all collections

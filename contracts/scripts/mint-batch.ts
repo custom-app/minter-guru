@@ -16,7 +16,7 @@ async function main() {
   const data = [];
   for (let i = 0; i < count; i++) {
     metaUris.push(
-      "ipfs://bafkreifscmrdikpqxyqpi66nk22gyxyki4tgj23vszv25724fmqr4ok7eu"
+      "ipfs://bafkreia7vbb4hpxkv6oi74oekuwh2m4ysbhhldyjmaoudjnkmo5huxwque"
     );
     data.push("0x");
   }

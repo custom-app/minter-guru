@@ -51,6 +51,7 @@ describe("Private collection", async () => {
     accessTokenInstance = await accessTokenFactory.deploy(
       "test",
       "test",
+      "",
       instaToken.address,
       privateCollection.address,
       BN.from(100)
@@ -83,7 +84,7 @@ describe("Private collection", async () => {
     );
     const purchaseTx = await accessTokenInstance
       .connect(accounts[4])
-      .purchasePrivateCollection(salt, "tsst", "tost", "0xaa");
+      .purchasePrivateCollection(salt, "tsst", "tost", "", "", "0xaa");
     expect(purchaseTx)
       .to.emit("ERC20", "Transfer")
       .withArgs(

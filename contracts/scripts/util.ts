@@ -26,6 +26,7 @@ export async function createPrivateCollectionsAccessToken(
   return await accessTokenFactory.deploy(
     "MinterGuruAccessToken",
     "MIGUAT",
+    "ipfs://bafkreibba2qhrnyqxbs4klnvijhoa3c77hhhrglo54afuvb4likcs2sfi4",
     tokenAddress,
     impl.address,
     BN.from(1).mul(multiplier)

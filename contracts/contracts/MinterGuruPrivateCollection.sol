@@ -7,11 +7,8 @@ import "./MinterGuruBaseCollection.sol";
 
 /// @dev MinterGuruPrivateCollection - collection where only the owner can mint photos
 contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
     uint256 public accessTokenId;                              // access token id
     MinterGuruCollectionsAccessToken public accessToken;       // Access token contract address
-    address public owner;                                      // current owner. changed on access token transfers
     bytes public data;                                         // collection additional data
     uint256 tokensLimit;                                       // mint limit
 
@@ -21,15 +18,10 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
         _;
     }
 
-    /// @dev modifier for checking if call is from the owner
-    modifier onlyOwner() {
-        require(_msgSender() == owner, "MinterGuruPrivateCollection: not an owner");
-        _;
-    }
-
     /// @dev initialize function
     /// @param name - name of the token
     /// @param symbol - symbol of the token
+    /// @param _contractMetaUri - contract-level metadata uri
     /// @param _accessToken - access token contract address
     /// @param _accessTokenId - access token id
     /// @param _owner - collection creator
@@ -37,18 +29,17 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
     function initialize(
         string memory name,
         string memory symbol,
+        string memory _contractMetaUri,
         MinterGuruCollectionsAccessToken _accessToken,
         uint256 _accessTokenId,
         address _owner,
         bytes memory _data
     ) external initializer {
-        __MinterCollection_init(name, symbol);
+        __MinterCollection_init(name, symbol, _contractMetaUri, _owner);
         accessTokenId = _accessTokenId;
         accessToken = _accessToken;
-        owner = _owner;
         data = _data;
         tokensLimit = 100;
-        emit OwnershipTransferred(address(0), owner);
     }
 
     /// @dev Mint function. Can called only by the owner
@@ -105,15 +96,14 @@ contract MinterGuruPrivateCollection is MinterGuruBaseCollection {
     }
 
     /// @dev function for transferring all owned tokens in collection
-    function transferOwnership(address to) external onlyAccessToken {
-        address prevOwner = owner;
+    function transferOwnership(address to) public virtual override onlyAccessToken {
+        address prevOwner = owner();
         uint256 ownerTokensCount = balanceOf(prevOwner);
         for (uint256 i = 0; i < ownerTokensCount; i++) {
             uint256 id = tokenOfOwnerByIndex(prevOwner, 0);
             _transfer(prevOwner, to, id);
         }
-        owner = to;
-        emit OwnershipTransferred(prevOwner, owner);
+        _transferOwnership(to);
     }
 
     /// @dev callback implementation for updating collections sets in access token contract

@@ -58,7 +58,7 @@ describe("PublicCollectionRouter single version", async () => {
     const factory = new MinterGuruPublicCollection__factory(accounts[0]);
     const cloneTx = await router
       .connect(accounts[0])
-      .createCollectionClone(salt, "test", "TEST");
+      .createCollectionClone(salt, "test", "TEST", "");
     expect(cloneTx)
       .to.emit("PublicCollectionsRouter", "CollectionCreated")
       .withArgs(collectionAddress, "0");
@@ -175,7 +175,7 @@ describe("PublicCollectionRouter multiple versions", async () => {
     const factory = new MinterGuruPublicCollection__factory(accounts[0]);
     await router
       .connect(accounts[0])
-      .createCollectionClone(salt, "test", "TEST");
+      .createCollectionClone(salt, "test", "TEST", "");
     collectionV1 = factory.attach(collectionAddress);
   });
 
@@ -189,7 +189,7 @@ describe("PublicCollectionRouter multiple versions", async () => {
       .predictDeterministicAddress(salt);
     await router
       .connect(accounts[0])
-      .createCollectionClone(salt, "test", "TEST");
+      .createCollectionClone(salt, "test", "TEST", "");
     collectionV2 = factory.attach(collectionAddress);
   });
 
