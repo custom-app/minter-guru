@@ -12,6 +12,7 @@ import WalletConnectSwift
 import BigInt
 import Combine
 import web3swift
+import CoreHaptics
 
 class GlobalViewModel: ObservableObject {
     
@@ -23,6 +24,8 @@ class GlobalViewModel: ObservableObject {
     let privateMintLabel = "private_mint"
     let approveTokensLabel = "approve_tokens"
     let purchaseCollectionLabel = "purchase_collection"
+    
+    var vibrationWorker: VibrationWorker?
     
     @Published
     var showConnectSheet = false
@@ -160,9 +163,21 @@ class GlobalViewModel: ObservableObject {
     }
     
     init() {
-        //TODO: uncomment
         if let used = UserDefaultsWorker.shared.isFaucetUsed() {
             faucetUsed = used
+        }
+        initVibrationWorker()
+    }
+    
+    func initVibrationWorker() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            let vibrateEngine = try CHHapticEngine()
+            try vibrateEngine.start()
+            vibrationWorker = VibrationWorker(engine: vibrateEngine)
+        } catch {
+            print("Create vibrate engine error: \(error.localizedDescription)")
         }
     }
     
@@ -625,6 +640,7 @@ class GlobalViewModel: ObservableObject {
                             self?.faucetFinished = true
                             self?.faucetProcessing = false
                         }
+                        self?.vibrationWorker?.vibrate()
                     }
                 }
             }
@@ -679,6 +695,7 @@ class GlobalViewModel: ObservableObject {
                             self?.stopObservingTokensCount()
                             self?.showMintFinishedSheet = true
                             self?.mintInProgress = false
+                            self?.vibrationWorker?.vibrate()
                         }
                     }
                 }
@@ -740,6 +757,7 @@ class GlobalViewModel: ObservableObject {
                             self?.stopObservingPrivateCollections()
                             self?.purchaseFinished = true
                             self?.purchasingInProgress = false
+                            self?.vibrationWorker?.vibrate()
                             self?.getMinterBalance()
                         }
                         let newTokensCount = collections.reduce(0) { $0 + $1.tokensCount}
@@ -774,6 +792,7 @@ class GlobalViewModel: ObservableObject {
                             self?.stopObservingPrivateTokensCount()
                             self?.showMintFinishedSheet = true
                             self?.mintInProgress = false
+                            self?.vibrationWorker?.vibrate()
                         }
                     }
                 }
@@ -829,6 +848,7 @@ class GlobalViewModel: ObservableObject {
                         withAnimation {
                             self?.purchasingInProgress = false
                         }
+                        self?.vibrationWorker?.vibrate()
                     }
                 }
             }

@@ -19,6 +19,7 @@
 		11408F3A28908EC900B9293F /* TwitterFollowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11408F3928908EC900B9293F /* TwitterFollowInfo.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
 		1183DD782891A67E002189FB /* MinterProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183DD772891A67E002189FB /* MinterProgress.swift */; };
+		1183DD7A2891CEA7002189FB /* VibrationWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183DD792891CEA7002189FB /* VibrationWorker.swift */; };
 		1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */; };
 		1196D3EC2870D06000EF6F63 /* access_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EB2870D06000EF6F63 /* access_token_abi.json */; };
 		1196D3F02870D15F00EF6F63 /* migu_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */; };
@@ -92,6 +93,7 @@
 		11408F3928908EC900B9293F /* TwitterFollowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterFollowInfo.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
 		1183DD772891A67E002189FB /* MinterProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinterProgress.swift; sourceTree = "<group>"; };
+		1183DD792891CEA7002189FB /* VibrationWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrationWorker.swift; sourceTree = "<group>"; };
 		1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeRefresh.swift; sourceTree = "<group>"; };
 		1196D3EB2870D06000EF6F63 /* access_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = access_token_abi.json; sourceTree = "<group>"; };
 		1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = migu_token_abi.json; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				1108864B284ABE59002C4E5A /* Tools.swift */,
 				111629BA286379B80012B134 /* TxWorker.swift */,
 				111629BC2863A0D20012B134 /* Web3Parser.swift */,
+				1183DD792891CEA7002189FB /* VibrationWorker.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				11DEE933284803B900B7E2E5 /* Errors.swift in Sources */,
 				11C804A0288841E80001F4BC /* LoadingScreen.swift in Sources */,
 				111629B9286365F50012B134 /* NftData.swift in Sources */,
+				1183DD7A2891CEA7002189FB /* VibrationWorker.swift in Sources */,
 				11C6D896287C9FA100CE0950 /* ShopScreen.swift in Sources */,
 				11C804A22889E0A50001F4BC /* TwitterInfo.swift in Sources */,
 				11C804A62889E2630001F4BC /* FaucetUsageInfo.swift in Sources */,

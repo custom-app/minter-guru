@@ -29,11 +29,11 @@ struct MintProcessingScreen: View {
                     .padding(.horizontal, 10)
                 
                 MinterProgress()
-                    .padding(.top, 25)
+                    .padding(.top, 50)
                 
                 
                 Tip(text: "Please wait\nIt should take a few seconds to process the transaction")
-                    .padding(.top, 25)
+                    .padding(.top, 50)
                     .padding(.horizontal, 26)
             }
         }

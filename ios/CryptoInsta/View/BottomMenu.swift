@@ -43,6 +43,7 @@ struct BottomMenu: View {
                         .background(Colors.mainWhite)
                         .cornerRadius(30, corners: [.topLeft, .bottomLeft])
                         .onTapGesture {
+                            globalVm.vibrationWorker?.vibrate()
                             withAnimation {
                                 globalVm.currentTab = .wallet
                             }
@@ -71,6 +72,7 @@ struct BottomMenu: View {
                             .shadow(color: Colors.mainGreen.opacity(globalVm.currentTab == .mint ? 0.7 : 0), radius: 5, x: 0, y: 0)
                         }
                         .onTapGesture {
+                            globalVm.vibrationWorker?.vibrate()
                             withAnimation {
                                 globalVm.currentTab = .mint
                             }
@@ -93,6 +95,7 @@ struct BottomMenu: View {
                         .background(Colors.mainWhite)
                         .cornerRadius(30, corners: [.topRight, .bottomRight])
                         .onTapGesture {
+                            globalVm.vibrationWorker?.vibrate()
                             withAnimation {
                                 globalVm.currentTab = .gallery
                             }

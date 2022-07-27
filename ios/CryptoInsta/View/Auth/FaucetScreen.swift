@@ -19,7 +19,7 @@ struct FaucetScreen: View {
         VStack(spacing: 0) {
             SheetStroke()
             
-            if !globalVm.faucetFinished {
+            if globalVm.faucetFinished {
                 Spacer()
                 HStack {
                     Spacer()
@@ -58,14 +58,11 @@ struct FaucetScreen: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
                 
-                
-                
                 MinterProgress()
-                    .padding(.top, 25)
-                
+                    .padding(.top, 50)
                 
                 Tip(text: "Please wait\nIt should take a few seconds")
-                    .padding(.top, 25)
+                    .padding(.top, 50)
                     .padding(.horizontal, 26)
                 
                 Spacer()

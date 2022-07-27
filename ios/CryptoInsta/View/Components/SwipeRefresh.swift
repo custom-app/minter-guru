@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct SwipeRefresh: View {
+    
+    @EnvironmentObject
+    var globalVm: GlobalViewModel
+    
     private static let minRefreshTimeInterval = TimeInterval(0.2)
     private static let triggerHeight = CGFloat(90)
     private static let indicatorHeight = CGFloat(60)
@@ -42,6 +46,7 @@ struct SwipeRefresh: View {
                             }
                             refreshStartTime = Date()
                         }
+                        globalVm.vibrationWorker?.vibrate()
                     }
                     .onDisappear {
                         if isEnabled,

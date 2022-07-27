@@ -35,11 +35,11 @@ struct ShopScreen: View {
                                     .multilineTextAlignment(.center)
                                 
                                 MinterProgress()
-                                    .padding(.top, 25)
+                                    .padding(.top, 50)
                                 
                                 
                                 Tip(text: "Please wait\nIt should take a few seconds to process the transaction")
-                                    .padding(.top, 25)
+                                    .padding(.top, 50)
                                     .padding(.horizontal, 26)
                             }
                             .frame(height: geometry.size.height)
