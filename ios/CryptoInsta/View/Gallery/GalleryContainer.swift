@@ -31,7 +31,7 @@ struct GalleryContainer: View {
                 
                 VStack(spacing: 0) {
                     Text("Nft Album")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 28))
                         .padding(.top, 10)
                     
@@ -49,14 +49,14 @@ struct GalleryContainer: View {
                             HStack(spacing: 10) {
                                 ForEach(globalVm.privateCollections, id: \.self) { collection in
                                     Text("#\(collection.data.name)")
-                                        .foregroundColor(Colors.mainGreen)
+                                        .foregroundColor(Colors.mainPurple)
                                         .font(.custom("rubik-bold", size: 16))
                                         .padding(.vertical, 8)
                                         .padding(.horizontal, 10)
-                                        .background(Colors.paleGreen)
+                                        .background(Colors.palePurple)
                                         .cornerRadius(30)
                                         .overlay(RoundedRectangle(cornerRadius: 30)
-                                            .stroke(Colors.mainGreen, lineWidth: 2)
+                                            .stroke(Colors.mainPurple, lineWidth: 2)
                                             .opacity(collection == globalVm.chosenCollectionInGallery ? 1 : 0))
                                         .onTapGesture {
                                             if collection == globalVm.chosenCollectionInGallery {
@@ -90,7 +90,7 @@ struct GalleryContainer: View {
                                     Spacer()
                                 }
                             }
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .lineLimit(1)
                             .truncationMode(.tail)
                             .padding(.horizontal, 14)
@@ -100,7 +100,7 @@ struct GalleryContainer: View {
                             .cornerRadius(32)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 32)
-                                    .stroke(Colors.mainGreen, lineWidth: 2)
+                                    .stroke(Colors.mainPurple, lineWidth: 2)
                             )
                             .overlay(
                              HStack {
@@ -112,7 +112,7 @@ struct GalleryContainer: View {
                                          .renderingMode(.template)
                                          .resizable()
                                          .scaledToFit()
-                                         .foregroundColor(Colors.mainGreen)
+                                         .foregroundColor(Colors.mainPurple)
                                          .frame(width: 22, height: 22)
                                  }
                                  .padding(.trailing, searchEmpty ? 16 : 6)
@@ -128,7 +128,7 @@ struct GalleryContainer: View {
                                              .renderingMode(.template)
                                              .resizable()
                                              .scaledToFit()
-                                             .foregroundColor(Colors.mainGreen)
+                                             .foregroundColor(Colors.mainPurple)
                                              .frame(width: 22, height: 22)
                                      }
                                      .padding(.trailing, 16)
@@ -160,11 +160,9 @@ struct GalleryContainer: View {
                                             .foregroundColor(Colors.mainWhite)
                                             .padding(.vertical, 17)
                                             .padding(.horizontal, 50)
-                                            .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                                       startPoint: .leading,
-                                                                       endPoint: .trailing))
+                                            .background(Colors.mainGradient)
                                             .cornerRadius(32)
-                                            .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                            .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                                     }
                                     .padding(.top, 50)
                                     .sheet(isPresented: $showCreateCollectionSheet, onDismiss: {
@@ -213,7 +211,7 @@ struct GalleryContainer: View {
                                             .background(Colors.mainWhite)
                                             .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                             .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                            .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                                            .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                                             .padding(.top, 25)
                                             .padding(.horizontal, 26)
                                             .sheet(item: $selectedNft,
@@ -260,7 +258,7 @@ struct GalleryContainer: View {
                                     .background(Colors.mainWhite)
                                     .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                     .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                                    .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                                     .padding(.top, 25)
                                     .padding(.horizontal, 26)
                                     .sheet(item: $selectedNft,
@@ -307,7 +305,7 @@ struct NftListView: View {
             } label: {
                 HStack {
                     Text(nft.data.name)
-                        .foregroundColor(Colors.mainGreen)
+                        .foregroundColor(Colors.mainPurple)
                         .font(.custom("rubik-bold", size: 17))
                     Spacer()
                 }
@@ -352,11 +350,9 @@ struct EmptyCollectionView: View {
                     .foregroundColor(Colors.mainWhite)
                     .padding(.vertical, 17)
                     .padding(.horizontal, 50)
-                    .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                               startPoint: .leading,
-                                               endPoint: .trailing))
+                    .background(Colors.mainGradient)
                     .cornerRadius(32)
-                    .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
             }
             .padding(.top, 50)
         }

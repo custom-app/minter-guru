@@ -26,7 +26,7 @@ struct MintFinishedSheet: View {
             ScrollView {
                 VStack(spacing: 0) {
                     Text("Minted!")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 28))
                         .padding(.top, 26)
                     
@@ -40,7 +40,7 @@ struct MintFinishedSheet: View {
                                 .frame(maxWidth: .infinity, maxHeight: 325)
                             
                             Text(globalVm.mintedPictureName)
-                                .foregroundColor(Colors.mainBlack)
+                                .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-bold", size: 24))
                             
                             let collection = globalVm.mintedPictureCollection
@@ -51,7 +51,7 @@ struct MintFinishedSheet: View {
                         .padding(25)
                         .background(Colors.mainWhite)
                         .cornerRadius(10)
-                        .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                         .padding(.horizontal, 26)
                         .padding(.top, 25)
                     }
@@ -65,7 +65,7 @@ struct MintFinishedSheet: View {
                             }
                         } label: {
                             Text("Watch on the OpenSea")
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .font(.custom("rubik-bold", size: 17))
                                 .padding(.top, 10)
                         }
@@ -80,12 +80,10 @@ struct MintFinishedSheet: View {
                             .foregroundColor(Colors.mainWhite)
                             .padding(.vertical, 17)
                             .padding(.horizontal, 58)
-                            .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                       startPoint: .leading,
-                                                       endPoint: .trailing))
+                            .background(Colors.mainGradient)
                             .cornerRadius(32)
                             .padding(.top, 25)
-                            .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                            .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                     }
                     
                     if globalVm.isRepostRewarded() {
@@ -97,7 +95,7 @@ struct MintFinishedSheet: View {
                             showMinterInfo = true
                         } label: {
                             Text("More info")
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .font(.custom("rubik-bold", size: 16))
                         }
                         .padding(.vertical, 10)

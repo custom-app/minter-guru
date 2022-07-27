@@ -31,7 +31,7 @@ struct ShopScreen: View {
                                 
                                 Text(globalVm.allowance >= globalVm.privateCollectionPrice ? "Purchasing in progress" : "Processing permission to use tokens")
                                     .font(.custom("rubik-bold", size: 28))
-                                    .foregroundColor(Colors.mainBlack)
+                                    .foregroundColor(Colors.darkGrey)
                                     .multilineTextAlignment(.center)
                                 
                                 MinterProgress()
@@ -50,12 +50,12 @@ struct ShopScreen: View {
                                     .renderingMode(.template)
                                     .resizable()
                                     .scaledToFit()
-                                    .foregroundColor(Colors.mainGreen)
+                                    .foregroundColor(Colors.mainPurple)
                                     .frame(width: 64, height: 64)
                                 
                                 Text("Success!")
                                     .font(.custom("rubik-bold", size: 28))
-                                    .foregroundColor(Colors.mainBlack)
+                                    .foregroundColor(Colors.darkGrey)
                                     .padding(.top, 20)
                                 
                                 Text("Your private collection")
@@ -86,11 +86,9 @@ struct ShopScreen: View {
                                         .foregroundColor(Colors.mainWhite)
                                         .padding(.vertical, 17)
                                         .padding(.horizontal, 60)
-                                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                                   startPoint: .leading,
-                                                                   endPoint: .trailing))
+                                        .background(Colors.mainGradient)
                                         .cornerRadius(32)
-                                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                                 }
                                 .padding(.top, 50)
                             }
@@ -98,7 +96,7 @@ struct ShopScreen: View {
                         } else {
                             
                             Text("Shop")
-                                .foregroundColor(Colors.mainBlack)
+                                .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-bold", size: 28))
                                 .padding(.top, 26)
                             
@@ -110,16 +108,16 @@ struct ShopScreen: View {
                             
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("About private collections")
-                                    .foregroundColor(Colors.mainBlack)
+                                    .foregroundColor(Colors.darkGrey)
                                     .font(.custom("rubik-bold", size: 17))
                                 
                                 Text("Buying a private collection means creating your personal NFT-collection with your own photos on the OpenSea that will be visible to other users.")
-                                    .foregroundColor(Colors.mainBlack)
+                                    .foregroundColor(Colors.darkGrey)
                                     .font(.custom("rubik-regular", size: 17))
                                 
                                 HStack(spacing: 0) {
                                     Text("Price:")
-                                        .foregroundColor(Colors.mainBlack)
+                                        .foregroundColor(Colors.darkGrey)
                                         .font(.custom("rubik-bold", size: 17))
                                     
                                     Image("ic_migu_token")
@@ -130,7 +128,7 @@ struct ShopScreen: View {
                                     
                                     Text(globalVm.privateCollectionPrice == 0 ? "loading" :
                                             "\(Tools.formatUint256(globalVm.privateCollectionPrice, decimals: 2))")
-                                        .foregroundColor(Colors.mainBlack)
+                                        .foregroundColor(Colors.darkGrey)
                                         .font(.custom("rubik-regular", size: 17))
                                         .padding(.leading, 5)
                                 }
@@ -141,7 +139,7 @@ struct ShopScreen: View {
                             .background(Colors.mainWhite)
                             .cornerRadius(30, corners: [.topLeft, .bottomRight])
                             .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                            .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                            .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                             .padding(.top, 50)
                             
                             TextField("", text: $collectionName)
@@ -154,7 +152,7 @@ struct ShopScreen: View {
                                         Spacer()
                                     }
                                 }
-                                .foregroundColor(Colors.mainBlack)
+                                .foregroundColor(Colors.darkGrey)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                                 .padding(.horizontal, 14)
@@ -163,7 +161,7 @@ struct ShopScreen: View {
                                 .cornerRadius(32)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 32)
-                                        .stroke(Colors.mainGreen, lineWidth: 2)
+                                        .stroke(Colors.mainPurple, lineWidth: 2)
                                 )
                                 .padding(.top, 50)
                                 .disabled(globalVm.purchasingInProgress)
@@ -185,11 +183,9 @@ struct ShopScreen: View {
                                     .foregroundColor(Colors.mainWhite)
                                     .padding(.vertical, 17)
                                     .padding(.horizontal, 60)
-                                    .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                               startPoint: .leading,
-                                                               endPoint: .trailing))
+                                    .background(Colors.mainGradient)
                                     .cornerRadius(32)
-                                    .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                             }
                             .padding(.top, 50)
                             

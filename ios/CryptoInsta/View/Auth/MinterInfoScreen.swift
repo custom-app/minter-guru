@@ -28,7 +28,7 @@ struct MinterInfoScreen: View {
             }
             
             Text("How to earn")
-                .foregroundColor(Colors.mainBlack)
+                .foregroundColor(Colors.darkGrey)
                 .font(.custom("rubik-bold", size: 28))
                 .padding(.top, 26)
                 .padding(.horizontal, 10)
@@ -42,15 +42,15 @@ struct MinterInfoScreen: View {
             
             VStack(alignment: .leading, spacing: 8) {
                 Text("Ways to get tokens")
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .font(.custom("rubik-bold", size: 17))
                 
                 Text("-You can get tokens for sharing your photos on twitter")
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .font(.custom("rubik-regular", size: 17))
                 
                 Text("Just link your twitter below and share photos. Tokens will be sent 24 hours after publication")
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .font(.custom("rubik-regular", size: 17))
                     .padding(.top, 12)
                 
@@ -63,7 +63,7 @@ struct MinterInfoScreen: View {
             .background(Colors.mainWhite)
             .cornerRadius(30, corners: [.topLeft, .bottomRight])
             .cornerRadius(10, corners: [.bottomLeft, .topRight])
-            .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+            .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
             .padding(.top, 50)
             .padding(.horizontal, 26)
             
@@ -92,7 +92,7 @@ struct MinterInfoScreen: View {
                      Spacer()
                  }
                 }
-                .foregroundColor(Colors.mainBlack)
+                .foregroundColor(Colors.darkGrey)
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .padding(.horizontal, 14)
@@ -102,7 +102,7 @@ struct MinterInfoScreen: View {
                 .cornerRadius(32)
                 .overlay(
                  RoundedRectangle(cornerRadius: 32)
-                     .stroke(Colors.mainGreen, lineWidth: 2)
+                     .stroke(Colors.mainPurple, lineWidth: 2)
                 )
                 .overlay(
                  HStack {
@@ -126,7 +126,7 @@ struct MinterInfoScreen: View {
                              .renderingMode(.template)
                              .resizable()
                              .scaledToFit()
-                             .foregroundColor(twitterName.isEmpty ? Colors.mainGrey : Colors.mainGreen)
+                             .foregroundColor(twitterName.isEmpty ? Colors.mainGrey : Colors.mainPurple)
                              .frame(width: 24, height: 24)
                      }
                      .padding(.trailing, 16)
@@ -161,7 +161,7 @@ struct RepostsInfo: View {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Text("Earned today:")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 16))
                         Spacer()
                     }
@@ -173,7 +173,7 @@ struct RepostsInfo: View {
                                 .frame(width: 15, height: 15)
 
                             Text(String(Tools.calcTodayRewards(rewards: rewards)))
-                                .foregroundColor(Colors.mainBlack)
+                                .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-regular", size: 16))
                                 .padding(.leading, 5)
                         }

@@ -21,7 +21,7 @@ struct ConnectSheet: View {
                 SheetStroke()
                 
                 Text("Connect crypto wallet")
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .font(.custom("rubik-bold", size: 28))
                     .padding(.top, 26)
                     .padding(.horizontal, 10)
@@ -45,11 +45,11 @@ struct ConnectSheet: View {
                                 .background(Color.white)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: selectedTrust ? Colors.mainGreen : Colors.mainBlack.opacity(0.15),
+                                .shadow(color: selectedTrust ? Colors.mainPurple : Colors.darkGrey.opacity(0.15),
                                         radius: 10, x: 0, y: 0)
                             
                             Text("Trust Wallet")
-                                .foregroundColor(selectedTrust ? Colors.mainBlack : Colors.mainGrey)
+                                .foregroundColor(selectedTrust ? Colors.darkGrey : Colors.mainGrey)
                                 .font(.custom("rubik-bold", size: 18))
                                 .padding(.top, 16)
                         }
@@ -69,11 +69,11 @@ struct ConnectSheet: View {
                                 .background(Color.white)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: selectedTrust ? Colors.mainBlack.opacity(0.15) : Colors.mainGreen,
+                                .shadow(color: selectedTrust ? Colors.darkGrey.opacity(0.15) : Colors.mainPurple,
                                         radius: 10, x: 0, y: 0)
                             
                             Text("Metamask")
-                                .foregroundColor(selectedTrust ? Colors.mainGrey : Colors.mainBlack)
+                                .foregroundColor(selectedTrust ? Colors.mainGrey : Colors.darkGrey)
                                 .font(.custom("rubik-bold", size: 18))
                                 .padding(.top, 16)
                         }
@@ -98,12 +98,10 @@ struct ConnectSheet: View {
                         .foregroundColor(Colors.mainWhite)
                         .padding(.vertical, 17)
                         .padding(.horizontal, 45)
-                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing))
+                        .background(Colors.mainGradient)
                         .cornerRadius(32)
                         .padding(.top, 50)
-                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                 }
                 
             }

@@ -16,42 +16,53 @@ class Colors {
     }
     
     static var mainGrey: Color {
-        Color(hex: "#858585")
+        Color(hex: "#8992A9")
     }
     
     static var lightGrey: Color {
         Color(hex: "#EAEAEA")
     }
     
-    static var middleGrey: Color {
-        Color(hex: "#C0C0C0")
+    static var darkGrey: Color {
+        Color(hex: "#454C5F")
     }
     
-    static var mainBlack: Color {
-        Color(hex: "#3D3D3D")
+    static var greyBlue: Color {
+        Color(hex: "#67728E")
     }
     
     static var mainWhite: Color {
         Color(hex: "#F8F8F8")
     }
     
-    static var mainGreen: Color {
-        Color(hex: "#0F927A")
+    static var whiteBackground: Color {
+        Color(hex: "#F2F3F2")
     }
     
-    static var paleGreen: Color {
-        Color(hex: "#D5E2DF")
+    static var mainPurple: Color {
+        Color(hex: "#6E53C3")
     }
     
-    static var darkGreen: Color {
-        Color(hex: "#0F927A")
+    static var palePurple: Color {
+        Color(hex: "#EAE3FF")
     }
     
-    static var lightGreen: Color {
-        Color(hex: "#1FBBBB")
+    static var brightGreen: Color {
+        Color(hex: "#5DDE6A")
+    }
+    
+    static var brightBlue: Color {
+        Color(hex: "#63AFD0")
     }
     
     static var paleRed: Color {
-        Color(hex: "#E2D5D5")
+        Color(hex: "#FCE4E4")
+    }
+    
+    
+    static var mainGradient: LinearGradient {
+        LinearGradient(colors: [Colors.brightGreen, Colors.brightBlue, Colors.mainPurple],
+                                   startPoint: .leading,
+                                   endPoint: .trailing)
     }
 }

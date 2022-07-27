@@ -24,7 +24,7 @@ struct FaucetScreen: View {
                 HStack {
                     Spacer()
                     Text("Faucet successfully used!")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 28))
                         .multilineTextAlignment(.center)
                         .padding(.top, 26)
@@ -40,11 +40,9 @@ struct FaucetScreen: View {
                         .foregroundColor(Colors.mainWhite)
                         .padding(.vertical, 17)
                         .padding(.horizontal, 60)
-                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing))
+                        .background(Colors.mainGradient)
                         .cornerRadius(32)
-                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                 }
                 .padding(.top, 50)
                 
@@ -54,7 +52,7 @@ struct FaucetScreen: View {
                 
                 Text("Processing faucet transaction")
                     .font(.custom("rubik-bold", size: 28))
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
                 
@@ -68,7 +66,7 @@ struct FaucetScreen: View {
                 Spacer()
             } else {
                 Text("Faucet")
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .font(.custom("rubik-bold", size: 28))
                     .padding(.top, 26)
                     .padding(.horizontal, 10)
@@ -82,21 +80,21 @@ struct FaucetScreen: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("How does it work?")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 17))
                     
                     Text("We can gift you some Matics to pay for a transaction fee and try out our service. All you need to do is just click the button “Get Matic” below.")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-regular", size: 17))
                     Text("It's free.")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-regular", size: 17))
                 }
                 .padding(20)
                 .background(Colors.mainWhite)
                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                 .padding(.top, 50)
                 .padding(.horizontal, 26)
                 
@@ -125,11 +123,9 @@ struct FaucetScreen: View {
                                     .foregroundColor(Colors.mainWhite)
                                     .padding(.vertical, 17)
                                     .padding(.horizontal, 42)
-                                    .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                               startPoint: .leading,
-                                                               endPoint: .trailing))
+                                    .background(Colors.mainGradient)
                                     .cornerRadius(32)
-                                    .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                             }
                             .padding(.top, 50)
                         }
@@ -158,7 +154,7 @@ struct FaucetUnusableView: View {
                 .foregroundColor(Colors.mainWhite)
                 .padding(.vertical, 17)
                 .padding(.horizontal, 42)
-                .background(Colors.middleGrey)
+                .background(Colors.mainGrey)
                 .cornerRadius(32)
                 .padding(.top, 50)
         }

@@ -11,14 +11,14 @@ struct Tip: View {
     
     var text: String
     
-    var backgroundColor: Color = Colors.paleGreen
+    var backgroundColor: Color = Colors.brightGreen.opacity(0.1)
     
     var body: some View {
         HStack(spacing: 0) {
             Spacer()
             Text(text)
                 .font(.custom("rubik-regular", size: 14))
-                .foregroundColor(Colors.mainGrey)
+                .foregroundColor(Colors.darkGrey)
                 .multilineTextAlignment(.center)
                 .padding(10)
             Spacer()

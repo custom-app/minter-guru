@@ -36,13 +36,13 @@ struct AuthContainer: View {
             }
             VStack(spacing: 0) {
                 Text("Crypto wallet")
-                    .foregroundColor(Colors.mainBlack)
+                    .foregroundColor(Colors.darkGrey)
                     .font(.custom("rubik-bold", size: 28))
                     .padding(.top, 16)
                     .padding(.horizontal, 10)
                 
                 Text("Status: \(connected ? "connected to \(globalVm.walletName)" : "disconnected")")
-                    .foregroundColor(Colors.mainGrey)
+                    .foregroundColor(Colors.greyBlue)
                     .multilineTextAlignment(.center)
                     .font(.custom("rubik-bold", size: 20))
                     .padding(.top, 10)
@@ -50,7 +50,7 @@ struct AuthContainer: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Address:")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 16))
                     
                     HStack(spacing: 0) {
@@ -62,7 +62,7 @@ struct AuthContainer: View {
                             
                             HStack(spacing: 0) {
                                 Text("\(globalVm.walletAccount ?? "")")
-                                    .foregroundColor(Colors.mainBlack)
+                                    .foregroundColor(Colors.darkGrey)
                                     .font(.custom("rubik-regular", size: 16))
                                     .lineLimit(1)
                                     .truncationMode(.middle)
@@ -71,8 +71,10 @@ struct AuthContainer: View {
                                     UIPasteboard.general.string = globalVm.walletAccount ?? ""
                                 } label: {
                                     Image("ic_copy")
+                                        .renderingMode(.template)
                                         .resizable()
                                         .scaledToFit()
+                                        .foregroundColor(Colors.mainPurple)
                                         .frame(width: 20, height: 20)
                                 }
                                 .padding(.leading, 4)
@@ -88,7 +90,7 @@ struct AuthContainer: View {
                                 .frame(width: 15, height: 15)
                             
                             Text("wallet not connected")
-                                .foregroundColor(Colors.mainBlack)
+                                .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-regular", size: 16))
                                 .padding(.leading, 5)
                         }
@@ -101,7 +103,7 @@ struct AuthContainer: View {
                         .padding(.top, 8)
                     
                     Text("Tokens:")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 16))
                         .padding(.top, 8)
                     
@@ -114,7 +116,7 @@ struct AuthContainer: View {
                         let showBalance = connected && !globalVm.isWrongChain
                         let balance = globalVm.loadedMinterBalance ? Tools.formatUint256(globalVm.minterBalance) : "Loading"
                         Text(showBalance ? balance : "tokens are not available")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-regular", size: 16))
                             .padding(.leading, 5)
                     }
@@ -124,7 +126,7 @@ struct AuthContainer: View {
                         showMinterInfo = true
                     } label: {
                         Text("How to earn")
-                            .foregroundColor(Colors.mainGreen)
+                            .foregroundColor(Colors.mainPurple)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 6)
                     }
@@ -137,7 +139,7 @@ struct AuthContainer: View {
                 .background(Colors.mainWhite)
                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                 .padding(.top, 25)
                 .padding(.horizontal, 26)
                 
@@ -150,17 +152,17 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
+                                .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
                         
                         Text("Guides")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
@@ -179,18 +181,18 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainGreen : Colors.middleGrey)
+                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainPurple : Colors.mainGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
+                                .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
                         .disabled(!connected || globalVm.isWrongChain)
                         
                         Text("Faucet")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
@@ -214,18 +216,18 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainGreen : Colors.middleGrey)
+                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainPurple : Colors.mainGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.mainBlack.opacity(0.15), radius: 10, x: 0, y: 0)
+                                .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
                         .disabled(!connected || globalVm.isWrongChain)
                         
                         Text("Shop")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
@@ -255,11 +257,9 @@ struct AuthContainer: View {
                             Spacer()
                         }
                         .padding(.vertical, 15)
-                        .background(LinearGradient(colors: [Colors.darkGreen, Colors.lightGreen],
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing))
+                        .background(Colors.mainGradient)
                         .cornerRadius(32)
-                        .shadow(color: Colors.mainGreen.opacity(0.5), radius: 10, x: 0, y: 0)
+                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                         .padding(.horizontal, 26)
                     }
                     .padding(.top, 26)
@@ -274,7 +274,7 @@ struct AuthContainer: View {
                             VStack(spacing: 0) {
                                 Text("Wrong blockchain")
                                     .font(.custom("rubik-bold", size: 16))
-                                    .foregroundColor(Colors.mainBlack)
+                                    .foregroundColor(Colors.darkGrey)
                                     .multilineTextAlignment(.center)
                                 
                                 Text("Check out the guidelines to find out how to connect your wallet to the Polygon blockchain or change the wallet")
@@ -296,10 +296,10 @@ struct AuthContainer: View {
                     } label: {
                         Text("Disconnect")
                             .font(.custom("rubik-bold", size: 17))
-                            .foregroundColor(Colors.mainGreen)
+                            .foregroundColor(Colors.mainPurple)
                             .padding(.vertical, 15)
                             .padding(.horizontal, 34)
-                            .background(Colors.paleGreen)
+                            .background(Colors.palePurple)
                             .cornerRadius(32)
                             
                     }

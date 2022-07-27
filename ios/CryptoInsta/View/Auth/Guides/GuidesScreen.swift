@@ -16,21 +16,21 @@ struct GuidesScreen: View {
                 VStack(spacing: 0) {
                     
                     Text("Guides")
-                        .foregroundColor(Colors.mainBlack)
+                        .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 28))
                         .padding(.top, 26)
                         .padding(.horizontal, 10)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Wallet:")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 17))
                         
                         Button {
                             
                         } label: {
                             Text("Some guide 1")
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                         
@@ -42,7 +42,7 @@ struct GuidesScreen: View {
                             
                         } label: {
                             Text("Some guide 2")
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                         
@@ -54,7 +54,7 @@ struct GuidesScreen: View {
                             
                         } label: {
                             Text("Some guide 3")
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                     }
@@ -62,20 +62,20 @@ struct GuidesScreen: View {
                     .background(Colors.mainWhite)
                     .cornerRadius(30, corners: [.topLeft, .bottomRight])
                     .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                    .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                     .padding(.top, 70)
                     .padding(.horizontal, 26)
                     
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Tokens:")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 17))
                         
                         Button {
                             
                         } label: {
                             Text("About")
-                                .foregroundColor(Colors.mainGreen)
+                                .foregroundColor(Colors.mainPurple)
                                 .font(.custom("rubik-bold", size: 17))
                         }
                         .padding(.top, 8)
@@ -88,7 +88,7 @@ struct GuidesScreen: View {
                     .background(Colors.mainWhite)
                     .cornerRadius(30, corners: [.topLeft, .bottomRight])
                     .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                    .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                     .padding(.top, 10)
                     .padding(.horizontal, 26)
                     
@@ -100,7 +100,7 @@ struct GuidesScreen: View {
                         
                     } label: {
                         Text("Help")
-                            .foregroundColor(Colors.mainGreen)
+                            .foregroundColor(Colors.mainPurple)
                             .font(.custom("rubik-bold", size: 17))
                     }
                     .padding(.top, 10)

@@ -44,7 +44,7 @@ struct MintContainer: View {
                     VStack(spacing: 0) {
                         
                         Text("Minting")
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .font(.custom("rubik-bold", size: 28))
                             .padding(.top, 10)
                         
@@ -71,7 +71,7 @@ struct MintContainer: View {
                                             HStack {
                                                     Spacer()
                                                     Text("Change")
-                                                        .foregroundColor(Colors.mainGreen)
+                                                        .foregroundColor(Colors.mainPurple)
                                                         .font(.custom("rubik-bold", size: 17))
                                                     Spacer()
                                                 }
@@ -98,12 +98,14 @@ struct MintContainer: View {
                                 } label: {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Image("ic_image")
+                                            .renderingMode(.template)
                                             .resizable()
                                             .scaledToFit()
+                                            .foregroundColor(Colors.mainPurple)
                                             .frame(width: 60, height: 50)
                                         
                                         Text("Library")
-                                            .foregroundColor(Colors.mainGreen)
+                                            .foregroundColor(Colors.mainPurple)
                                             .font(.custom("rubik-bold", size: 16))
                                             .padding(.top, 8)
                                     }
@@ -112,7 +114,7 @@ struct MintContainer: View {
                                     .background(Colors.mainWhite)
                                     .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                     .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                    .shadow(color: Colors.mainBlack.opacity(0.25), radius: 10, x: 0, y: 0)
+                                    .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
                                 }
                                 
                                 Spacer()
@@ -130,7 +132,7 @@ struct MintContainer: View {
                                     Spacer()
                                 }
                             }
-                            .foregroundColor(Colors.mainBlack)
+                            .foregroundColor(Colors.darkGrey)
                             .lineLimit(1)
                             .truncationMode(.tail)
                             .padding(.horizontal, 14)
@@ -139,7 +141,7 @@ struct MintContainer: View {
                             .cornerRadius(32)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 32)
-                                    .stroke(Colors.mainGreen, lineWidth: 2)
+                                    .stroke(Colors.mainPurple, lineWidth: 2)
                             )
                             .padding(.horizontal, 26)
                             .padding(.top, 25)
@@ -177,7 +179,7 @@ struct MintContainer: View {
                                         showCreateCollectionSheet = true
                                     } label: {
                                         Text("Create")
-                                            .foregroundColor(Colors.mainGreen)
+                                            .foregroundColor(Colors.mainPurple)
                                             .font(.custom("rubik-bold", size: 16))
                                     }
                                 }
@@ -190,14 +192,14 @@ struct MintContainer: View {
                                     HStack(spacing: 10) {
                                         ForEach(globalVm.privateCollections, id: \.self) { collection in
                                             Text("#\(collection.data.name)")
-                                                .foregroundColor(Colors.mainGreen)
+                                                .foregroundColor(Colors.mainPurple)
                                                 .font(.custom("rubik-bold", size: 16))
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 10)
-                                                .background(Colors.paleGreen)
+                                                .background(Colors.palePurple)
                                                 .cornerRadius(30)
                                                 .overlay(RoundedRectangle(cornerRadius: 30)
-                                                    .stroke(Colors.mainGreen, lineWidth: 2)
+                                                    .stroke(Colors.mainPurple, lineWidth: 2)
                                                     .opacity(collection == globalVm.pickedCollection ? 1 : 0))
                                                 .onTapGesture {
                                                     if collection != globalVm.pickedCollection {
@@ -244,7 +246,7 @@ struct MintContainer: View {
                                     } label: {
                                         Text("Faucet")
                                             .font(.custom("rubik-bold", size: 17))
-                                            .foregroundColor(Colors.mainGreen)
+                                            .foregroundColor(Colors.mainPurple)
                                     }
                                     .padding(.top, 10)
                                     .sheet(isPresented: $showFaucet, onDismiss: {
@@ -282,13 +284,11 @@ struct MintContainer: View {
                                     .foregroundColor(Colors.mainWhite)
                                     .padding(.vertical, 17)
                                     .padding(.horizontal, 60)
-                                    .background(LinearGradient(colors: [zeroBalance ? Colors.middleGrey : Colors.darkGreen,
-                                                                        zeroBalance ? Colors.middleGrey : Colors.lightGreen],
-                                                               startPoint: .leading,
-                                                               endPoint: .trailing))
+                                    .background(zeroBalance ? LinearGradient(colors: [Colors.mainGrey, Colors.mainGrey],
+                                                                             startPoint: .leading,endPoint: .trailing) : Colors.mainGradient)
                                     .cornerRadius(32)
                                     .padding(.vertical, 25)
-                                    .shadow(color: Colors.mainGreen.opacity(zeroBalance ? 0 : 0.5), radius: 10, x: 0, y: 0)
+                                    .shadow(color: Colors.mainPurple.opacity(zeroBalance ? 0 : 0.5), radius: 10, x: 0, y: 0)
                             }
                             .disabled(zeroBalance)
                         }
@@ -335,12 +335,12 @@ struct CollectionMenu: View {
     var body: some View {
         HStack(spacing: 6) {
             Text("Common")
-                .foregroundColor(pickedPrivateCollection ? Colors.mainGreen : Colors.mainWhite)
+                .foregroundColor(pickedPrivateCollection ? Colors.mainPurple : Colors.mainWhite)
                 .font(.custom("rubik-bold", size: 16))
                 .frame(width: 94)
                 .padding(.vertical, 10)
                 .background(pickedPrivateCollection ?
-                            Color.clear.cornerRadius(30) : Colors.mainGreen.cornerRadius(30)
+                            Color.clear.cornerRadius(30) : Colors.mainPurple.cornerRadius(30)
                 )
                 .onTapGesture {
                     if pickedPrivateCollection {
@@ -353,13 +353,13 @@ struct CollectionMenu: View {
             
             Text("Private")
                 .foregroundColor(globalVm.isPassBought ?
-                                 (pickedPrivateCollection ? Colors.mainWhite : Colors.mainGreen) : Colors.mainGrey
+                                 (pickedPrivateCollection ? Colors.mainWhite : Colors.mainPurple) : Colors.mainGrey
                 )
                 .font(.custom("rubik-bold", size: 16))
                 .frame(width: 94)
                 .padding(.vertical, 10)
                 .background(pickedPrivateCollection ?
-                            Colors.mainGreen.cornerRadius(30) : Color.clear.cornerRadius(30)
+                            Colors.mainPurple.cornerRadius(30) : Color.clear.cornerRadius(30)
                 )
                 .onTapGesture {
                     if globalVm.isPassBought && !pickedPrivateCollection {
@@ -378,7 +378,7 @@ struct CollectionMenu: View {
         .padding(4)
         .overlay(
             RoundedRectangle(cornerRadius: 30)
-                .stroke(Colors.mainGreen, lineWidth: 2)
+                .stroke(Colors.mainPurple, lineWidth: 2)
         )
     }
 }
