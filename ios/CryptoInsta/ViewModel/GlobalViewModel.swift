@@ -600,6 +600,15 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
+    func getMintedNft() -> Nft? {
+        guard !mintedPictureName.isEmpty else { return nil }
+        if mintedPictureCollection.isEmpty {
+            return publicNfts.first { $0.data.name == mintedPictureName }
+        } else {
+            return privateNfts.first { $0.data.name == mintedPictureName }
+        }
+    }
+    
     // Web3 calls
     
     func getPolygonBalance() {

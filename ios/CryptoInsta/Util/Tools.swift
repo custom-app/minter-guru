@@ -42,6 +42,11 @@ class Tools {
         ipfsLink.replacingOccurrences(of: "ipfs://", with: "")
     }
     
+    static func formOpenseaLink(contract: String, tokenId: Int) -> String {
+        let prefix = Config.TESTING ? "https://testnets.opensea.io/assets/mumbai/" : "https://opensea.io/assets/matic/"
+        return prefix + contract + "/\(tokenId)"
+    }
+    
     static func formatUint256(_ count: BigUInt, decimals: Int = 2) -> String {
         return Web3.Utils.formatToEthereumUnits(count, toUnits: .eth, decimals: decimals)!
     }

@@ -21,16 +21,14 @@ struct MintProcessingScreen: View {
                                  (!globalVm.pickedPrivateCollection && globalVm.refreshingPublicNfts)
             
             if refreshingNfts {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                MinterProgress()
             } else {
                 Text("Minting in progress")
                     .font(.custom("rubik-bold", size: 28))
                     .foregroundColor(Colors.mainBlack)
                     .padding(.horizontal, 10)
                 
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                MinterProgress()
                     .padding(.top, 25)
                 
                 

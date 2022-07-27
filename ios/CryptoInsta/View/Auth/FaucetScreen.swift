@@ -59,8 +59,8 @@ struct FaucetScreen: View {
                     .padding(.horizontal, 20)
                 
                 
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                
+                MinterProgress()
                     .padding(.top, 25)
                 
                 

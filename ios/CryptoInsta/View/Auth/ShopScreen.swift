@@ -34,8 +34,7 @@ struct ShopScreen: View {
                                     .foregroundColor(Colors.mainBlack)
                                     .multilineTextAlignment(.center)
                                 
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                                MinterProgress()
                                     .padding(.top, 25)
                                 
                                 
@@ -121,7 +120,7 @@ struct ShopScreen: View {
                                         .foregroundColor(Colors.mainBlack)
                                         .font(.custom("rubik-bold", size: 17))
                                     
-                                    Image("ic_cross")
+                                    Image("ic_migu_token")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 18, height: 18)

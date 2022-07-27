@@ -28,8 +28,8 @@ struct AuthContainer: View {
         ScrollView {
             let connected = globalVm.session != nil
             
-            if connected {
-                SwipeRefresh(bg: .black.opacity(0), fg: .black) {
+            SwipeRefresh(bg: .black.opacity(0), fg: .black, animate: connected) {
+                if connected {
                     globalVm.getPolygonBalance()
                     globalVm.getMinterBalance()
                 }
@@ -104,7 +104,7 @@ struct AuthContainer: View {
                         .padding(.top, 8)
                     
                     HStack(spacing: 0) {
-                        Image("ic_cross")
+                        Image("ic_migu_token")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 15, height: 15)

@@ -55,20 +55,20 @@ struct MintFinishedSheet: View {
                         .padding(.horizontal, 26)
                         .padding(.top, 25)
                     }
-                    
-                    Button {
-                        //TODO: unmock
-                        if let url = URL(string: "https://opensea.io/assets/matic/0xba21ce6b4dc183fa5d257584e657b913c90a69da/12"),
-                           UIApplication.shared.canOpenURL(url) {
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                        } else {
-                            //TODO: show error alert
+                    if let nft = globalVm.getMintedNft() {
+                        Button {
+                            if let url = URL(string: Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId)),
+                               UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            } else {
+                                //TODO: show error alert
+                            }
+                        } label: {
+                            Text("Watch on the OpenSea")
+                                .foregroundColor(Colors.mainGreen)
+                                .font(.custom("rubik-bold", size: 17))
+                                .padding(.top, 10)
                         }
-                    } label: {
-                        Text("Watch on the OpenSea")
-                            .foregroundColor(Colors.mainGreen)
-                            .font(.custom("rubik-bold", size: 17))
-                            .padding(.top, 10)
                     }
                     
                     Button {

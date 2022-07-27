@@ -46,7 +46,7 @@ struct NftInfoSheet: View {
                                 .cornerRadius(10)
                                 .frame(maxWidth: .infinity, maxHeight: 325)
                             
-                            Text(nft.data.name ?? "")
+                            Text(nft.data.name)
                                 .foregroundColor(Colors.mainBlack)
                                 .font(.custom("rubik-bold", size: 24))
                             
@@ -56,9 +56,7 @@ struct NftInfoSheet: View {
                                     .font(.custom("rubik-bold", size: 18))
                             }
                         } else {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
-                                .scaleEffect(1.5)
+                            MinterProgress()
                                 .padding(100)
                         }
                     }
@@ -83,7 +81,7 @@ struct NftInfoSheet: View {
                     
                     Button {
                         //TODO: unmock
-                        if let url = URL(string: "https://opensea.io/assets/matic/0xba21ce6b4dc183fa5d257584e657b913c90a69da/12"),
+                        if let url = URL(string: Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId)),
                            UIApplication.shared.canOpenURL(url) {
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         } else {

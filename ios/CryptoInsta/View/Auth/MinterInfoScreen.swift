@@ -167,7 +167,7 @@ struct RepostsInfo: View {
                     }
                     HStack(spacing: 0) {
                         HStack(spacing: 0) {
-                            Image("ic_cross")
+                            Image("ic_migu_token")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 15, height: 15)
@@ -196,7 +196,7 @@ struct RepostsInfo: View {
                     }
                     HStack(spacing: 0) {
                         HStack(spacing: 0) {
-                            Image("ic_cross")
+                            Image("ic_migu_token")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 15, height: 15)

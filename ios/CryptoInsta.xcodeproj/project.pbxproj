@@ -18,6 +18,7 @@
 		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
 		11408F3A28908EC900B9293F /* TwitterFollowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11408F3928908EC900B9293F /* TwitterFollowInfo.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
+		1183DD782891A67E002189FB /* MinterProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183DD772891A67E002189FB /* MinterProgress.swift */; };
 		1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */; };
 		1196D3EC2870D06000EF6F63 /* access_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EB2870D06000EF6F63 /* access_token_abi.json */; };
 		1196D3F02870D15F00EF6F63 /* migu_token_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */; };
@@ -90,6 +91,7 @@
 		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
 		11408F3928908EC900B9293F /* TwitterFollowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterFollowInfo.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
+		1183DD772891A67E002189FB /* MinterProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinterProgress.swift; sourceTree = "<group>"; };
 		1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeRefresh.swift; sourceTree = "<group>"; };
 		1196D3EB2870D06000EF6F63 /* access_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = access_token_abi.json; sourceTree = "<group>"; };
 		1196D3EF2870D15F00EF6F63 /* migu_token_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = migu_token_abi.json; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				11C9F992285FA7E100A27587 /* ShareView.swift */,
 				1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */,
 				11C8049F288841E80001F4BC /* LoadingScreen.swift */,
+				1183DD772891A67E002189FB /* MinterProgress.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				11ED5AAA284710B400F0D61D /* AuthContainer.swift in Sources */,
 				11ED5AAE284710C800F0D61D /* GalleryContainer.swift in Sources */,
 				11ED5AA0284705F800F0D61D /* MainContainer.swift in Sources */,
+				1183DD782891A67E002189FB /* MinterProgress.swift in Sources */,
 				11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */,
 				11D2572728444C790028E2B4 /* ContentView.swift in Sources */,
 				11408F3A28908EC900B9293F /* TwitterFollowInfo.swift in Sources */,

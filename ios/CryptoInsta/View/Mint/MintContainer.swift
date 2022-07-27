@@ -219,8 +219,7 @@ struct MintContainer: View {
                                         .padding(.top, 10)
                                 }
                             } else {
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                                MinterProgress()
                             }
                         }
                         

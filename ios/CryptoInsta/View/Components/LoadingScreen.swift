@@ -13,8 +13,7 @@ struct LoadingScreen: View {
     
     var body: some View {
         VStack {
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+            MinterProgress()
         }
     }
 }
