@@ -122,7 +122,7 @@ struct MinterInfoScreen: View {
                              )
                          }
                      } label: {
-                         Image("ic_ok")
+                         Image("ic_ok_light")
                              .renderingMode(.template)
                              .resizable()
                              .scaledToFit()

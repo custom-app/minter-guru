@@ -46,9 +46,11 @@ struct ShopScreen: View {
                         } else if globalVm.purchaseFinished {
                             VStack(spacing: 0) {
                                 
-                                Image("ic_ok")
+                                Image("ic_ok_light")
+                                    .renderingMode(.template)
                                     .resizable()
                                     .scaledToFit()
+                                    .foregroundColor(Colors.mainGreen)
                                     .frame(width: 64, height: 64)
                                 
                                 Text("Success!")

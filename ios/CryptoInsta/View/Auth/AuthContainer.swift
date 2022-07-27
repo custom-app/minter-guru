@@ -55,10 +55,10 @@ struct AuthContainer: View {
                     
                     HStack(spacing: 0) {
                         if connected {
-                            Image("ic_cross")
+                            Image("ic_ok_light")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 15, height: 15)
+                                .frame(width: 20, height: 20)
                             
                             HStack(spacing: 0) {
                                 Text("\(globalVm.walletAccount ?? "")")
@@ -77,12 +77,14 @@ struct AuthContainer: View {
                                 }
                                 .padding(.leading, 4)
                             }
-                            .padding(.leading, 5)
+                            .padding(.leading, 3)
                             .padding(.trailing, 20)
                         } else {
-                            Image("ic_cross")
+                            Image("ic_cross_light")
+                                .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
+                                .foregroundColor(Colors.mainGrey)
                                 .frame(width: 15, height: 15)
                             
                             Text("wallet not connected")
@@ -144,7 +146,7 @@ struct AuthContainer: View {
                         Button {
                             showGuides = true
                         } label: {
-                            Image("ic_cross")
+                            Image("ic_info")
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
@@ -173,7 +175,7 @@ struct AuthContainer: View {
                         Button {
                             showFaucet = true
                         } label: {
-                            Image("ic_cross")
+                            Image("ic_faucet")
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
@@ -208,7 +210,7 @@ struct AuthContainer: View {
                         Button {
                             showShop = true
                         } label: {
-                            Image("ic_cross")
+                            Image("ic_shop")
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
