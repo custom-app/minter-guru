@@ -289,7 +289,7 @@ class HttpRequester {
                             onResult(nil, InternalError.minterApiError(error: error))
                         }
                     } catch {
-                        if let dataStr = String(data: data, encoding: .utf8), dataStr == "null" {
+                        if let dataStr = String(data: data, encoding: .utf8), dataStr == "null\n" {
                             DispatchQueue.main.async {
                                 onResult(nil, nil)
                             }

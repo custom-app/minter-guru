@@ -401,6 +401,7 @@ class GlobalViewModel: ObservableObject {
         if let address = walletAccount {
             DispatchQueue.global(qos: .userInitiated).async {
                 HttpRequester.shared.checkTwitterFollow(address: address) { result, error in
+                    print("HELLO")
                     if let error = error {
                         print("got check follow error: \(error)")
                         //TODO: handle error
@@ -410,6 +411,7 @@ class GlobalViewModel: ObservableObject {
                             self.twitterFollowRewardReceived = true
                         }
                     } else {
+                        print("twitter follow response is null -> not received")
                         withAnimation {
                             self.twitterFollowRewardReceived = false
                         }

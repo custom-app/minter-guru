@@ -18,6 +18,7 @@
 		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
 		11408F3A28908EC900B9293F /* TwitterFollowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11408F3928908EC900B9293F /* TwitterFollowInfo.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
+		1177C27C2893022900A43AB1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1177C27B2893022900A43AB1 /* Config.swift */; };
 		1183DD782891A67E002189FB /* MinterProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183DD772891A67E002189FB /* MinterProgress.swift */; };
 		1183DD7A2891CEA7002189FB /* VibrationWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183DD792891CEA7002189FB /* VibrationWorker.swift */; };
 		1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */; };
@@ -62,7 +63,6 @@
 		11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */; };
 		11ED5A802846BCC600F0D61D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A7F2846BCC600F0D61D /* Constants.swift */; };
 		11ED5A822846BD4000F0D61D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A812846BD4000F0D61D /* Extensions.swift */; };
-		11ED5A912846C5FD00F0D61D /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A902846C5FD00F0D61D /* Config.swift */; };
 		11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A922846C7AE00F0D61D /* Colors.swift */; };
 		11ED5A952846C7E800F0D61D /* UserDefaultsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */; };
 		11ED5A972847015300F0D61D /* Wallets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5A962847015300F0D61D /* Wallets.swift */; };
@@ -92,6 +92,7 @@
 		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
 		11408F3928908EC900B9293F /* TwitterFollowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterFollowInfo.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
+		1177C27B2893022900A43AB1 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		1183DD772891A67E002189FB /* MinterProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinterProgress.swift; sourceTree = "<group>"; };
 		1183DD792891CEA7002189FB /* VibrationWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrationWorker.swift; sourceTree = "<group>"; };
 		1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeRefresh.swift; sourceTree = "<group>"; };
@@ -135,7 +136,6 @@
 		11ED5A7C2846BB7900F0D61D /* GlobalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalViewModel.swift; sourceTree = "<group>"; };
 		11ED5A7F2846BCC600F0D61D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		11ED5A812846BD4000F0D61D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		11ED5A902846C5FD00F0D61D /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		11ED5A922846C7AE00F0D61D /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWorker.swift; sourceTree = "<group>"; };
 		11ED5A962847015300F0D61D /* Wallets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallets.swift; sourceTree = "<group>"; };
@@ -288,7 +288,6 @@
 				11ED5A7F2846BCC600F0D61D /* Constants.swift */,
 				11ED5A812846BD4000F0D61D /* Extensions.swift */,
 				11DEE932284803B900B7E2E5 /* Errors.swift */,
-				11ED5A902846C5FD00F0D61D /* Config.swift */,
 				11ED5A922846C7AE00F0D61D /* Colors.swift */,
 				11ED5A942846C7E800F0D61D /* UserDefaultsWorker.swift */,
 				11DEE9342848063D00B7E2E5 /* BackgroundTasksManager.swift */,
@@ -298,6 +297,7 @@
 				111629BA286379B80012B134 /* TxWorker.swift */,
 				111629BC2863A0D20012B134 /* Web3Parser.swift */,
 				1183DD792891CEA7002189FB /* VibrationWorker.swift */,
+				1177C27B2893022900A43AB1 /* Config.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -479,7 +479,6 @@
 				11C562F1287B8E9A0028F885 /* PrivateCollection.swift in Sources */,
 				11C9F98F285F6E0500A27587 /* MintProcessingScreen.swift in Sources */,
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
-				11ED5A912846C5FD00F0D61D /* Config.swift in Sources */,
 				11F9729E285CE738000026FD /* SheetStroke.swift in Sources */,
 				11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */,
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
@@ -513,6 +512,7 @@
 				1108864E284AF497002C4E5A /* NftMeta.swift in Sources */,
 				11A749692849A9F100387869 /* HttpRequester.swift in Sources */,
 				11C9F991285F6E1000A27587 /* MintFinishedSheet.swift in Sources */,
+				1177C27C2893022900A43AB1 /* Config.swift in Sources */,
 				11F972A2285CEF6D000026FD /* FaucetScreen.swift in Sources */,
 				11ED5A9E2847059B00F0D61D /* Placeholder.swift in Sources */,
 				111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */,
@@ -646,11 +646,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"CryptoInsta/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MinterGuru/Preview Content\"";
 				DEVELOPMENT_TEAM = 7VF24UW9N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CryptoInsta/Info.plist;
+				INFOPLIST_FILE = MinterGuru/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Minter Guru";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For creating nft of photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -681,11 +681,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"CryptoInsta/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MinterGuru/Preview Content\"";
 				DEVELOPMENT_TEAM = 7VF24UW9N8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CryptoInsta/Info.plist;
+				INFOPLIST_FILE = MinterGuru/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Minter Guru";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For creating nft of photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
