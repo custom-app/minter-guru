@@ -75,7 +75,9 @@ class Tools {
     
     static func calcTodayRewards(rewards: [RewardInfo]) -> Int {
         let now = Date()
-        let dayStart = now.timestamp() - now.timestamp() % (24 * 60 * 60)
+        let dayStart = (now.timestamp() - now.timestamp() % (24 * 60 * 60)) * 1000
+        print("dayStart: \(dayStart)")
+        print("\(rewards)")
         var count = 0
         for reward in rewards {
             if reward.createdAt >= dayStart {
@@ -84,6 +86,8 @@ class Tools {
                 break
             }
         }
+        1658966400
+        1658425605447
         return count
     }
 }

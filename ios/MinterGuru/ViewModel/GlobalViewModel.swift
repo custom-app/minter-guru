@@ -261,7 +261,7 @@ class GlobalViewModel: ObservableObject {
     func isRepostRewarded() -> Bool {
         if let rewards = rewards, let info = twitterInfo {
             let todayRewards = Tools.calcTodayRewards(rewards: rewards)
-            return todayRewards < info.personalLimit && info.open && info.spent < info.limit
+            return todayRewards < info.personalLimit && rewards.count < info.personalTotalLimit && info.open && info.spent < info.limit
         } else {
             return true
         }

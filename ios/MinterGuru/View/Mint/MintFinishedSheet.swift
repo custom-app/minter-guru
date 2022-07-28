@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BigInt
 
 struct MintFinishedSheet: View {
     
@@ -87,7 +88,8 @@ struct MintFinishedSheet: View {
                     }
                     
                     if globalVm.isRepostRewarded() {
-                        Tip(text: "You can earn Minter Guru tokens by sharing photos on social networks")
+                        let value = globalVm.twitterInfo == nil ? "" : Tools.formatUint256(BigUInt(globalVm.twitterInfo!.value)!, decimals: 0)
+                        Tip(text: "You can earn \(value) MIGU tokens by sharing photo on social networks")
                             .padding(.horizontal, 26)
                             .padding(.top, 25)
                     

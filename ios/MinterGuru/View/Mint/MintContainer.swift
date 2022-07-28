@@ -223,7 +223,7 @@ struct MintContainer: View {
                                 }
                             } else {
                                 MinterProgress()
-                                    .padding(.top, 25)
+                                    .padding(.top, 50)
                             }
                         }
                         
@@ -231,7 +231,7 @@ struct MintContainer: View {
                         if let image = globalVm.pickedImage {
                             
                             let zeroBalance = globalVm.polygonBalanceLoaded && globalVm.polygonBalance == 0
-                            if !zeroBalance {
+                            if zeroBalance {
                                 
                                 if globalVm.faucetUsed {
                                     Tip(text: "To mint a photo, you need to pay a commission to the blockchain network. Please top up your balance ")

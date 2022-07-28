@@ -27,7 +27,8 @@ struct MinterInfoScreen: View {
                     .padding(.bottom, 4)
                 Spacer()
             }
-            ScrollView {
+            
+            ScrollView(showsIndicators: true) {
                 VStack(spacing: 0) {
                     
                     Text("How to earn")
@@ -99,7 +100,7 @@ struct MinterInfoScreen: View {
                                 let rewardsCount = globalVm.rewards?.count ?? 0
                                 let totalLimit = info.personalTotalLimit
                                 let addition = rewardsCount >= info.personalTotalLimit ? "(done \(totalLimit)/\(totalLimit))" :
-                                (info.spent >= info.limit ? "(today limit is rearched)" : "(done \(rewardsCount)/\(totalLimit))")
+                                (info.spent >= info.limit ? "" : "(done \(rewardsCount)/\(totalLimit))")
                                 
                                 Text("- Share your photos on Twitter \(addition)")
                                     .foregroundColor(Colors.darkGrey)
@@ -210,6 +211,10 @@ struct MinterInfoScreen: View {
                         )
                         .padding(.horizontal, 26)
                         .padding(.top, 25)
+                    
+                    Tip(text: "The ways of obtaining tokens can be changed or expanded over time.\nStay tuned for updates!")
+                        .padding(.top, 25)
+                        .padding(.horizontal, 26)
                         .padding(.bottom, 40)
                     
                     Spacer()
