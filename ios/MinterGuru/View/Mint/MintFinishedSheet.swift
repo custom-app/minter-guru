@@ -70,40 +70,40 @@ struct MintFinishedSheet: View {
                                 .font(.custom("rubik-bold", size: 17))
                                 .padding(.top, 10)
                         }
-                    }
-                    
-                    Button {
-                        globalVm.applyForRepostReward()
-                        textForShare = "Some info to detect post\nhttps://opensea.io/assets/matic/0xba21ce6b4dc183fa5d257584e657b913c90a69da/12"
-                    } label: {
-                        Text("Share")
-                            .font(.custom("rubik-bold", size: 17))
-                            .foregroundColor(Colors.mainWhite)
-                            .padding(.vertical, 17)
-                            .padding(.horizontal, 58)
-                            .background(Colors.mainGradient)
-                            .cornerRadius(32)
-                            .padding(.top, 25)
-                            .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
-                    }
-                    
-                    if globalVm.isRepostRewarded() {
-                        let value = globalVm.twitterInfo == nil ? "" : Tools.formatUint256(BigUInt(globalVm.twitterInfo!.value)!, decimals: 0)
-                        Tip(text: "You can earn \(value) MIGU tokens by sharing photo on social networks")
-                            .padding(.horizontal, 26)
-                            .padding(.top, 25)
-                    
+                        
                         Button {
-                            showMinterInfo = true
+                            globalVm.applyForRepostReward()
+                            textForShare = "\(Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId))\n#MIGU"
                         } label: {
-                            Text("More info")
-                                .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 16))
+                            Text("Share")
+                                .font(.custom("rubik-bold", size: 17))
+                                .foregroundColor(Colors.mainWhite)
+                                .padding(.vertical, 17)
+                                .padding(.horizontal, 58)
+                                .background(Colors.mainGradient)
+                                .cornerRadius(32)
+                                .padding(.top, 25)
+                                .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                         }
-                        .padding(.vertical, 10)
-                        .sheet(isPresented: $showMinterInfo) {
-                            MinterInfoScreen()
-                                .environmentObject(globalVm)
+                        
+                        if globalVm.isRepostRewarded() {
+                            let value = globalVm.twitterInfo == nil ? "" : Tools.formatUint256(BigUInt(globalVm.twitterInfo!.value)!, decimals: 0)
+                            Tip(text: "You can earn \(value) MIGU tokens by sharing photo on social networks")
+                                .padding(.horizontal, 26)
+                                .padding(.top, 25)
+                        
+                            Button {
+                                showMinterInfo = true
+                            } label: {
+                                Text("More info")
+                                    .foregroundColor(Colors.mainPurple)
+                                    .font(.custom("rubik-bold", size: 16))
+                            }
+                            .padding(.vertical, 10)
+                            .sheet(isPresented: $showMinterInfo) {
+                                MinterInfoScreen()
+                                    .environmentObject(globalVm)
+                            }
                         }
                     }
                 }
