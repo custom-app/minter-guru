@@ -143,6 +143,7 @@ struct MintContainer: View {
                                 RoundedRectangle(cornerRadius: 32)
                                     .stroke(Colors.mainPurple, lineWidth: 2)
                             )
+                            .disabled(globalVm.mintInProgress)
                             .padding(.horizontal, 26)
                             .padding(.top, 25)
                             .sheet(isPresented: $showPhotoPicker) {
