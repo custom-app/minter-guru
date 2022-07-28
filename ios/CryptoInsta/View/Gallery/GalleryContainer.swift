@@ -183,8 +183,9 @@ struct GalleryContainer: View {
                                 } else {
                                     let nfts = globalVm.chosenCollectionInGallery == nil ? globalVm.privateNfts :
                                     globalVm.privateNfts.filter({ $0.contractAddress == globalVm.chosenCollectionInGallery?.address })
-                                    let filteredNfts = globalVm.nftSearch.isEmpty ? nfts :
-                                        nfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) })
+                                    let filteredNfts = (globalVm.nftSearch.isEmpty ? nfts :
+                                        nfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) }))
+                                        .sorted(by: { $0.data.createDate > $1.data.createDate })
                                     if filteredNfts.isEmpty && !nfts.isEmpty {
                                         VStack(spacing: 0) {
                                             Text("There is no NFTs with this name")
@@ -230,8 +231,9 @@ struct GalleryContainer: View {
                                 LoadingScreen(text: "")
                                     .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                         } else {
-                            let filteredNfts = globalVm.nftSearch.isEmpty ? globalVm.publicNfts :
-                                globalVm.publicNfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) })
+                            let filteredNfts = (globalVm.nftSearch.isEmpty ? globalVm.publicNfts :
+                                globalVm.publicNfts.filter({ $0.data.name.lowercased().contains(globalVm.nftSearch.lowercased()) }))
+                                .sorted(by: { $0.data.createDate > $1.data.createDate })
                             if filteredNfts.isEmpty && !globalVm.publicNfts.isEmpty {
                                 VStack(spacing: 0) {
                                     Text("There is no NFTs with this name")
