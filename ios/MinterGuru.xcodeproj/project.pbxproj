@@ -199,7 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				11ED5A852846BFFA00F0D61D /* Packages */,
-				11D2572328444C790028E2B4 /* CryptoInsta */,
+				11D2572328444C790028E2B4 /* MinterGuru */,
 				11D2572228444C790028E2B4 /* Products */,
 				11ED5AA628470D3600F0D61D /* Frameworks */,
 			);
@@ -213,7 +213,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		11D2572328444C790028E2B4 /* CryptoInsta */ = {
+		11D2572328444C790028E2B4 /* MinterGuru */ = {
 			isa = PBXGroup;
 			children = (
 				11ED5A98284703C100F0D61D /* Info.plist */,
@@ -231,7 +231,7 @@
 				11D2572828444C7B0028E2B4 /* Assets.xcassets */,
 				11D2572A28444C7B0028E2B4 /* Preview Content */,
 			);
-			path = CryptoInsta;
+			path = MinterGuru;
 			sourceTree = "<group>";
 		};
 		11D2572A28444C7B0028E2B4 /* Preview Content */ = {
