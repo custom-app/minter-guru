@@ -121,7 +121,7 @@
 		11C9F992285FA7E100A27587 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
 		11CC0B2C28845FBC000E52D0 /* MinterInfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinterInfoScreen.swift; sourceTree = "<group>"; };
 		11CE41A428665D32000A15EA /* web3swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = web3swift; path = ../../web3swift; sourceTree = "<group>"; };
-		11D2572128444C790028E2B4 /* CryptoInsta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoInsta.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		11D2572128444C790028E2B4 /* MinterGuru.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinterGuru.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D2572428444C790028E2B4 /* CryptoInstaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoInstaApp.swift; sourceTree = "<group>"; };
 		11D2572628444C790028E2B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		11D2572828444C7B0028E2B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -208,7 +208,7 @@
 		11D2572228444C790028E2B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				11D2572128444C790028E2B4 /* CryptoInsta.app */,
+				11D2572128444C790028E2B4 /* MinterGuru.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -376,9 +376,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		11D2572028444C790028E2B4 /* CryptoInsta */ = {
+		11D2572028444C790028E2B4 /* MinterGuru */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 11D2572F28444C7B0028E2B4 /* Build configuration list for PBXNativeTarget "CryptoInsta" */;
+			buildConfigurationList = 11D2572F28444C7B0028E2B4 /* Build configuration list for PBXNativeTarget "MinterGuru" */;
 			buildPhases = (
 				11D2571D28444C790028E2B4 /* Sources */,
 				11D2571E28444C790028E2B4 /* Frameworks */,
@@ -388,14 +388,14 @@
 			);
 			dependencies = (
 			);
-			name = CryptoInsta;
+			name = MinterGuru;
 			packageProductDependencies = (
 				11A7496D2849CD6700387869 /* AWSSigner */,
 				11BE8CDF2855D4410088F261 /* WalletConnectSwift */,
 				11CE41A628665D66000A15EA /* web3swift */,
 			);
 			productName = CryptoInsta;
-			productReference = 11D2572128444C790028E2B4 /* CryptoInsta.app */;
+			productReference = 11D2572128444C790028E2B4 /* MinterGuru.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -413,7 +413,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 11D2571C28444C790028E2B4 /* Build configuration list for PBXProject "CryptoInsta" */;
+			buildConfigurationList = 11D2571C28444C790028E2B4 /* Build configuration list for PBXProject "MinterGuru" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -431,7 +431,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				11D2572028444C790028E2B4 /* CryptoInsta */,
+				11D2572028444C790028E2B4 /* MinterGuru */,
 			);
 		};
 /* End PBXProject section */
@@ -651,6 +651,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CryptoInsta/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Minter Guru";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For creating nft of photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -665,7 +666,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.psoik.cryptoinsta2.CryptoInsta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.customapp.minterguru;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -685,6 +686,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CryptoInsta/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Minter Guru";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For creating nft of photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -699,7 +701,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.psoik.cryptoinsta2.CryptoInsta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.customapp.minterguru;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -710,7 +712,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		11D2571C28444C790028E2B4 /* Build configuration list for PBXProject "CryptoInsta" */ = {
+		11D2571C28444C790028E2B4 /* Build configuration list for PBXProject "MinterGuru" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				11D2572D28444C7B0028E2B4 /* Debug */,
@@ -719,7 +721,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		11D2572F28444C7B0028E2B4 /* Build configuration list for PBXNativeTarget "CryptoInsta" */ = {
+		11D2572F28444C7B0028E2B4 /* Build configuration list for PBXNativeTarget "MinterGuru" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				11D2573028444C7B0028E2B4 /* Debug */,
