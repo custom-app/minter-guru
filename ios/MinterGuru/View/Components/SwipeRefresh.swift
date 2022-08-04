@@ -46,7 +46,7 @@ struct SwipeRefresh: View {
                             }
                             refreshStartTime = Date()
                         }
-                        globalVm.vibrationWorker?.vibrate()
+                        globalVm.vibrationWorker.vibrate()
                     }
                     .onDisappear {
                         if isEnabled,

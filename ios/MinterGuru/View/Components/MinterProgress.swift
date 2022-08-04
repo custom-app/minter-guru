@@ -27,7 +27,7 @@ struct MinterProgress: View {
             .resizable()
             .scaledToFit()
             .frame(height: height)
-            .opacity(isAnimating ? 1 : 0.4)
+            .opacity(isAnimating ? 0.4 : 1)
             .offset(x: 0, y: isAnimating ? -10 : 10)
             .animation(foreverAnimation)
             .onAppear {

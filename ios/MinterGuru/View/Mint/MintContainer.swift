@@ -276,7 +276,7 @@ struct MintContainer: View {
                                         globalVm.mintInProgress = true
                                     }
                                     globalVm.objectWillChange.send()
-                                    globalVm.vibrationWorker?.vibrate()
+                                    globalVm.vibrationWorker.vibrate()
                                     globalVm.uploadImageToIpfs(image: image, name: globalVm.pictureName)
                                 }
                             } label: {
@@ -345,7 +345,7 @@ struct CollectionMenu: View {
                 )
                 .onTapGesture {
                     if pickedPrivateCollection {
-                        globalVm.vibrationWorker?.vibrate()
+                        globalVm.vibrationWorker.vibrate()
                         withAnimation {
                             pickedPrivateCollection = false
                         }
@@ -364,7 +364,7 @@ struct CollectionMenu: View {
                 )
                 .onTapGesture {
                     if globalVm.isPassBought && !pickedPrivateCollection {
-                        globalVm.vibrationWorker?.vibrate()
+                        globalVm.vibrationWorker.vibrate()
                         withAnimation {
                             pickedPrivateCollection = true
                         }
