@@ -38,7 +38,7 @@ struct ShopScreen: View {
                                     .padding(.top, 50)
                                 
                                 
-                                Tip(text: "Please wait\nIt should take a few seconds to process the transaction")
+                                Tip(text: "Please wait\nIt should take a few seconds to process the transaction\nYou will be redirected to the wallet app")
                                     .padding(.top, 50)
                                     .padding(.horizontal, 26)
                             }
@@ -166,32 +166,37 @@ struct ShopScreen: View {
                                 .padding(.top, 50)
                                 .disabled(globalVm.purchasingInProgress)
                             
-                            let enoughtAllowance = globalVm.allowance >= globalVm.privateCollectionPrice
+                            let enoughtAllowance = (globalVm.allowance >= globalVm.privateCollectionPrice) && globalVm.privateCollectionPriceLoaded
                             
-                            Button {
-                                withAnimation {
-                                    globalVm.purchasingInProgress = true
+                            if globalVm.session == nil {
+                                Tip(text: "To purchase a private collection you need to connect the wallet")
+                                    .padding(.vertical, 25)
+                            } else {
+                                Button {
+                                    withAnimation {
+                                        globalVm.purchasingInProgress = true
+                                    }
+                                    if enoughtAllowance {
+                                        globalVm.purchaseCollection(collectionData: PrivateCollectionData(name: collectionName))
+                                    } else {
+                                        globalVm.approveTokens()
+                                    }
+                                } label: {
+                                    Text("Create")
+                                        .font(.custom("rubik-bold", size: 17))
+                                        .foregroundColor(Colors.mainWhite)
+                                        .padding(.vertical, 17)
+                                        .padding(.horizontal, 60)
+                                        .background(Colors.mainGradient)
+                                        .cornerRadius(32)
+                                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                                 }
-                                if enoughtAllowance {
-                                    globalVm.purchaseCollection(collectionData: PrivateCollectionData(name: collectionName))
-                                } else {
-                                    globalVm.approveTokens()
-                                }
-                            } label: {
-                                Text("Create")
-                                    .font(.custom("rubik-bold", size: 17))
-                                    .foregroundColor(Colors.mainWhite)
-                                    .padding(.vertical, 17)
-                                    .padding(.horizontal, 60)
-                                    .background(Colors.mainGradient)
-                                    .cornerRadius(32)
-                                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                                .padding(.top, 50)
+                                
+                                Tip(text: enoughtAllowance ? "Now you are ready to create collection!" :
+                                        "First you need to give access to the use of MIGU tokens, and then make a purchase")
+                                    .padding(.vertical, 25)
                             }
-                            .padding(.top, 50)
-                            
-                            Tip(text: enoughtAllowance ? "Now you are ready to create collection!" :
-                                    "First you need to give access to the use of MIGU tokens, and then make a purchase")
-                                .padding(.vertical, 25)
                         }
                     }
                     .padding(.horizontal, 26)

@@ -263,6 +263,13 @@ struct MintContainer: View {
                             }
                             
                             Button {
+                                if globalVm.session == nil {
+                                    globalVm.alert = IdentifiableAlert.build(
+                                        id: "wallet not connected",
+                                        title: "Wallet not connected",
+                                        message: "To mint a picture, you need to connect the wallet")
+                                    return
+                                }
                                 globalVm.pictureName = globalVm.pictureName.trimmingCharacters(in: .whitespacesAndNewlines)
                                 if globalVm.pictureName.isEmpty {
                                     globalVm.alert = IdentifiableAlert.build(

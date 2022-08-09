@@ -94,6 +94,8 @@ class GlobalViewModel: ObservableObject {
     @Published
     var privateCollectionPrice: BigUInt = 0
     @Published
+    var privateCollectionPriceLoaded = false
+    @Published
     var minterBalance: BigUInt = 0
     @Published
     var loadedMinterBalance = false
@@ -701,6 +703,7 @@ class GlobalViewModel: ObservableObject {
                 print("got private collection price: \(price)")
                 withAnimation {
                     self?.privateCollectionPrice = price
+                    self?.privateCollectionsLoaded = true
                 }
             }
         }
