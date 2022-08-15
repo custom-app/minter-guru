@@ -168,6 +168,7 @@ class GlobalViewModel: ObservableObject {
         if let used = UserDefaultsWorker.shared.isFaucetUsed() {
             faucetUsed = used
         }
+        loadGeneralInfo()
     }
     
     func checkGalleryAuth(onSuccess: @escaping () -> ()) {
@@ -221,14 +222,17 @@ class GlobalViewModel: ObservableObject {
             checkFaucetUsage()
         }
         getPublicTokensCount()
-        getPrivateCollectionPrice()
         getPrivateCollectionsCount()
+        checkTwitterFollow()
+        getRepostRewards()
+        getAllowance()
+    }
+    
+    func loadGeneralInfo() {
+        getPrivateCollectionPrice()
         getFaucetInfo()
         getTwitterInfo()
         getTwitterFollowInfo()
-        getRepostRewards()
-        checkTwitterFollow()
-        getAllowance()
     }
     
     func clearAccountInfo() {
