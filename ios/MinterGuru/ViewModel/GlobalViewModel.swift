@@ -947,6 +947,21 @@ class GlobalViewModel: ObservableObject {
                 }
                 if let error = response.error {
                     print("Got error response for \(label) tx: \(error)")
+                    if error.localizedDescription == "User rejected the transaction" {
+                        print("user rejected")
+                        DispatchQueue.main.async {
+                            withAnimation {
+                                switch label {
+                                case self?.mintLabel, self?.privateMintLabel:
+                                    self?.mintInProgress = false
+                                case self?.approveTokensLabel, self?.purchaseCollectionLabel:
+                                    self?.purchasingInProgress = false
+                                default:
+                                    print("unknown tx label: \(label)")
+                                }
+                            }
+                        }
+                    }
                 } else {
                     do {
                         let result = try response.result(as: String.self)
