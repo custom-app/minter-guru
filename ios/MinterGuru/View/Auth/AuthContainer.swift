@@ -240,32 +240,53 @@ struct AuthContainer: View {
                 .padding(.top, 25)
                 
                 if !connected {
-                    
-                    Tip(text: "To use the main functions of the application, you need to connect a wallet")
-                        .padding(.top, 25)
-                        .padding(.horizontal, 26)
-                    
-                    Button {
-                        globalVm.showConnectSheet = true
-                    } label: {
-                        HStack(spacing: 0) {
-                            Spacer()
-                            Text("Connect crypto wallet")
+                    if globalVm.isReconnecting {
+                        MinterProgress()
+                            .padding(.top, 40)
+                        
+                        Tip(text: "Reconnecting to your previous session\nPlease wait")
+                            .padding(.top, 25)
+                            .padding(.horizontal, 26)
+                        
+                        Button {
+                            globalVm.disconnect()
+                        } label: {
+                            Text("Disconnect")
                                 .font(.custom("rubik-bold", size: 17))
-                                .fontWeight(.bold)
-                                .foregroundColor(Colors.mainWhite)
-                            Spacer()
+                                .foregroundColor(Colors.mainPurple)
+                                .padding(.vertical, 15)
+                                .padding(.horizontal, 34)
+                                .background(Colors.palePurple)
+                                .cornerRadius(32)
                         }
-                        .padding(.vertical, 15)
-                        .background(Colors.mainGradient)
-                        .cornerRadius(32)
-                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
-                        .padding(.horizontal, 26)
-                    }
-                    .padding(.top, 26)
-                    .sheet(isPresented: $globalVm.showConnectSheet) {
-                        ConnectSheet()
-                            .environmentObject(globalVm)
+                        .padding(.top, 25)
+                    } else {
+                        Tip(text: "To use the main functions of the application, you need to connect a wallet")
+                            .padding(.top, 25)
+                            .padding(.horizontal, 26)
+                        
+                        Button {
+                            globalVm.showConnectSheet = true
+                        } label: {
+                            HStack(spacing: 0) {
+                                Spacer()
+                                Text("Connect crypto wallet")
+                                    .font(.custom("rubik-bold", size: 17))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Colors.mainWhite)
+                                Spacer()
+                            }
+                            .padding(.vertical, 15)
+                            .background(Colors.mainGradient)
+                            .cornerRadius(32)
+                            .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                            .padding(.horizontal, 26)
+                        }
+                        .padding(.top, 26)
+                        .sheet(isPresented: $globalVm.showConnectSheet) {
+                            ConnectSheet()
+                                .environmentObject(globalVm)
+                        }
                     }
                 } else {
                     if globalVm.isWrongChain {
@@ -301,7 +322,6 @@ struct AuthContainer: View {
                             .padding(.horizontal, 34)
                             .background(Colors.palePurple)
                             .cornerRadius(32)
-                            
                     }
                     .padding(.top, 25)
                 }

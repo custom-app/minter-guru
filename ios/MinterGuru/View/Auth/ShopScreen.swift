@@ -43,6 +43,16 @@ struct ShopScreen: View {
                                     .padding(.horizontal, 26)
                             }
                             .frame(height: geometry.size.height)
+                        } else if globalVm.isReconnecting {
+                            
+                            VStack(spacing: 0) {
+                                MinterProgress()
+                                
+                                Tip(text: "Reconnecting to your session\nPlease wait")
+                                    .padding(.top, 50)
+                                    .padding(.horizontal, 26)
+                            }
+                            .frame(height: geometry.size.height)
                         } else if globalVm.purchaseFinished {
                             VStack(spacing: 0) {
                                 

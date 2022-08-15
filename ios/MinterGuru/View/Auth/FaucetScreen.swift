@@ -111,23 +111,33 @@ struct FaucetScreen: View {
                         if globalVm.polygonBalance != 0 {
                             FaucetUnusableView(reason: "Faucet is only available if your Polygon wallet is empty")
                         } else {
-                            Button {
-                                UserDefaultsWorker.shared.setFaucetUsed()
-                                withAnimation {
-                                    globalVm.faucetUsed = true
+                            if globalVm.isReconnecting {
+                                MinterProgress()
+                                    .padding(.top, 50)
+                                
+                                
+                                Tip(text: "Reconnecting to your session\nPlease wait")
+                                    .padding(.top, 25)
+                                    .padding(.horizontal, 26)
+                            } else {
+                                Button {
+                                    UserDefaultsWorker.shared.setFaucetUsed()
+                                    withAnimation {
+                                        globalVm.faucetUsed = true
+                                    }
+                                    globalVm.callFaucet()
+                                } label: {
+                                    Text("Get Matic")
+                                        .font(.custom("rubik-bold", size: 17))
+                                        .foregroundColor(Colors.mainWhite)
+                                        .padding(.vertical, 17)
+                                        .padding(.horizontal, 42)
+                                        .background(Colors.mainGradient)
+                                        .cornerRadius(32)
+                                        .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
                                 }
-                                globalVm.callFaucet()
-                            } label: {
-                                Text("Get Matic")
-                                    .font(.custom("rubik-bold", size: 17))
-                                    .foregroundColor(Colors.mainWhite)
-                                    .padding(.vertical, 17)
-                                    .padding(.horizontal, 42)
-                                    .background(Colors.mainGradient)
-                                    .cornerRadius(32)
-                                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                                .padding(.top, 50)
                             }
-                            .padding(.top, 50)
                         }
                     }
                 }

@@ -262,43 +262,52 @@ struct MintContainer: View {
                                 }
                             }
                             
-                            Button {
-                                if globalVm.session == nil {
-                                    globalVm.alert = IdentifiableAlert.build(
-                                        id: "wallet not connected",
-                                        title: "Wallet not connected",
-                                        message: "To mint a picture, you need to connect the wallet")
-                                    return
-                                }
-                                globalVm.pictureName = globalVm.pictureName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                if globalVm.pictureName.isEmpty {
-                                    globalVm.alert = IdentifiableAlert.build(
-                                        id: "empty_name",
-                                        title: "Empty name",
-                                        message: "Please enter picture name")
-                                    return
-                                }
-                                DispatchQueue.main.async {
-                                    withAnimation {
-                                        globalVm.mintInProgress = true
+                            if globalVm.isReconnecting {
+                                MinterProgress()
+                                    .padding(.top, 40)
+                                
+                                Tip(text: "Reconnecting to your session\nPlease wait")
+                                    .padding(.top, 25)
+                                    .padding(.horizontal, 26)
+                            } else {
+                                Button {
+                                    if globalVm.session == nil {
+                                        globalVm.alert = IdentifiableAlert.build(
+                                            id: "wallet not connected",
+                                            title: "Wallet not connected",
+                                            message: "To mint a picture, you need to connect the wallet")
+                                        return
                                     }
-                                    globalVm.objectWillChange.send()
-                                    globalVm.vibrationWorker.vibrate()
-                                    globalVm.uploadImageToIpfs(image: image, name: globalVm.pictureName)
+                                    globalVm.pictureName = globalVm.pictureName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                    if globalVm.pictureName.isEmpty {
+                                        globalVm.alert = IdentifiableAlert.build(
+                                            id: "empty_name",
+                                            title: "Empty name",
+                                            message: "Please enter picture name")
+                                        return
+                                    }
+                                    DispatchQueue.main.async {
+                                        withAnimation {
+                                            globalVm.mintInProgress = true
+                                        }
+                                        globalVm.objectWillChange.send()
+                                        globalVm.vibrationWorker.vibrate()
+                                        globalVm.uploadImageToIpfs(image: image, name: globalVm.pictureName)
+                                    }
+                                } label: {
+                                    Text("Mint")
+                                        .font(.custom("rubik-bold", size: 17))
+                                        .foregroundColor(Colors.mainWhite)
+                                        .padding(.vertical, 17)
+                                        .padding(.horizontal, 60)
+                                        .background(zeroBalance ? LinearGradient(colors: [Colors.mainGrey, Colors.mainGrey],
+                                                                                 startPoint: .leading,endPoint: .trailing) : Colors.mainGradient)
+                                        .cornerRadius(32)
+                                        .padding(.vertical, 25)
+                                        .shadow(color: Colors.mainPurple.opacity(zeroBalance ? 0 : 0.5), radius: 10, x: 0, y: 0)
                                 }
-                            } label: {
-                                Text("Mint")
-                                    .font(.custom("rubik-bold", size: 17))
-                                    .foregroundColor(Colors.mainWhite)
-                                    .padding(.vertical, 17)
-                                    .padding(.horizontal, 60)
-                                    .background(zeroBalance ? LinearGradient(colors: [Colors.mainGrey, Colors.mainGrey],
-                                                                             startPoint: .leading,endPoint: .trailing) : Colors.mainGradient)
-                                    .cornerRadius(32)
-                                    .padding(.vertical, 25)
-                                    .shadow(color: Colors.mainPurple.opacity(zeroBalance ? 0 : 0.5), radius: 10, x: 0, y: 0)
+                                .disabled(zeroBalance)
                             }
-                            .disabled(zeroBalance)
                         }
                         
                         Spacer()

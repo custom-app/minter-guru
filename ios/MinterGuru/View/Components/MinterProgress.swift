@@ -32,7 +32,9 @@ struct MinterProgress: View {
             .animation(foreverAnimation)
             .onAppear {
                 if animate {
-                    isAnimating = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                        isAnimating = true
+                    }
                 }
             }
     }

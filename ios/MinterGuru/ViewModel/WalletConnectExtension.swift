@@ -71,7 +71,22 @@ extension GlobalViewModel {
             try? walletConnect.client?.disconnect(from: session)
             withAnimation {
                 self.session = nil
+                self.isConnecting = false
+                self.isReconnecting = false
+                self.currentWallet = nil
+                self.connectingToBridge = false
+                self.pendingDeepLink = nil
+                self.mintInProgress = false
+                self.purchasingInProgress = false
+                self.refreshingPublicNfts = false
+                self.refreshingPrivateNfts = false
+                self.stopObservingBalance()
+                self.stopObservingAllowance()
+                self.stopObservingTokensCount()
+                self.stopObservingPrivateCollections()
+                self.stopObservingPrivateTokensCount()
             }
+            self.clearAccountInfo()
             UserDefaults.standard.removeObject(forKey: Constants.sessionKey)
             self.objectWillChange.send()
         }
