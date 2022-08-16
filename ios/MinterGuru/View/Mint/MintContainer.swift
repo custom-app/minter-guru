@@ -287,6 +287,7 @@ struct MintContainer: View {
                                         return
                                     }
                                     DispatchQueue.main.async {
+                                        hideKeyboard()
                                         withAnimation {
                                             globalVm.mintInProgress = true
                                         }
