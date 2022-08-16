@@ -183,6 +183,7 @@ struct ShopScreen: View {
                                     .padding(.vertical, 25)
                             } else {
                                 Button {
+                                    hideKeyboard()
                                     withAnimation {
                                         globalVm.purchasingInProgress = true
                                     }

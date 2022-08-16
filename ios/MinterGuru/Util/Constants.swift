@@ -13,7 +13,7 @@ struct Constants {
     static let twitterLink = "https://twitter.com/"
     static let sessionKey = "session_key"
     static let currentVersion = 0
-    static let privateCollectionMeta = "ipfs://QmcENYH7SZhGi1Qu4GwRfBvvxnXh12nLmntvg8votDrka3"
+    static let ipfsMinterImage = "ipfs://QmcENYH7SZhGi1Qu4GwRfBvvxnXh12nLmntvg8votDrka3"
     static let minterTwitterLink = "https://twitter.com/baklanov_dev"
     
     struct Bridges {

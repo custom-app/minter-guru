@@ -707,7 +707,7 @@ class GlobalViewModel: ObservableObject {
                 print("got private collection price: \(price)")
                 withAnimation {
                     self?.privateCollectionPrice = price
-                    self?.privateCollectionsLoaded = true
+                    self?.privateCollectionPriceLoaded = true
                 }
             }
         }
@@ -907,25 +907,43 @@ class GlobalViewModel: ObservableObject {
     
     func purchaseCollection(collectionData: PrivateCollectionData) {
         if let address = walletAccount {
-            do {
-                let data = try JSONEncoder().encode(collectionData)
-                let salt = Tools.sha256(data: (address + "\(Date())").data(using: .utf8)!)
-                guard let data = web3.purchasePrivateCollectionData(salt: salt,
-                                                                    name: collectionData.name,
-                                                                    collectionMeta: Constants.privateCollectionMeta,
-                                                                    accessTokenMeta: Constants.privateCollectionMeta,
-                                                                    symbol: "",
-                                                                    data: data) else {
-                    //TODO: handle error
-                    return
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                let filename = collectionData.name + "\(Date().timestamp())_meta.json"
+                let meta = NftMeta(name: collectionData.name,
+                                   description: "",
+                                   image: Constants.ipfsMinterImage,
+                                   properties: MetaProperties(id: "", imageName: ""))
+                HttpRequester.shared.uploadMetaToFilebase(meta: meta, filename: filename) { cid, error in
+                    if let error = error {
+                        print("Error uploading meta: \(error)")
+                        return
+                    }
+                    if let cid = cid {
+                        print("uploaded meta: \(cid)")
+                        do {
+                            let data = try JSONEncoder().encode(collectionData)
+                            let salt = Tools.sha256(data: (address + "\(Date())").data(using: .utf8)!)
+                            guard let data = self.web3.purchasePrivateCollectionData(salt: salt,
+                                                                                name: collectionData.name,
+                                                                                collectionMeta: "ipfs://\(cid)",
+                                                                                accessTokenMeta: "ipfs://\(cid)",
+                                                                                symbol: "",
+                                                                                data: data) else {
+                                //TODO: handle error
+                                return
+                            }
+                            DispatchQueue.main.async {
+                                withAnimation {
+                                    self.purchasingInProgress = true
+                                }
+                                self.prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
+                            }
+                        } catch {
+                            print("Error encoding PrivatecollectionData: \(error)")
+                            //TODO: handle error
+                        }
+                    }
                 }
-                withAnimation {
-                    self.purchasingInProgress = true
-                }
-                prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
-            } catch {
-                print("Error encoding PrivatecollectionData: \(error)")
-                //TODO: handle error
             }
         }
     }
