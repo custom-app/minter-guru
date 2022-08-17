@@ -38,7 +38,7 @@ struct ShopScreen: View {
                                     .padding(.top, 50)
                                 
                                 
-                                Tip(text: "Please wait\nIt should take a few seconds to process the transaction\nYou will be redirected to the wallet app")
+                                Tip(text: "Please wait\nIt should take a few seconds to process the transaction\(globalVm.isAgentAccount ? "" : "\nYou will be redirected to the wallet app")")
                                     .padding(.top, 50)
                                     .padding(.horizontal, 26)
                             }
@@ -178,7 +178,7 @@ struct ShopScreen: View {
                             
                             let enoughtAllowance = (globalVm.allowance >= globalVm.privateCollectionPrice) && globalVm.privateCollectionPriceLoaded
                             
-                            if globalVm.session == nil {
+                            if globalVm.session == nil && (globalVm.connectedAddress == nil || !globalVm.isAgentAccount) {
                                 Tip(text: "To purchase a private collection you need to connect the wallet")
                                     .padding(.vertical, 25)
                             } else {

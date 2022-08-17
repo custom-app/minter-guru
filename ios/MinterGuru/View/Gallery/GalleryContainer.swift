@@ -281,7 +281,7 @@ struct GalleryContainer: View {
     
     func calcWindowHeight(fullHeight: CGFloat) -> CGFloat {
         var res = fullHeight - 220
-        if globalVm.privateCollectionsInGallery && globalVm.privateCollectionsLoaded && !globalVm.privateCollections.isEmpty {
+        if globalVm.privateCollectionsInGallery && !globalVm.privateCollections.isEmpty {
             res -= 80
         }
         if globalVm.showSearch() {

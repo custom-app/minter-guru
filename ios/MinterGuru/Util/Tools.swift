@@ -27,7 +27,7 @@ class Tools {
     }
     
     static func isAddressValid(_ address: String) -> Bool {
-        EthereumAddress(address) != nil
+        EthereumAddress(address) != nil && address.count == Constants.ADDRESS_LEN
     }
     
     static func ipfsLinkToHttp(ipfsLink: String) -> String {

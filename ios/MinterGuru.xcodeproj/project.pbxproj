@@ -17,6 +17,7 @@
 		111629BF2863A3520012B134 /* PublicCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BE2863A3520012B134 /* PublicCollection.swift */; };
 		111629C12863AAE50012B134 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629C02863AAE50012B134 /* TokenData.swift */; };
 		11408F3A28908EC900B9293F /* TwitterFollowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11408F3928908EC900B9293F /* TwitterFollowInfo.swift */; };
+		114AE62428ACFF9D00874DE2 /* AddressAuthSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114AE62328ACFF9D00874DE2 /* AddressAuthSheet.swift */; };
 		1154D501286273ED006C6E25 /* public_router_abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 1154D500286273ED006C6E25 /* public_router_abi.json */; };
 		1177C27C2893022900A43AB1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1177C27B2893022900A43AB1 /* Config.swift */; };
 		1183DD782891A67E002189FB /* MinterProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183DD772891A67E002189FB /* MinterProgress.swift */; };
@@ -91,6 +92,7 @@
 		111629BE2863A3520012B134 /* PublicCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCollection.swift; sourceTree = "<group>"; };
 		111629C02863AAE50012B134 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
 		11408F3928908EC900B9293F /* TwitterFollowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterFollowInfo.swift; sourceTree = "<group>"; };
+		114AE62328ACFF9D00874DE2 /* AddressAuthSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAuthSheet.swift; sourceTree = "<group>"; };
 		1154D500286273ED006C6E25 /* public_router_abi.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = public_router_abi.json; sourceTree = "<group>"; };
 		1177C27B2893022900A43AB1 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		1183DD772891A67E002189FB /* MinterProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinterProgress.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				11F972A1285CEF6D000026FD /* FaucetScreen.swift */,
 				11C6D895287C9FA100CE0950 /* ShopScreen.swift */,
 				11CC0B2C28845FBC000E52D0 /* MinterInfoScreen.swift */,
+				114AE62328ACFF9D00874DE2 /* AddressAuthSheet.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				11ED5A7D2846BB7900F0D61D /* GlobalViewModel.swift in Sources */,
 				11F9729E285CE738000026FD /* SheetStroke.swift in Sources */,
 				11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */,
+				114AE62428ACFF9D00874DE2 /* AddressAuthSheet.swift in Sources */,
 				11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */,
 				11ED5A9C2847055200F0D61D /* PhotoPicker.swift in Sources */,
 				1108864C284ABE59002C4E5A /* Tools.swift in Sources */,

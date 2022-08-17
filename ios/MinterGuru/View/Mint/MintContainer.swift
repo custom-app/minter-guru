@@ -271,7 +271,7 @@ struct MintContainer: View {
                                     .padding(.horizontal, 26)
                             } else {
                                 Button {
-                                    if globalVm.session == nil {
+                                    if globalVm.session == nil && (globalVm.connectedAddress == nil || !globalVm.isAgentAccount) {
                                         globalVm.alert = IdentifiableAlert.build(
                                             id: "wallet not connected",
                                             title: "Wallet not connected",

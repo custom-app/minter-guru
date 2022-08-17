@@ -24,9 +24,13 @@ struct AuthContainer: View {
     @State
     var showMinterInfo = false
     
+    @State
+    var showAddressAuthSheet = false
+    
     var body: some View {
         ScrollView {
-            let connected = globalVm.session != nil
+            let connected = globalVm.session != nil || globalVm.connectedAddress != nil
+            let connectedByAddress = globalVm.connectedAddress != nil
             
             SwipeRefresh(bg: .black.opacity(0), fg: .black, animate: connected) {
                 if connected {
@@ -41,7 +45,7 @@ struct AuthContainer: View {
                     .padding(.top, 16)
                     .padding(.horizontal, 10)
                 
-                Text("Status: \(connected ? "connected to \(globalVm.walletName)" : "disconnected")")
+                Text("Status: \(connectedByAddress ? "connected by address" : (connected ? "connected to \(globalVm.walletName)" : "disconnected"))")
                     .foregroundColor(Colors.greyBlue)
                     .multilineTextAlignment(.center)
                     .font(.custom("rubik-bold", size: 20))
@@ -173,6 +177,9 @@ struct AuthContainer: View {
                     
                     Spacer()
                     
+                    let accessShopAndFaucet = (globalVm.session != nil ||
+                                               (globalVm.connectedAddress != nil && globalVm.isAgentAccount)) && globalVm.isWrongChain
+                    
                     VStack(spacing: 0) {
                         Button {
                             showFaucet = true
@@ -181,7 +188,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainPurple : Colors.mainGrey)
+                                .foregroundColor(accessShopAndFaucet ? Colors.mainPurple : Colors.mainGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -189,7 +196,7 @@ struct AuthContainer: View {
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
                                 .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
-                        .disabled(!connected || globalVm.isWrongChain)
+                        .disabled(!accessShopAndFaucet)
                         
                         Text("Faucet")
                             .foregroundColor(Colors.darkGrey)
@@ -216,7 +223,7 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor((connected && !globalVm.isWrongChain) ? Colors.mainPurple : Colors.mainGrey)
+                                .foregroundColor(accessShopAndFaucet ? Colors.mainPurple : Colors.mainGrey)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
@@ -224,7 +231,7 @@ struct AuthContainer: View {
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
                                 .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
                         }
-                        .disabled(!connected || globalVm.isWrongChain)
+                        .disabled(!accessShopAndFaucet)
                         
                         Text("Shop")
                             .foregroundColor(Colors.darkGrey)
@@ -287,6 +294,20 @@ struct AuthContainer: View {
                             ConnectSheet()
                                 .environmentObject(globalVm)
                         }
+                        
+                        Button {
+                            showAddressAuthSheet = true
+                        } label: {
+                            Text("Or you can log in with address")
+                                .font(.custom("rubik-bold", size: 16))
+                                .underline()
+                                .foregroundColor(Colors.greyBlue)
+                        }
+                        .padding(.top, 40)
+                        .sheet(isPresented: $showAddressAuthSheet) {
+                            AddressAuthSheet(showSheet: $showAddressAuthSheet)
+                                .environmentObject(globalVm)
+                        }
                     }
                 } else {
                     if globalVm.isWrongChain {
@@ -312,6 +333,13 @@ struct AuthContainer: View {
                         .padding(.horizontal, 26)
                         .padding(.top, 25)
                     }
+                    
+                    if connectedByAddress && !globalVm.isAgentAccount {
+                        Tip(text: "To use the main functions of the application, you need to connect a wallet")
+                            .padding(.top, 25)
+                            .padding(.horizontal, 26)
+                    }
+                    
                     Button {
                         globalVm.disconnect()
                     } label: {

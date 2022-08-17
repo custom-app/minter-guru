@@ -34,6 +34,10 @@ class GlobalViewModel: ObservableObject {
     @Published
     var session: Session?
     @Published
+    var connectedAddress: String? // not nil if authorized throught address
+    @Published
+    var isAgentAccount = false
+    @Published
     var currentWallet: Wallet?
     @Published
     var isConnecting: Bool = false
@@ -212,6 +216,18 @@ class GlobalViewModel: ObservableObject {
                     self.pickedImage = compressed
                 }
             }
+        }
+    }
+    
+    func authByAddress(_ address: String) {
+        connectedAddress = address
+        if address == Config.agentAddress {
+            isAgentAccount = true
+        }
+        loadInitialInfo()
+        withAnimation {
+            isConnecting = false
+            isReconnecting = false
         }
     }
     
@@ -853,13 +869,26 @@ class GlobalViewModel: ObservableObject {
     func publicMint(metaUrl: String, nftData: NftData) {
         do {
             let data = try JSONEncoder().encode(nftData)
-            guard let data = web3.mintWithoutIdData(version: BigUInt(Constants.currentVersion),
-                                                    metaUrl: metaUrl,
-                                                    data: data) else {
-                //TODO: handle error
-                return
+            
+            if connectedAddress != nil && isAgentAccount {
+                web3.publicMintAgent(version: BigUInt(Constants.currentVersion),
+                                     metaUrl: metaUrl,
+                                     data: data) { [weak self] err in
+                    if let err = err {
+                        print("Tx error: \(err)")
+                    } else {
+                        self?.startObservingTokensCount()
+                    }
+                }
+            } else {
+                guard let data = web3.mintWithoutIdData(version: BigUInt(Constants.currentVersion),
+                                                        metaUrl: metaUrl,
+                                                        data: data) else {
+                    //TODO: handle error
+                    return
+                }
+                prepareAndSendTx(to: Constants.routerAddress, data: data, label: mintLabel)
             }
-            prepareAndSendTx(to: Constants.routerAddress, data: data, label: mintLabel)
         } catch {
             print("Error encoding NftData: \(error)")
             //TODO: handle error
@@ -871,14 +900,28 @@ class GlobalViewModel: ObservableObject {
         if let address = walletAccount, let mintTo = EthereumAddress(address) {
             do {
                 let data = try JSONEncoder().encode(nftData)
-                guard let data = web3.privateMintData(to: mintTo,
-                                                      metaUrl: metaUrl,
-                                                      data: data) else {
-                    print("error getting data")
-                    //TODO: handle error
-                    return
+                
+                if connectedAddress != nil && isAgentAccount {
+                    web3.privateMintAgent(contractAddress: contract,
+                                          to: mintTo,
+                                          metaUrl: metaUrl,
+                                          data: data) { [weak self] err in
+                        if let err = err {
+                            print("Tx error: \(err)")
+                        } else {
+                            self?.startObservingPrivateTokensCount()
+                        }
+                    }
+                } else {
+                    guard let data = web3.privateMintData(to: mintTo,
+                                                          metaUrl: metaUrl,
+                                                          data: data) else {
+                        print("error getting data")
+                        //TODO: handle error
+                        return
+                    }
+                    prepareAndSendTx(to: contract, data: data, label: privateMintLabel)
                 }
-                prepareAndSendTx(to: contract, data: data, label: privateMintLabel)
             } catch {
                 print("Error encoding NftData: \(error)")
                 //TODO: handle error
@@ -890,18 +933,31 @@ class GlobalViewModel: ObservableObject {
     }
     
     func approveTokens() {
-        do {
-            guard let data = web3.approveData(spender: Constants.accessTokenAddress, amount: privateCollectionPrice-allowance) else {
+        withAnimation {
+            self.purchasingInProgress = true
+        }
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            do {
+                if connectedAddress != nil && isAgentAccount {
+                    web3.approveAgent(spender: Constants.accessTokenAddress,
+                                      amount: privateCollectionPrice-allowance) { [weak self] err in
+                        if let err = err {
+                            print("Tx error: \(err)")
+                        } else {
+                            self?.startObservingAllowance()
+                        }
+                    }
+                } else {
+                    guard let data = web3.approveData(spender: Constants.accessTokenAddress, amount: privateCollectionPrice-allowance) else {
+                        //TODO: handle error
+                        return
+                    }
+                    prepareAndSendTx(to: Constants.minterAddress, data: data, label: approveTokensLabel)
+                }
+            } catch {
+                print("Error encoding approve data: \(error)")
                 //TODO: handle error
-                return
             }
-            withAnimation {
-                self.purchasingInProgress = true
-            }
-            prepareAndSendTx(to: Constants.minterAddress, data: data, label: approveTokensLabel)
-        } catch {
-            print("Error encoding approve data: \(error)")
-            //TODO: handle error
         }
     }
     
@@ -923,20 +979,36 @@ class GlobalViewModel: ObservableObject {
                         do {
                             let data = try JSONEncoder().encode(collectionData)
                             let salt = Tools.sha256(data: (address + "\(Date())").data(using: .utf8)!)
-                            guard let data = self.web3.purchasePrivateCollectionData(salt: salt,
-                                                                                name: collectionData.name,
-                                                                                collectionMeta: "ipfs://\(cid)",
-                                                                                accessTokenMeta: "ipfs://\(cid)",
-                                                                                symbol: "",
-                                                                                data: data) else {
-                                //TODO: handle error
-                                return
-                            }
-                            DispatchQueue.main.async {
-                                withAnimation {
-                                    self.purchasingInProgress = true
+                            let metaLink = "ipfs://\(cid)"
+                            if self.connectedAddress != nil && self.isAgentAccount {
+                                self.web3.purchasePrivateCollectionAgent(salt: salt,
+                                                                    name: collectionData.name,
+                                                                    collectionMeta: metaLink,
+                                                                    accessTokenMeta: metaLink,
+                                                                    symbol: "",
+                                                                    data: data) { [weak self] err in
+                                    if let err = err {
+                                        print("Tx error: \(err)")
+                                    } else {
+                                        self?.startObservingPrivateCollections()
+                                    }
                                 }
-                                self.prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: purchaseCollectionLabel)
+                            } else {
+                                guard let data = self.web3.purchasePrivateCollectionData(salt: salt,
+                                                                                    name: collectionData.name,
+                                                                                    collectionMeta: metaLink,
+                                                                                    accessTokenMeta: metaLink,
+                                                                                    symbol: "",
+                                                                                    data: data) else {
+                                    //TODO: handle error
+                                    return
+                                }
+                                DispatchQueue.main.async {
+                                    withAnimation {
+                                        self.purchasingInProgress = true
+                                    }
+                                    self.prepareAndSendTx(to: Constants.accessTokenAddress, data: data, label: self.purchaseCollectionLabel)
+                                }
                             }
                         } catch {
                             print("Error encoding PrivatecollectionData: \(error)")

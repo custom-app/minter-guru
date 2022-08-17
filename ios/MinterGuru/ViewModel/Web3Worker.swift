@@ -14,6 +14,7 @@ class Web3Worker: ObservableObject {
     let zeroAddress = "0x0000000000000000000000000000000000000000"
     
     private let web3: web3
+    private let web3Agent: web3
     private let parser: Web3Parser
     private let routerContract: EthereumContract
     private let routerContractWeb3: web3.web3contract
@@ -22,6 +23,10 @@ class Web3Worker: ObservableObject {
     private let minterContract: EthereumContract
     private let minterContractWeb3: web3.web3contract
     private let privateCollectionContract: EthereumContract
+    
+    private let routerContractAgent: web3.web3contract
+    private let accessTokenContractAgent: web3.web3contract
+    private let minterContractAgent: web3.web3contract
     
     init(endpoint: String) {
         let chainId = BigUInt(Constants.requiredChainId)
@@ -43,6 +48,14 @@ class Web3Worker: ObservableObject {
         minterContract = EthereumContract(minterAbi)!
         minterContractWeb3 = web3.contract(minterAbi, at: EthereumAddress(Constants.minterAddress)!, abiVersion: 2)!
         privateCollectionContract = EthereumContract(privateCollectionAbi)!
+        
+        web3Agent = web3swift.web3(provider: Web3HttpProvider(URL(string: endpoint)!,
+                                                         network: Networks.Custom(networkID: chainId))!)
+        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(Config.agentKey)!)!
+        web3Agent.addKeystoreManager(KeystoreManager([keystore]))
+        routerContractAgent = web3Agent.contract(routerAbi, at: EthereumAddress(Constants.routerAddress)!, abiVersion: 2)!
+        accessTokenContractAgent = web3Agent.contract(accessTokenAbi, at: EthereumAddress(Constants.accessTokenAddress)!, abiVersion: 2)!
+        minterContractAgent = web3Agent.contract(minterAbi, at: EthereumAddress(Constants.minterAddress)!, abiVersion: 2)!
     }
     
     func getBalance(address: String, onResult: @escaping (Double, Error?) -> ()) {
@@ -488,6 +501,88 @@ class Web3Worker: ObservableObject {
             }
         }
     }
+    
+    func publicMintAgent(version: BigUInt, metaUrl: String, data: Data, onResult: @escaping (Error?) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            callMethodByAgent(contract: routerContractAgent,
+                              method: "mintWithoutId",
+                              params: [version as AnyObject,
+                                       metaUrl as AnyObject,
+                                       data as AnyObject],
+                              onResult: onResult)
+        }
+    }
+    
+    func privateMintAgent(contractAddress: String, to: EthereumAddress, metaUrl: String, data: Data, onResult: @escaping (Error?) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            let privateCollectionPath = Bundle.main.path(forResource: "private_collection_abi", ofType: "json")!
+            let privateCollectionAbi = try! String(contentsOfFile: privateCollectionPath)
+            let contract = web3Agent.contract(privateCollectionAbi, at: EthereumAddress(contractAddress)!, abiVersion: 2)!
+            callMethodByAgent(contract: contract,
+                              method: "mintWithoutId",
+                              params: [to as AnyObject,
+                                       metaUrl as AnyObject,
+                                       data as AnyObject],
+                              onResult: onResult)
+        }
+    }
+    
+    func approveAgent(spender: String, amount: BigUInt, onResult: @escaping (Error?) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            callMethodByAgent(contract: minterContractAgent,
+                              method: "approve",
+                              params: [spender as AnyObject,
+                                       amount as AnyObject],
+                              onResult: onResult)
+        }
+    }
+    
+    func purchasePrivateCollectionAgent(salt: Data,
+                                        name: String,
+                                        collectionMeta: String,
+                                        accessTokenMeta: String,
+                                        symbol: String,
+                                        data: Data,
+                                        onResult: @escaping (Error?) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            callMethodByAgent(contract: accessTokenContractAgent,
+                              method: "purchasePrivateCollection",
+                              params: [salt as AnyObject,
+                                       name as AnyObject,
+                                       collectionMeta as AnyObject,
+                                       accessTokenMeta as AnyObject,
+                                       symbol as AnyObject,
+                                       data as AnyObject],
+                              onResult: onResult)
+        }
+    }
+    
+    func callMethodByAgent(contract: web3.web3contract, method: String, params: [AnyObject], onResult: @escaping (Error?) -> ()) {
+        do {
+            let agentAccount = EthereumAddress(Config.agentAddress)!
+            var options = TransactionOptions.defaultOptions
+            options.value = Web3.Utils.parseToBigUInt("0.0", units: .eth)
+            options.from = agentAccount
+            options.gasPrice = .automatic
+            options.gasLimit = .automatic
+            print("calling \(method)")
+            let tx = contract.write(
+                method,
+                parameters: params,
+                extraData: Data(),
+                transactionOptions: options)!
+            let res = try tx.send()
+            DispatchQueue.main.async {
+                print(res)
+                onResult(nil)
+            }
+        } catch {
+            DispatchQueue.main.async {
+                onResult(error)
+            }
+        }
+    }
+    
     
     func mintData(version: BigUInt, id: BigUInt, metaUrl: String, data: Data) -> String? {
         return encodeFunctionData(contract: routerContract,
