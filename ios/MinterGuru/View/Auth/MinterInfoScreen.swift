@@ -190,6 +190,11 @@ struct MinterInfoScreen: View {
                                      UserDefaultsWorker.shared.saveTwitterLogin(token: res.login)
                                      twitterName = res.login
                                      hideKeyboard()
+                                     alert = IdentifiableAlert.build(
+                                         id: "twitter_saved",
+                                         title: "Saved",
+                                         message: "Your twitter nickname was successfully saved"
+                                     )
                                  } else {
                                      alert = IdentifiableAlert.build(
                                          id: "invalid_twitter",

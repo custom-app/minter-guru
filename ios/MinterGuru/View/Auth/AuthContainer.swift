@@ -36,6 +36,13 @@ struct AuthContainer: View {
                 if connected {
                     globalVm.getPolygonBalance()
                     globalVm.getMinterBalance()
+                    globalVm.checkTwitterFollow()
+                    globalVm.getRepostRewards()
+                    globalVm.getAllowance()
+                    if !globalVm.faucetUsed {
+                        globalVm.checkFaucetUsage()
+                    }
+                    globalVm.loadGeneralInfo()
                 }
             }
             VStack(spacing: 0) {
