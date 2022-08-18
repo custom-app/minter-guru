@@ -178,7 +178,7 @@ struct AuthContainer: View {
                     Spacer()
                     
                     let accessShopAndFaucet = (globalVm.session != nil ||
-                                               (globalVm.connectedAddress != nil && globalVm.isAgentAccount)) && globalVm.isWrongChain
+                                               (globalVm.connectedAddress != nil && globalVm.isAgentAccount)) && !globalVm.isWrongChain
                     
                     VStack(spacing: 0) {
                         Button {

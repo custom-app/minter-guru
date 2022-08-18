@@ -10,4 +10,6 @@ import Foundation
 struct RewardInfo: Codable {
     let id: Int
     let createdAt: Int
+    let username: String
+    let url: String
 }

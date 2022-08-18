@@ -17,6 +17,7 @@ struct TwitterFollowInfo: Codable {
 struct TwitterFollowReward: Codable {
     let createdAt: Int
     let transaction: Transaction
+    let username: String
     
     struct Transaction: Codable {
         let id: String

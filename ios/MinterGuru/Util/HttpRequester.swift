@@ -215,9 +215,9 @@ class HttpRequester {
         doApiRequest(route: ApiRoute.twitterInfo, data: Data(), onResult: onResult)
     }
     
-    func applyForRepostReward(address: String, onResult: @escaping (RewardInfo?, Error?) -> ()) {
+    func applyForRepostReward(address: String, twitter: String, onResult: @escaping (RewardInfo?, Error?) -> ()) {
         let encoder = JSONEncoder()
-        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        let bodyJson = try! encoder.encode(AddressWithTwitter(address: address, username: twitter))
         doApiRequest(route: ApiRoute.applyForTwitter, data: bodyJson, onResult: onResult)
     }
     
@@ -227,9 +227,9 @@ class HttpRequester {
         doApiRequest(route: ApiRoute.twitterRewards, data: bodyJson, onResult: onResult)
     }
     
-    func applyForTwitterFollow(address: String, onResult: @escaping (TwitterFollowReward?, Error?) -> ()) {
+    func applyForTwitterFollow(address: String, twitter: String, onResult: @escaping (TwitterFollowReward?, Error?) -> ()) {
         let encoder = JSONEncoder()
-        let bodyJson = try! encoder.encode(AddressBody(address: address))
+        let bodyJson = try! encoder.encode(AddressWithTwitter(address: address, username: twitter))
         doApiRequest(route: ApiRoute.applyForTwitterFollow, data: bodyJson, onResult: onResult)
     }
     

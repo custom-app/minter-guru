@@ -358,9 +358,11 @@ class GlobalViewModel: ObservableObject {
     }
     
     func applyForRepostReward() {
-        if let address = walletAccount {
+        let twitter = UserDefaultsWorker().getTwitterLogin()
+        if let address = walletAccount, !twitter.isEmpty {
             DispatchQueue.global(qos: .userInitiated).async {
-                HttpRequester.shared.applyForRepostReward(address: address) { result, error in
+                HttpRequester.shared.applyForRepostReward(address: address,
+                                                          twitter: "@\(twitter)") { result, error in
                     if let error = error {
                         print("apply for reward error: \(error)")
                         //TODO: handle error
@@ -430,9 +432,10 @@ class GlobalViewModel: ObservableObject {
     }
     
     func applyForFollowReward() {
-        if let address = walletAccount {
+        let twitter = UserDefaultsWorker().getTwitterLogin()
+        if let address = walletAccount, !twitter.isEmpty {
             DispatchQueue.global(qos: .userInitiated).async {
-                HttpRequester.shared.applyForTwitterFollow(address: address) { result, error in
+                HttpRequester.shared.applyForTwitterFollow(address: address, twitter: "@\(twitter)") { result, error in
                     if let error = error {
                         print("apply for follow reward error: \(error)")
                         //TODO: handle error
