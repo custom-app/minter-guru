@@ -227,7 +227,8 @@ struct GalleryContainer: View {
                             }
                         }
                     } else {
-                        if globalVm.refreshingPublicNfts || !globalVm.publicNftsLoaded {
+                        if globalVm.refreshingPublicNfts || (!globalVm.publicNftsLoaded
+                                                             && (globalVm.session != nil || globalVm.connectedAddress != nil)) {
                             LoadingScreen(text: globalVm.publicNftsLoaded ? "" : "Loading")
                                     .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
                         } else {

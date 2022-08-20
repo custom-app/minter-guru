@@ -32,7 +32,7 @@ struct AuthContainer: View {
             let connected = globalVm.session != nil || globalVm.connectedAddress != nil
             let connectedByAddress = globalVm.connectedAddress != nil
             
-            SwipeRefresh(bg: .black.opacity(0), fg: .black, animate: connected) {
+            SwipeRefresh(bg: .black.opacity(0), fg: .black) {
                 if connected {
                     globalVm.getPolygonBalance()
                     globalVm.getMinterBalance()

@@ -19,17 +19,15 @@ struct SwipeRefresh: View {
     
     let backgroundColor: Color
     let foregroundColor: Color
-    let animate: Bool
     let isEnabled: Bool
     let onRefresh: () -> Void
     
     @State private var isRefreshIndicatorVisible = false
     @State private var refreshStartTime: Date? = nil
     
-    init(bg: Color = .white, fg: Color = .black, animate: Bool = true, isEnabled: Bool = true, onRefresh: @escaping () -> Void) {
+    init(bg: Color = .white, fg: Color = .black, isEnabled: Bool = true, onRefresh: @escaping () -> Void) {
         self.backgroundColor = bg
         self.foregroundColor = fg
-        self.animate = animate
         self.isEnabled = isEnabled
         self.onRefresh = onRefresh
     }
@@ -63,7 +61,7 @@ struct SwipeRefresh: View {
             }
             .frame(height: Self.triggerHeight)
             
-            Indicator(animate: animate, isRefreshIndicatorVisible: isRefreshIndicatorVisible)
+            Indicator(isRefreshIndicatorVisible: isRefreshIndicatorVisible)
 //                .frame(height: Self.indicatorHeight)
         }
         .background(backgroundColor)
@@ -75,12 +73,10 @@ struct SwipeRefresh: View {
 
 struct Indicator: View {
     
-    var animate: Bool = true
-    
     var isRefreshIndicatorVisible: Bool = false
     
     var body: some View {
-        MinterProgress(animate: animate)
+        MinterProgress()
             .opacity(isRefreshIndicatorVisible ? 1 : 0)
         
     }

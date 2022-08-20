@@ -15,8 +15,6 @@ struct MinterProgress: View {
     
     let height: Double = 56
     
-    var animate = true
-    
     var foreverAnimation: Animation {
         Animation.easeInOut(duration: 0.9)
             .repeatForever(autoreverses: true)
@@ -29,12 +27,10 @@ struct MinterProgress: View {
             .frame(height: height)
             .opacity(isAnimating ? 0.4 : 1)
             .offset(x: 0, y: isAnimating ? -10 : 10)
-            .animation(foreverAnimation)
+            .animation(foreverAnimation, value: isAnimating)
             .onAppear {
-                if animate {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                        isAnimating = true
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    isAnimating = true
                 }
             }
     }
