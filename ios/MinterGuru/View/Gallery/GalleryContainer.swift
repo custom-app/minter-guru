@@ -162,7 +162,7 @@ struct GalleryContainer: View {
                                             .padding(.horizontal, 50)
                                             .background(Colors.mainGradient)
                                             .cornerRadius(32)
-                                            .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                                            .shadow(color: Colors.mainGrey.opacity(0.15), radius: 20, x: 0, y: 0)
                                     }
                                     .padding(.top, 50)
                                     .sheet(isPresented: $showCreateCollectionSheet, onDismiss: {
@@ -355,7 +355,7 @@ struct EmptyCollectionView: View {
                     .padding(.horizontal, 50)
                     .background(Colors.mainGradient)
                     .cornerRadius(32)
-                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                    .shadow(color: Colors.mainGrey.opacity(0.15), radius: 20, x: 0, y: 0)
             }
             .padding(.top, 50)
         }

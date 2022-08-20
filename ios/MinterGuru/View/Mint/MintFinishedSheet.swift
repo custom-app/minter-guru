@@ -83,7 +83,7 @@ struct MintFinishedSheet: View {
                                 .background(Colors.mainGradient)
                                 .cornerRadius(32)
                                 .padding(.top, 25)
-                                .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                                .shadow(color: Colors.mainGrey.opacity(0.15), radius: 20, x: 0, y: 0)
                         }
                         
                         if globalVm.isRepostRewarded() {

@@ -89,7 +89,7 @@ struct AddressAuthSheet: View {
                     .padding(.horizontal, 40)
                     .background(Colors.mainGradient)
                     .cornerRadius(32)
-                    .shadow(color: Colors.mainPurple.opacity(0.5), radius: 10, x: 0, y: 0)
+                    .shadow(color: Colors.mainGrey.opacity(0.15), radius: 20, x: 0, y: 0)
             }
             .padding(.top, 25)
             

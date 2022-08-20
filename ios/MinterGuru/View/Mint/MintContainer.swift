@@ -68,16 +68,16 @@ struct MintContainer: View {
                                         } label: {
                                             VStack {
                                                 Spacer()
-                                            HStack {
+                                                HStack {
                                                     Spacer()
-                                                    Text("Change")
+                                                    Text("Edit")
                                                         .foregroundColor(Colors.mainPurple)
                                                         .font(.custom("rubik-bold", size: 17))
                                                     Spacer()
                                                 }
-                                                .padding(.vertical, 15)
-                                                .background(LinearGradient(colors: [Color(hex: "#444444"), Color(hex: "#444444").opacity(0)],
-                                                                                    startPoint: .bottom, endPoint: .top))
+                                                .padding(.vertical, 12)
+                                                .background(LinearGradient(colors: [Color.black.opacity(0.8), Color.black.opacity(0.6)],
+                                                                           startPoint: .bottom, endPoint: .top))
                                             }
                                         }
                                     )
@@ -87,6 +87,7 @@ struct MintContainer: View {
                                     .padding(.horizontal, 26)
                                     .padding(.top, 10)
                             }
+                                     
                         } else {
                             HStack {
                                 Spacer()
@@ -153,7 +154,7 @@ struct MintContainer: View {
                                     guard let image = image else {
                                         print("image nil")
                                         withAnimation {
-                                            globalVm.pickedImage = nil
+//                                            globalVm.pickedImage = nil
                                         }
                                         return
                                     }
@@ -305,7 +306,7 @@ struct MintContainer: View {
                                                                                  startPoint: .leading,endPoint: .trailing) : Colors.mainGradient)
                                         .cornerRadius(32)
                                         .padding(.vertical, 25)
-                                        .shadow(color: Colors.mainPurple.opacity(zeroBalance ? 0 : 0.5), radius: 10, x: 0, y: 0)
+                                        .shadow(color: Colors.mainGrey.opacity(zeroBalance ? 0 : 0.15), radius: 10, x: 0, y: 0)
                                 }
                                 .disabled(zeroBalance)
                             }
