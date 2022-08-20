@@ -30,5 +30,6 @@ struct MainContainer: View {
         .alert(item: $globalVm.alert) { alert in
             alert.alert()
         }
+        .preferredColorScheme(.light)
     }
 }

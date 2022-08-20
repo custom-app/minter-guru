@@ -26,12 +26,12 @@ class UserDefaultsWorker {
     
     func isFaucetUsed() -> Bool? {
         let defaults = UserDefaults.standard
-        return defaults.object(forKey: UserDefaultsWorker.OnboardingShownKey) as? Bool
+        return defaults.object(forKey: UserDefaultsWorker.FaucetUsedKey) as? Bool
     }
 
     func setFaucetUsed() {
         let defaults = UserDefaults.standard
-        defaults.set(true, forKey: UserDefaultsWorker.OnboardingShownKey)
+        defaults.set(true, forKey: UserDefaultsWorker.FaucetUsedKey)
     }
     
     func getTwitterLogin() -> String {

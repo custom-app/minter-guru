@@ -55,6 +55,10 @@ class Colors {
         Color(hex: "#63AFD0")
     }
     
+    static var brightPurple: Color {
+        Color(hex: "#6F51C3")
+    }
+    
     static var paleRed: Color {
         Color(hex: "#FCE4E4")
     }
@@ -62,7 +66,19 @@ class Colors {
     
     static var mainGradient: LinearGradient {
         LinearGradient(colors: [Colors.brightGreen, Colors.brightBlue, Colors.mainPurple],
-                                   startPoint: .leading,
-                                   endPoint: .trailing)
+                       startPoint: .leading,
+                       endPoint: .trailing)
+    }
+    
+    static var onboardingGradientPurple: LinearGradient {
+        LinearGradient(colors: [Colors.brightBlue, Colors.brightGreen],
+                       startPoint: .bottomLeading,
+                       endPoint: .topTrailing)
+    }
+    
+    static var onboardingGradientGreen: LinearGradient {
+        LinearGradient(colors: [Colors.brightBlue, Colors.brightPurple],
+                       startPoint: .bottomLeading,
+                       endPoint: .topTrailing)
     }
 }

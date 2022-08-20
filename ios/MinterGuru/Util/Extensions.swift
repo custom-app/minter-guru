@@ -114,7 +114,7 @@ extension View {
 }
 #endif
 
-struct RoundedCorner: Shape {
+struct RoundedCornersShape: Shape {
 
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
@@ -127,6 +127,13 @@ struct RoundedCorner: Shape {
 
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
+        clipShape(RoundedCornersShape(radius: radius, corners: corners))
     }
+}
+
+extension AnyTransition {
+    static var backslide: AnyTransition {
+        AnyTransition.asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading))}
 }

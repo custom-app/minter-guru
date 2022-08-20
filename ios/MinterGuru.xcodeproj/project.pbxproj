@@ -11,6 +11,8 @@
 		1108864E284AF497002C4E5A /* NftMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864D284AF497002C4E5A /* NftMeta.swift */; };
 		11088650284B123C002C4E5A /* Nft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1108864F284B123C002C4E5A /* Nft.swift */; };
 		11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11088651284B244A002C4E5A /* NftInfoSheet.swift */; };
+		1110D52128B12749009568CF /* AttributedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110D52028B12749009568CF /* AttributedText.swift */; };
+		1110D52328B13686009568CF /* AttributedStringWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110D52228B13686009568CF /* AttributedStringWorker.swift */; };
 		111629B9286365F50012B134 /* NftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629B8286365F50012B134 /* NftData.swift */; };
 		111629BB286379B80012B134 /* TxWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BA286379B80012B134 /* TxWorker.swift */; };
 		111629BD2863A0D20012B134 /* Web3Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111629BC2863A0D20012B134 /* Web3Parser.swift */; };
@@ -39,6 +41,7 @@
 		11BEBE5B285A5C0200D056FA /* rubik-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11BEBE57285A5C0200D056FA /* rubik-bold.ttf */; };
 		11BEBE5D285A5DED00D056FA /* ConnectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */; };
 		11C3B06328AE75DD00CC100C /* AddressWithTwitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C3B06228AE75DD00CC100C /* AddressWithTwitter.swift */; };
+		11C3B06628AEA5CC00CC100C /* OnboardingContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C3B06528AEA5CC00CC100C /* OnboardingContainer.swift */; };
 		11C562F1287B8E9A0028F885 /* PrivateCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C562F0287B8E9A0028F885 /* PrivateCollection.swift */; };
 		11C6D894287C7B6800CE0950 /* PrivateCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */; };
 		11C6D896287C9FA100CE0950 /* ShopScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C6D895287C9FA100CE0950 /* ShopScreen.swift */; };
@@ -87,6 +90,8 @@
 		1108864D284AF497002C4E5A /* NftMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftMeta.swift; sourceTree = "<group>"; };
 		1108864F284B123C002C4E5A /* Nft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nft.swift; sourceTree = "<group>"; };
 		11088651284B244A002C4E5A /* NftInfoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftInfoSheet.swift; sourceTree = "<group>"; };
+		1110D52028B12749009568CF /* AttributedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedText.swift; sourceTree = "<group>"; };
+		1110D52228B13686009568CF /* AttributedStringWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringWorker.swift; sourceTree = "<group>"; };
 		111629B8286365F50012B134 /* NftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftData.swift; sourceTree = "<group>"; };
 		111629BA286379B80012B134 /* TxWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxWorker.swift; sourceTree = "<group>"; };
 		111629BC2863A0D20012B134 /* Web3Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Parser.swift; sourceTree = "<group>"; };
@@ -113,6 +118,7 @@
 		11BEBE57285A5C0200D056FA /* rubik-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rubik-bold.ttf"; sourceTree = "<group>"; };
 		11BEBE5C285A5DED00D056FA /* ConnectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSheet.swift; sourceTree = "<group>"; };
 		11C3B06228AE75DD00CC100C /* AddressWithTwitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressWithTwitter.swift; sourceTree = "<group>"; };
+		11C3B06528AEA5CC00CC100C /* OnboardingContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainer.swift; sourceTree = "<group>"; };
 		11C562F0287B8E9A0028F885 /* PrivateCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCollection.swift; sourceTree = "<group>"; };
 		11C6D893287C7B6800CE0950 /* PrivateCollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCollectionData.swift; sourceTree = "<group>"; };
 		11C6D895287C9FA100CE0950 /* ShopScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopScreen.swift; sourceTree = "<group>"; };
@@ -200,6 +206,14 @@
 			path = fonts;
 			sourceTree = "<group>";
 		};
+		11C3B06428AEA5AB00CC100C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				11C3B06528AEA5CC00CC100C /* OnboardingContainer.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		11D2571828444C790028E2B4 = {
 			isa = PBXGroup;
 			children = (
@@ -250,6 +264,7 @@
 		11ED5A792846BAA500F0D61D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				11C3B06428AEA5AB00CC100C /* Onboarding */,
 				11ED5A8D2846C45000F0D61D /* Components */,
 				11ED5A8A2846C40400F0D61D /* Auth */,
 				11ED5A8B2846C41500F0D61D /* Mint */,
@@ -303,6 +318,7 @@
 				111629BC2863A0D20012B134 /* Web3Parser.swift */,
 				1183DD792891CEA7002189FB /* VibrationWorker.swift */,
 				1177C27B2893022900A43AB1 /* Config.swift */,
+				1110D52228B13686009568CF /* AttributedStringWorker.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -360,6 +376,7 @@
 				1196D3E9287095C800EF6F63 /* SwipeRefresh.swift */,
 				11C8049F288841E80001F4BC /* LoadingScreen.swift */,
 				1183DD772891A67E002189FB /* MinterProgress.swift */,
+				1110D52028B12749009568CF /* AttributedText.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -480,6 +497,7 @@
 				1183DD782891A67E002189FB /* MinterProgress.swift in Sources */,
 				11ED5A932846C7AE00F0D61D /* Colors.swift in Sources */,
 				11D2572728444C790028E2B4 /* ContentView.swift in Sources */,
+				11C3B06628AEA5CC00CC100C /* OnboardingContainer.swift in Sources */,
 				11408F3A28908EC900B9293F /* TwitterFollowInfo.swift in Sources */,
 				11ED5A9A2847052300F0D61D /* IdentifiableAlert.swift in Sources */,
 				11C562F1287B8E9A0028F885 /* PrivateCollection.swift in Sources */,
@@ -504,12 +522,14 @@
 				11C804A0288841E80001F4BC /* LoadingScreen.swift in Sources */,
 				111629B9286365F50012B134 /* NftData.swift in Sources */,
 				1183DD7A2891CEA7002189FB /* VibrationWorker.swift in Sources */,
+				1110D52128B12749009568CF /* AttributedText.swift in Sources */,
 				11C6D896287C9FA100CE0950 /* ShopScreen.swift in Sources */,
 				11C804A22889E0A50001F4BC /* TwitterInfo.swift in Sources */,
 				11C804A62889E2630001F4BC /* FaucetUsageInfo.swift in Sources */,
 				11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */,
 				11DEE9372848501400B7E2E5 /* ImageWorker.swift in Sources */,
 				111629BB286379B80012B134 /* TxWorker.swift in Sources */,
+				1110D52328B13686009568CF /* AttributedStringWorker.swift in Sources */,
 				11BA41242887237100CFA2F8 /* FaucetResponse.swift in Sources */,
 				11C3B06328AE75DD00CC100C /* AddressWithTwitter.swift in Sources */,
 				1196D3EA287095C800EF6F63 /* SwipeRefresh.swift in Sources */,

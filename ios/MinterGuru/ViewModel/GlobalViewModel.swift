@@ -28,6 +28,9 @@ class GlobalViewModel: ObservableObject {
     var vibrationWorker = VibrationWorker()
     
     @Published
+    var showingOnboarding: Bool
+    
+    @Published
     var showConnectSheet = false
     
     //Wallet connect block
@@ -169,6 +172,11 @@ class GlobalViewModel: ObservableObject {
     }
     
     init() {
+        if let shown = UserDefaultsWorker.shared.isOnboardingShown() {
+            showingOnboarding = !shown
+        } else {
+            showingOnboarding = true
+        }
         if let used = UserDefaultsWorker.shared.isFaucetUsed() {
             faucetUsed = used
         }
