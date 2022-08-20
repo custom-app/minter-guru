@@ -219,6 +219,7 @@ struct GalleryContainer: View {
                                                    onDismiss: { selectedNft = nil }) { nft in
                                                 if let index = globalVm.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
                                                     NftInfoSheet(nft: $globalVm.privateNfts[index])
+                                                        .environmentObject(globalVm)
                                                 }
                                             }
                                         }
@@ -268,6 +269,7 @@ struct GalleryContainer: View {
                                            onDismiss: { selectedNft = nil }) { nft in
                                         if let index = globalVm.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl }) {
                                             NftInfoSheet(nft: $globalVm.publicNfts[index])
+                                                .environmentObject(globalVm)
                                         }
                                     }
                                 }

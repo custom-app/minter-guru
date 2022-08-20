@@ -175,7 +175,7 @@ class GlobalViewModel: ObservableObject {
         if let shown = UserDefaultsWorker.shared.isOnboardingShown() {
             showingOnboarding = shown
         } else {
-            showingOnboarding = false
+            showingOnboarding = true
         }
         if let used = UserDefaultsWorker.shared.isFaucetUsed() {
             faucetUsed = used

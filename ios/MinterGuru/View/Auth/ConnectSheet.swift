@@ -37,6 +37,9 @@ struct ConnectSheet: View {
                             .padding(.horizontal, 10)
                         
                         HStack(spacing: 0) {
+                            
+                            Spacer()
+                            
                             Button {
                                 selectedTrust = true
                             } label: {
@@ -58,6 +61,7 @@ struct ConnectSheet: View {
                                         .padding(.top, 16)
                                 }
                             }
+                            .padding(.trailing, 13)
                             
                             Spacer()
                             
@@ -82,9 +86,12 @@ struct ConnectSheet: View {
                                         .padding(.top, 16)
                                 }
                             }
+                            .padding(.leading, 13)
+                            
+                            Spacer()
                         }
                         .padding(.top, 50)
-                        .padding(.horizontal, 26)
+                        .padding(.horizontal, 12)
                         
                         if selectedTrust {
                             Tip(text: "Recommended connection method.\nBefore connecting, please make sure that your wallet has the latest update. When you connect, make sure that the Polygon network is selected.")
