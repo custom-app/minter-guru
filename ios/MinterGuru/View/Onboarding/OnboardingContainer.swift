@@ -298,30 +298,47 @@ struct OnboardingContainer: View {
                         }
                     } label: {
                         ZStack {
-                            Text(state.nextText())
-                                .font(.custom("rubik-semibold", size: 20))
-                                .foregroundColor(Color.white)
-                                .frame(width: 150, height: 50)
-                                .background(
-                                    ZStack {
-                                        switch state {
-                                        case .first, .third:
-                                            Image("onboarding_btn_green")
-                                                .resizable()
-                                                .scaledToFill()
-                                        case .second, .fourth:
-                                            Image("onboarding_btn_purple")
-                                                .resizable()
-                                                .scaledToFill()
-                                        case .fifth:
-                                            Image("onboarding_btn_multi")
-                                                .resizable()
-                                                .scaledToFill()
+                            if state == .fifth {
+                                LinearGradient(colors: [Colors.brightGreen, Colors.brightBlue, Colors.brightPurple],
+                                               startPoint: .bottomLeading,
+                                               endPoint: .topTrailing)
+                                    .mask (
+                                        Text(state.nextText())
+                                            .font(.custom("rubik-semibold", size: 20))
+                                            .foregroundColor(Color.white)
+                                    )
+                                    .frame(width: 150, height: 50)
+                                    .background(
+                                        Image("onboarding_btn_multi")
+                                            .resizable()
+                                            .scaledToFill()
+                                    )
+                            } else {
+                                Text(state.nextText())
+                                    .font(.custom("rubik-semibold", size: 20))
+                                    .foregroundColor(Color.white)
+                                    .frame(width: 150, height: 50)
+                                    .background(
+                                        ZStack {
+                                            switch state {
+                                            case .first, .third:
+                                                Image("onboarding_btn_green")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            case .second, .fourth:
+                                                Image("onboarding_btn_purple")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            case .fifth:
+                                                Image("onboarding_btn_multi")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
                                         }
-                                    }
-                                )
-                                .animation(nil, value: UUID())
+                                    )
+                            }
                         }
+                        .animation(nil, value: UUID())
                     }
                     .frame(maxWidth: .infinity)
                 }
