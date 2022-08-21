@@ -105,7 +105,9 @@ struct OnboardingContainer: View {
                         }
                         .transition(.backslide.combined(with: .opacity))
                         .onAppear {
-                            isAnimating.toggle()
+                            withAnimation {
+                                isAnimating.toggle()
+                            }
                         }
                     case .second:
                         ZStack {
