@@ -32,6 +32,15 @@ struct Wallet: Hashable {
     func formLinkForOpen() -> String {
         return linkForOpenOnly.isEmpty ? formEmptyDeepLink() : linkForOpenOnly
     }
+    
+    func isAvailable() -> Bool {
+        let nativeLink = "\(nativeScheme)://"
+        if let url = URL(string: nativeLink), UIApplication.shared.canOpenURL(url) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 struct Wallets {
@@ -59,8 +68,7 @@ struct Wallets {
     static func available() -> [Wallet] {
         var res: [Wallet] = []
         for wallet in All {
-            let nativeLink = "\(wallet.nativeScheme)://"
-            if let url = URL(string: nativeLink), UIApplication.shared.canOpenURL(url) {
+            if wallet.isAvailable() {
                 res.append(wallet)
             }
         }

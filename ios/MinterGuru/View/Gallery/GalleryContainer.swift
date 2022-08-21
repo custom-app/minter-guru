@@ -22,14 +22,16 @@ struct GalleryContainer: View {
         GeometryReader { geometry in
             ScrollView(showsIndicators: true) {
                 SwipeRefresh(bg: .black.opacity(0), fg: .black) {
-                    if globalVm.privateCollectionsInGallery {
-                        globalVm.refreshPrivateNfts()
-                    } else {
-                        globalVm.refreshPublicNfts()
+                    if globalVm.session != nil || globalVm.connectedAddress != nil {
+                        if globalVm.privateCollectionsInGallery {
+                            globalVm.refreshPrivateNfts()
+                        } else {
+                            globalVm.refreshPublicNfts()
+                        }
                     }
                 }
                 
-                VStack(spacing: 0) {
+                LazyVStack(spacing: 0) {
                     Text("Nft Album")
                         .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 28))
@@ -279,6 +281,7 @@ struct GalleryContainer: View {
                     
                 }
             }
+            .padding(.top, 0.1)
         }
     }
     
@@ -340,7 +343,7 @@ struct EmptyCollectionView: View {
                 .foregroundColor(Colors.mainGrey)
                 .multilineTextAlignment(.center)
                 .font(.custom("rubik-bold", size: 19))
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 28)
             
             Button {
                 DispatchQueue.main.async {

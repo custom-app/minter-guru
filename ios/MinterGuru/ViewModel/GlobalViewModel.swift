@@ -239,17 +239,22 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func loadInitialInfo() {
+    func loadInitialInfo(loadNfts: Bool = true) {
         getPolygonBalance()
         getMinterBalance()
         if !faucetUsed {
             checkFaucetUsage()
         }
-        getPublicTokensCount()
-        getPrivateCollectionsCount()
         checkTwitterFollow()
         getRepostRewards()
         getAllowance()
+        
+        if !publicNftsLoaded || publicNfts.isEmpty || loadNfts {
+            getPublicTokensCount()
+        }
+        if !privateNftsLoaded || privateNfts.isEmpty || loadNfts {
+            getPrivateCollectionsCount()
+        }
     }
     
     func loadGeneralInfo() {
@@ -460,7 +465,7 @@ class GlobalViewModel: ObservableObject {
     
     func uploadImageToIpfs(image: UIImage,
                            name: String,
-                           quality: Double = 0.9) {
+                           quality: Double = 0.92) {
         if let address = walletAccount, address.count > 2 {
             print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in

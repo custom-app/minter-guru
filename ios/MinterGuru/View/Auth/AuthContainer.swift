@@ -280,7 +280,10 @@ struct AuthContainer: View {
                             .padding(.horizontal, 26)
                         
                         Button {
-                            globalVm.showConnectSheet = true
+                            withAnimation {
+                                globalVm.showConnectSheet = true
+                            }
+                            globalVm.objectWillChange.send()
                         } label: {
                             HStack(spacing: 0) {
                                 Spacer()

@@ -13,7 +13,7 @@ struct SwipeRefresh: View {
     var globalVm: GlobalViewModel
     
     private static let minRefreshTimeInterval = TimeInterval(0.2)
-    private static let triggerHeight = CGFloat(90)
+    private static let triggerHeight = CGFloat(120)
     private static let indicatorHeight = CGFloat(60)
     private static let fullHeight = triggerHeight + indicatorHeight
     

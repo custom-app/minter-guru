@@ -65,12 +65,21 @@ extension GlobalViewModel {
     
     func connect(wallet: Wallet) {
         guard let walletConnect = walletConnect else { return }
-        withAnimation {
-            connectingToBridge = true
+        if wallet.isAvailable() {
+            withAnimation {
+                connectingToBridge = true
+            }
+            let connectionUrl = walletConnect.connect()
+            pendingDeepLink = wallet.formWcDeepLink(connectionUrl: connectionUrl)
+            currentWallet = wallet
+        } else {
+            if let url = URL(string: wallet.appStoreLink), UIApplication.shared.canOpenURL(url) {
+                print(wallet.appStoreLink)
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                //TODO: handle error
+            }
         }
-        let connectionUrl = walletConnect.connect()
-        pendingDeepLink = wallet.formWcDeepLink(connectionUrl: connectionUrl)
-        currentWallet = wallet
     }
     
     func disconnect() {
@@ -143,6 +152,7 @@ extension GlobalViewModel: WalletConnectDelegate {
     func didConnect() {
         print("did connect callback")
         backgroundManager.finishConnectBackgroundTask()
+        let wasReconnecting = isReconnecting
         DispatchQueue.main.async { [unowned self] in
             withAnimation {
                 isConnecting = false
@@ -154,7 +164,7 @@ extension GlobalViewModel: WalletConnectDelegate {
                 showConnectSheet = false
             }
             if !isWrongChain {
-                loadInitialInfo()
+                loadInitialInfo(loadNfts: !wasReconnecting)
             }
         }
     }
