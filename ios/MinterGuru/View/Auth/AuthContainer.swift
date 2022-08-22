@@ -195,18 +195,18 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(accessShopAndFaucet ? Colors.mainPurple : Colors.mainGrey)
+                                .foregroundColor(accessShopAndFaucet ? Colors.mainPurple : Colors.greyBlue)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
+                                .shadow(color: Colors.darkGrey.opacity(accessShopAndFaucet ? 0.15 : 0.05), radius: 10, x: 0, y: 0)
                         }
                         .disabled(!accessShopAndFaucet)
                         
                         Text("Faucet")
-                            .foregroundColor(Colors.darkGrey)
+                            .foregroundColor(accessShopAndFaucet ? Colors.darkGrey : Colors.greyBlue)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
@@ -230,22 +230,27 @@ struct AuthContainer: View {
                                 .renderingMode(.template)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(accessShopAndFaucet ? Colors.mainPurple : Colors.mainGrey)
+                                .foregroundColor(accessShopAndFaucet ? Colors.mainPurple : Colors.greyBlue)
                                 .frame(width: 38, height: 38)
                                 .padding(30)
                                 .background(Colors.mainWhite)
                                 .cornerRadius(30, corners: [.topLeft, .bottomRight])
                                 .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                                .shadow(color: Colors.darkGrey.opacity(0.15), radius: 10, x: 0, y: 0)
+                                .shadow(color: Colors.darkGrey.opacity(accessShopAndFaucet ? 0.15 : 0.05), radius: 10, x: 0, y: 0)
                         }
                         .disabled(!accessShopAndFaucet)
                         
                         Text("Shop")
-                            .foregroundColor(Colors.darkGrey)
+                            .foregroundColor(accessShopAndFaucet ? Colors.darkGrey : Colors.greyBlue)
                             .font(.custom("rubik-bold", size: 16))
                             .padding(.top, 10)
                     }
-                    .sheet(isPresented: $showShop) {
+                    .sheet(isPresented: $showShop, onDismiss: {
+                        withAnimation {
+                            globalVm.purchasingInProgress = false
+                            globalVm.purchaseFinished = false
+                        }
+                    }) {
                         ShopScreen(showingSheet: $showShop)
                             .environmentObject(globalVm)
                     }

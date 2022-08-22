@@ -473,7 +473,7 @@ class GlobalViewModel: ObservableObject {
                     print("error getting jpeg data for photo")
                     return
                 }
-                let filename = (Tools.generatePictureName(address: address))
+                let filename = Tools.generatePictureName(address: address)
                 HttpRequester.shared.uploadPictureToFilebase(data: data, filename: "\(filename).jpg") { cid, error in
                     if let error = error {
                         print("Error uploading photo: \(error)")
@@ -980,7 +980,7 @@ class GlobalViewModel: ObservableObject {
     func purchaseCollection(collectionData: PrivateCollectionData) {
         if let address = walletAccount {
             DispatchQueue.global(qos: .userInitiated).async { [self] in
-                let filename = collectionData.name + "\(Date().timestamp())_meta.json"
+                let filename = "\(collectionData.name.hashValue)_\(Date().timestamp())_meta.json"
                 let meta = NftMeta(name: collectionData.name,
                                    description: "",
                                    image: Constants.ipfsMinterImage,

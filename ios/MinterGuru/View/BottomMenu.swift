@@ -37,7 +37,6 @@ struct BottomMenu: View {
                             .frame(width: 0.213*width, height: 0.08*width)
                             .background(globalVm.currentTab == .wallet ? Colors.mainPurple : Colors.mainWhite)
                             .cornerRadius(30)
-                            .shadow(color: Colors.mainPurple.opacity(globalVm.currentTab == .wallet ? 0.8 : 0), radius: 3, x: 0, y: 0)
                         }
                         .frame(width: 0.24*width, height: 0.107*width)
                         .background(Colors.mainWhite)
@@ -89,7 +88,6 @@ struct BottomMenu: View {
                             .frame(width: 0.213*width, height: 0.08*width)
                             .background(globalVm.currentTab == .gallery ? Colors.mainPurple : Colors.mainWhite)
                             .cornerRadius(30)
-                            .shadow(color: Colors.mainPurple.opacity(globalVm.currentTab == .gallery ? 0.8 : 0), radius: 3, x: 0, y: 0)
                         }
                         .frame(width: 0.24*width, height: 0.107*width)
                         .background(Colors.mainWhite)

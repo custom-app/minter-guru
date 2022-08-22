@@ -222,9 +222,9 @@ struct MintContainer: View {
                                         .padding(.horizontal, 26)
                                         .padding(.top, 10)
                                 }
-                            } else {
+                            } else if globalVm.session != nil || globalVm.connectedAddress != nil {
                                 MinterProgress()
-                                    .padding(.top, 50)
+                                    .padding(.top, 20)
                             }
                         }
                         

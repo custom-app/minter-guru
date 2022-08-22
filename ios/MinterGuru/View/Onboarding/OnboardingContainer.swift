@@ -83,7 +83,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_rotating_1")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 2/3)
+                                .frame(width: geometry.size.width * 2/3, height: geometry.size.width * 2/3)
                                 .rotationEffect(Angle.degrees(isAnimating ? 360 : 0))
                                 .animation(rotateAnimation,
                                            value: isAnimating)
@@ -91,7 +91,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_center_1")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 0.48)
+                                .frame(width: geometry.size.width * 0.48, height: geometry.size.width * 0.48)
                                 .shadow(color: Colors.brightGreen.opacity(0.25), radius: 50, x: 0, y: 0)
 
                             Circle()
@@ -114,7 +114,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_rotating_2")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 2/3)
+                                .frame(width: geometry.size.width * 2/3, height: geometry.size.width * 2/3)
                                 .rotationEffect(Angle.degrees(isAnimating ? 360 : 0))
                                 .animation(rotateAnimation,
                                            value: isAnimating)
@@ -122,7 +122,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_center_2")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 0.48)
+                                .frame(width: geometry.size.width * 0.48, height: geometry.size.width * 0.48)
                                 .shadow(color: Colors.brightBlue.opacity(0.5), radius: 50, x: 0, y: 0)
 
                             Circle()
@@ -143,7 +143,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_rotating_3")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 2/3)
+                                .frame(width: geometry.size.width * 2/3, height: geometry.size.width * 2/3)
                                 .rotationEffect(Angle.degrees(isAnimating ? 360 : 0))
                                 .animation(rotateAnimation,
                                            value: isAnimating)
@@ -151,7 +151,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_center_3")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 0.48)
+                                .frame(width: geometry.size.width * 0.48, height: geometry.size.width * 0.48)
                                 .shadow(color: Colors.brightGreen.opacity(0.25), radius: 50, x: 0, y: 0)
 
                             Circle()
@@ -172,7 +172,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_rotating_4")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 2/3)
+                                .frame(width: geometry.size.width * 2/3, height: geometry.size.width * 2/3)
                                 .rotationEffect(Angle.degrees(isAnimating ? 360 : 0))
                                 .animation(rotateAnimation,
                                            value: isAnimating)
@@ -180,7 +180,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_center_4")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 0.48)
+                                .frame(width: geometry.size.width * 0.48, height: geometry.size.width * 0.48)
                                 .shadow(color: Colors.brightBlue.opacity(0.5), radius: 50, x: 0, y: 0)
 
                             Circle()
@@ -201,7 +201,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_rotating_5")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 2/3)
+                                .frame(width: geometry.size.width * 2/3, height: geometry.size.width * 2/3)
                                 .rotationEffect(Angle.degrees(isAnimating ? 360 : 0))
                                 .animation(rotateAnimation,
                                            value: isAnimating)
@@ -209,7 +209,7 @@ struct OnboardingContainer: View {
                             Image("onboarding_center_5")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: geometry.size.width * 0.48)
+                                .frame(width: geometry.size.width * 0.48, height: geometry.size.width * 0.48)
                                 .shadow(color: Colors.brightPurple.opacity(0.5), radius: 50, x: 0, y: 0)
 
                             Circle()

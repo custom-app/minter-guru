@@ -29,7 +29,9 @@ struct ShopScreen: View {
                         if globalVm.purchasingInProgress {
                             VStack(spacing: 0) {
                                 
-                                Text(globalVm.allowance >= globalVm.privateCollectionPrice ? "Purchasing in progress" : "Processing permission to use tokens")
+                                let approved = globalVm.allowance >= globalVm.privateCollectionPrice
+                                
+                                Text(approved ? "Purchasing in progress" : "Processing permission to use tokens")
                                     .font(.custom("rubik-bold", size: 28))
                                     .foregroundColor(Colors.darkGrey)
                                     .multilineTextAlignment(.center)
@@ -37,8 +39,9 @@ struct ShopScreen: View {
                                 MinterProgress()
                                     .padding(.top, 50)
                                 
+                                let metamask = globalVm.currentWallet?.name == Wallets.Metamask.name
                                 
-                                Tip(text: "Please wait\nIt should take a few seconds to process the transaction\(globalVm.isAgentAccount ? "" : "\nYou will be redirected to the wallet app")")
+                                Tip(text: "Please wait\nIt should take a few seconds to process the transaction\(globalVm.isAgentAccount ? "" : "\nYou will be redirected to the wallet app")\((metamask && !approved) ? "\nMetamask may also send you a notification that something is wrong with the transaction, this is ok" : "")")
                                     .padding(.top, 50)
                                     .padding(.horizontal, 26)
                             }
@@ -179,7 +182,7 @@ struct ShopScreen: View {
                             let enoughtAllowance = (globalVm.allowance >= globalVm.privateCollectionPrice) && globalVm.privateCollectionPriceLoaded
                             
                             if globalVm.session == nil && (globalVm.connectedAddress == nil || !globalVm.isAgentAccount) {
-                                Tip(text: "To purchase a private collection you need to connect the wallet")
+                                Tip(text: "To purchase a private collection you need to connect the wallet", backgroundColor: Colors.paleRed)
                                     .padding(.vertical, 25)
                             } else {
                                 Button {

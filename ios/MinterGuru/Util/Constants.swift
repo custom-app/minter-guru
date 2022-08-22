@@ -15,8 +15,8 @@ struct Constants {
     static let twitterLink = "https://twitter.com/"
     static let sessionKey = "session_key"
     static let currentVersion = 0
-    static let ipfsMinterImage = "ipfs://QmcENYH7SZhGi1Qu4GwRfBvvxnXh12nLmntvg8votDrka3"
-    static let minterTwitterLink = "https://twitter.com/baklanov_dev"
+    static let ipfsMinterImage = "ipfs://QmabMpksqkBnD48a4sdSNj5Y3uEG4hTzJxri7jE88vTz2g"
+    static let minterTwitterLink = "https://twitter.com/MinterGuru"
     
     struct Bridges {
         static let Gnosis = "https://safe-walletconnect.gnosis.io/"
