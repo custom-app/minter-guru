@@ -85,7 +85,6 @@ class HttpRequester {
         
         let credentials = StaticCredential(accessKeyId: Config.Filebase.key, secretAccessKey: Config.Filebase.secret)
         let signer = AWSSigner(credentials: credentials, name: "s3", region: "us-east-1")
-        print("url: \("https://\(Config.Filebase.bucket).\(Constants.Filebase.endpoint)/\(filename)")")
         let url = URL(string:"https://\(Config.Filebase.bucket).\(Constants.Filebase.endpoint)/\(filename)")!
         let signedURL = signer.signURL(url: url, method: .PUT)
         var request = URLRequest(url: signedURL)

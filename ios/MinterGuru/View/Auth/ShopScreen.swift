@@ -18,6 +18,9 @@ struct ShopScreen: View {
     @Binding
     var showingSheet: Bool
     
+    @State
+    var alert: IdentifiableAlert?
+    
     var body: some View {
         
         VStack(spacing: 0) {
@@ -187,11 +190,21 @@ struct ShopScreen: View {
                             } else {
                                 Button {
                                     hideKeyboard()
+                                    collectionName = collectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                    if collectionName.isEmpty {
+                                        alert = IdentifiableAlert.build(
+                                            id: "empty_name",
+                                            title: "Empty name",
+                                            message: "Please enter collection name")
+                                        return
+                                    }
                                     withAnimation {
                                         globalVm.purchasingInProgress = true
                                     }
                                     if enoughtAllowance {
-                                        globalVm.purchaseCollection(collectionData: PrivateCollectionData(name: collectionName))
+                                        globalVm.purchaseCollection(
+                                            collectionData: PrivateCollectionData(name: collectionName)
+                                        )
                                     } else {
                                         globalVm.approveTokens()
                                     }
@@ -218,5 +231,8 @@ struct ShopScreen: View {
             }
         }
         .background(Color.white.ignoresSafeArea())
+        .alert(item: $alert) { alert in
+            alert.alert()
+        }
     }
 }

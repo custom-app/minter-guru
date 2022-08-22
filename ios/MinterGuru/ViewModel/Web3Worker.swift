@@ -51,8 +51,8 @@ class Web3Worker: ObservableObject {
         
         web3Agent = web3swift.web3(provider: Web3HttpProvider(URL(string: endpoint)!,
                                                          network: Networks.Custom(networkID: chainId))!)
-//        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(Config.agentKey)!)!
-//        web3Agent.addKeystoreManager(KeystoreManager([keystore]))
+        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(Config.agentKey)!)!
+        web3Agent.addKeystoreManager(KeystoreManager([keystore]))
         routerContractAgent = web3Agent.contract(routerAbi, at: EthereumAddress(Constants.routerAddress)!, abiVersion: 2)!
         accessTokenContractAgent = web3Agent.contract(accessTokenAbi, at: EthereumAddress(Constants.accessTokenAddress)!, abiVersion: 2)!
         minterContractAgent = web3Agent.contract(minterAbi, at: EthereumAddress(Constants.minterAddress)!, abiVersion: 2)!
