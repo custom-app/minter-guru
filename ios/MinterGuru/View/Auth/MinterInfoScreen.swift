@@ -34,7 +34,7 @@ struct MinterInfoScreen: View {
                     Text("How to earn")
                         .foregroundColor(Colors.darkGrey)
                         .font(.custom("rubik-bold", size: 28))
-                        .padding(.top, 26)
+                        .padding(.top, 20)
                         .padding(.horizontal, 10)
                     
                     Text("Minter Guru (MIGU) tokens")
@@ -141,7 +141,7 @@ struct MinterInfoScreen: View {
                     .cornerRadius(30, corners: [.topLeft, .bottomRight])
                     .cornerRadius(10, corners: [.bottomLeft, .topRight])
                     .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
-                    .padding(.top, 50)
+                    .padding(.top, 25)
                     .padding(.horizontal, 26)
                     
                     if let info = globalVm.twitterInfo, !info.open || info.spent == info.limit {
@@ -180,42 +180,39 @@ struct MinterInfoScreen: View {
                          RoundedRectangle(cornerRadius: 32)
                              .stroke(Colors.mainPurple, lineWidth: 2)
                         )
-                        .overlay(
-                         HStack {
-                             Spacer()
-                             Button {
-                                 twitterName = twitterName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                 let res = Tools.parseTwitter(twitter: twitterName)
-                                 if res.valid {
-                                     UserDefaultsWorker.shared.saveTwitterLogin(token: res.login)
-                                     twitterName = res.login
-                                     hideKeyboard()
-                                     alert = IdentifiableAlert.build(
-                                         id: "twitter_saved",
-                                         title: "Saved",
-                                         message: "Your twitter nickname was successfully saved"
-                                     )
-                                 } else {
-                                     alert = IdentifiableAlert.build(
-                                         id: "invalid_twitter",
-                                         title: "Invalid twitter nickname",
-                                         message: "Please enter your valid twitter nickname with or without @"
-                                     )
-                                 }
-                             } label: {
-                                 Image("ic_ok_light")
-                                     .renderingMode(.template)
-                                     .resizable()
-                                     .scaledToFit()
-                                     .foregroundColor(twitterName.isEmpty ? Colors.mainGrey : Colors.mainPurple)
-                                     .frame(width: 24, height: 24)
-                             }
-                             .padding(.trailing, 16)
-                             .disabled(twitterName.isEmpty)
-                         }
-                        )
                         .padding(.horizontal, 26)
                         .padding(.top, 25)
+                    
+                    Button {
+                        twitterName = twitterName.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let res = Tools.parseTwitter(twitter: twitterName)
+                        hideKeyboard()
+                        if res.valid {
+                            UserDefaultsWorker.shared.saveTwitterLogin(token: res.login)
+                            twitterName = res.login
+                            alert = IdentifiableAlert.build(
+                                id: "twitter_saved",
+                                title: "Saved",
+                                message: "Your twitter nickname was successfully saved"
+                            )
+                        } else {
+                            alert = IdentifiableAlert.build(
+                                id: "invalid_twitter",
+                                title: "Invalid twitter nickname",
+                                message: "Please enter your valid twitter nickname with or without @"
+                            )
+                        }
+                    } label: {
+                        Text("Save")
+                            .font(.custom("rubik-bold", size: 17))
+                            .foregroundColor(Colors.mainWhite)
+                            .padding(.vertical, 17)
+                            .padding(.horizontal, 60)
+                            .background(Colors.mainGradient)
+                            .cornerRadius(32)
+                            .shadow(color: Colors.mainGrey.opacity(0.15), radius: 20, x: 0, y: 0)
+                    }
+                    .padding(.top, 25)
                     
                     Tip(text: "The ways of obtaining tokens can be changed or expanded over time.\nStay tuned for updates!")
                         .padding(.top, 25)
