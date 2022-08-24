@@ -265,7 +265,7 @@ struct OnboardingContainer: View {
                 HStack(spacing: 0) {
                     Button {
                         if state == .first {
-//                            UserDefaultsWorker.shared.setOnBoardingShown(shown: true)
+                            UserDefaultsWorker.shared.setOnBoardingShown(shown: true)
                             withAnimation {
                                 globalVm.showingOnboarding = false
                             }
@@ -285,7 +285,7 @@ struct OnboardingContainer: View {
                     
                     Button {
                         if state == .fifth {
-//                            UserDefaultsWorker.shared.setOnBoardingShown(shown: true)
+                            UserDefaultsWorker.shared.setOnBoardingShown(shown: true)
                             withAnimation {
                                 globalVm.showingOnboarding = false
                             }
