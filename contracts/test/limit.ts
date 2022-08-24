@@ -86,14 +86,14 @@ describe("Private collection", async () => {
       .connect(accounts[4])
       .purchasePrivateCollection(salt, "tsst", "tost", "", "", "0xaa");
     expect(purchaseTx)
-      .to.emit("ERC20", "Transfer")
+      .to.emit(instaToken, "Transfer")
       .withArgs(
         await accounts[4].getAddress(),
         "0x0000000000000000000000000000000000000000",
         BN.from(100)
       );
     expect(purchaseTx)
-      .to.emit("PublicCollectionsRouter", "CollectionCreated")
+      .to.emit(accessTokenInstance, "CollectionCreated")
       .withArgs(boughtCollection.address, BN.from(0));
   });
 

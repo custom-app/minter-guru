@@ -6,6 +6,7 @@
 import { ethers } from "hardhat";
 import { Signer, BigNumber as BN } from "ethers";
 import {
+  MinterGuruCollectionsAccessToken,
   MinterGuruPublicCollection,
   // eslint-disable-next-line camelcase
   MinterGuruPublicCollection__factory,
@@ -20,7 +21,7 @@ import {
   createMinterGuruToken,
 } from "./util";
 
-async function createPublicRouter(account: Signer) {
+async function createPublicRouter(account: Signer, metaUri: string) {
   const factory = new MinterGuruPublicCollection__factory(account);
   const impl: MinterGuruPublicCollection = await factory.deploy();
 
@@ -36,21 +37,65 @@ async function createPublicRouter(account: Signer) {
       .join("");
   await router.createCollectionClone(
     "0x" + genRanHex(64),
-    "test",
-    "TEST",
-    "ipfs://bafkreibba2qhrnyqxbs4klnvijhoa3c77hhhrglo54afuvb4likcs2sfi4"
+    "Minter Guru Public Collection",
+    "MIGUPC",
+    metaUri
   );
 }
 
 async function main() {
+  const network = process.env.HARDHAT_NETWORK;
   const accounts: Signer[] = await ethers.getSigners();
-  await createPublicRouter(accounts[0]);
-  const tokenAddress = await createMinterGuruToken(accounts);
+
+  if (network === "polygon") {
+    await createPublicRouter(
+      accounts[0],
+      "ipfs://bafkreifug2publpbhjbupqfuk634frihq3fth2qeodtnxqyb7coopxioui"
+    );
+  } else {
+    await createPublicRouter(
+      accounts[0],
+      "ipfs://bafkreifug2publpbhjbupqfuk634frihq3fth2qeodtnxqyb7coopxioui"
+    );
+  }
+
+  let tokenAddress: string;
+  const multiplier = BN.from(10).pow(BN.from(18));
+  if (network === "polygon") {
+    tokenAddress = await createMinterGuruToken(
+      accounts,
+      BN.from(25000000).mul(multiplier),
+      BN.from(7500000).mul(multiplier),
+      BN.from(5000000).mul(multiplier),
+      BN.from(12500000).mul(multiplier)
+    );
+  } else {
+    tokenAddress = await createMinterGuruToken(
+      accounts,
+      BN.from(100000).mul(multiplier),
+      BN.from(50000).mul(multiplier),
+      BN.from(20000).mul(multiplier),
+      BN.from(30000).mul(multiplier)
+    );
+  }
   console.log("MinterGuruToken: ", tokenAddress);
-  const accessTokenInstance = await createPrivateCollectionsAccessToken(
-    accounts[0],
-    tokenAddress
-  );
+  let accessTokenInstance: MinterGuruCollectionsAccessToken;
+
+  if (network === "polygon") {
+    accessTokenInstance = await createPrivateCollectionsAccessToken(
+      accounts[0],
+      tokenAddress,
+      "ipfs://bafkreicyphjyqqlxjzqlllwnxth3zqdoj3mkteeia46iyueuolgyzjzagm",
+      BN.from(35).mul(multiplier)
+    );
+  } else {
+    accessTokenInstance = await createPrivateCollectionsAccessToken(
+      accounts[0],
+      tokenAddress,
+      "ipfs://bafkreicyphjyqqlxjzqlllwnxth3zqdoj3mkteeia46iyueuolgyzjzagm",
+      BN.from(1).mul(multiplier)
+    );
+  }
   console.log("MinterGuruAccessToken: ", accessTokenInstance.address);
 }
 

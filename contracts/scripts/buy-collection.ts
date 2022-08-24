@@ -25,6 +25,7 @@ async function main() {
       "Sesh",
       "SHS",
       "ipfs://bafkreibba2qhrnyqxbs4klnvijhoa3c77hhhrglo54afuvb4likcs2sfi4",
+      "",
       "0x"
     );
   console.log("purchase txid: ", tx.hash);

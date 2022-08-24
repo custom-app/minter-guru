@@ -17,10 +17,13 @@ async function main() {
   const BN = hre.ethers.BigNumber;
 
   const multiplier = BN.from(10).pow(BN.from(18));
-  const thresholds = args.thresholds
-    .split(",")
-    .map((t: any) => Number(t))
-    .map((t: number) => BN.from(t));
+  let thresholds = [];
+  if (args.thresholds) {
+    thresholds = args.thresholds
+      .split(",")
+      .map((t: any) => Number(t))
+      .map((t: number) => BN.from(t));
+  }
   const values = args.values
     .split(",")
     .map((t: any) => Number(t))

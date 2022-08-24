@@ -132,7 +132,6 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
 
         bool[] memory mask = new bool[](counts.length);
         uint256 current = 0;
-        uint256 ind = 0;
         uint256 resSize = size;
         if ((page + 1) * size > _total) {
             resSize = _total - page * size;
@@ -151,19 +150,14 @@ contract MinterGuruPublicCollectionsRouter is Ownable {
                     for (uint256 j = 0; j < collectionListSize; j++) {
                         uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), j);
                         res[i][j] = MinterGuruBaseCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
-                        ind++;
                     }
-                } else if (page * size >= current && page * size < current + counts[i]) {
+                } else if (current < page*size && current + counts[i] > page * size) {
                     mask[i] = true;
-                    uint256 collectionListSize = counts[i];
-                    if (page * size > current) {
-                        collectionListSize = current + counts[i] - page * size;
-                    }
+                    uint256 collectionListSize = current + counts[i] - page * size;
                     res[i] = new MinterGuruBaseCollection.TokenData[](collectionListSize);
                     for (uint256 j = 0; j < collectionListSize; j++) {
                         uint256 id = allCollections[i].tokenOfOwnerByIndex(_msgSender(), counts[i] - collectionListSize + j);
                         res[i][j] = MinterGuruBaseCollection.TokenData(id, allCollections[i].tokenURI(id), allCollections[i].tokenData(id));
-                        ind++;
                     }
                 }
             }

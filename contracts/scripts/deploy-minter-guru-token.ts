@@ -1,11 +1,18 @@
 import * as hre from "hardhat";
 // eslint-disable-next-line node/no-missing-import
 import { createMinterGuruToken } from "./util";
-import { Signer } from "ethers";
+import { Signer, BigNumber as BN } from "ethers";
 
 async function main() {
   const accounts: Signer[] = await hre.ethers.getSigners();
-  const tokenAddress = await createMinterGuruToken(accounts);
+  const multiplier = BN.from(10).pow(BN.from(18));
+  const tokenAddress = await createMinterGuruToken(
+    accounts,
+    BN.from(100000).mul(multiplier),
+    BN.from(50000).mul(multiplier),
+    BN.from(20000).mul(multiplier),
+    BN.from(30000).mul(multiplier)
+  );
   console.log("MinterGuruToken: ", tokenAddress);
 }
 

@@ -65,7 +65,7 @@ describe("Token community event", async () => {
       .connect(accounts[3])
       .mintCommunityReward(BN.from(0), await accounts[0].getAddress());
     expect(tx)
-      .to.emit("ERC20", "Transfer")
+      .to.emit(tokenInstance, "Transfer")
       .withArgs(
         "0x0000000000000000000000000000000000000000",
         await accounts[0].getAddress(),
@@ -79,7 +79,7 @@ describe("Token community event", async () => {
       .connect(accounts[3])
       .mintCommunityReward(BN.from(0), await accounts[0].getAddress());
     expect(tx)
-      .to.emit("ERC20", "Transfer")
+      .to.emit(tokenInstance, "Transfer")
       .withArgs(
         "0x0000000000000000000000000000000000000000",
         await accounts[0].getAddress(),
@@ -92,7 +92,7 @@ describe("Token community event", async () => {
       .connect(accounts[3])
       .mintCommunityReward(BN.from(0), await accounts[0].getAddress());
     expect(tx)
-      .to.emit("ERC20", "Transfer")
+      .to.emit(tokenInstance, "Transfer")
       .withArgs(
         "0x0000000000000000000000000000000000000000",
         await accounts[0].getAddress(),
@@ -122,14 +122,14 @@ describe("Token community event", async () => {
         await accounts[0].getAddress(),
       ]);
     expect(tx)
-      .to.emit("ERC20", "Transfer")
+      .to.emit(tokenInstance, "Transfer")
       .withArgs(
         "0x0000000000000000000000000000000000000000",
         await accounts[0].getAddress(),
         BN.from(2)
       );
     expect(tx)
-      .to.emit("MinterGuruToken", "CommunityEventFinished")
+      .to.emit(tokenInstance, "CommunityEventFinished")
       .withArgs(BN.from(0));
   });
 });
@@ -167,7 +167,7 @@ describe("Vesting", async () => {
         BN.from(10)
       );
     expect(tx)
-      .to.emit("MinterGuruToken", "VestingStarted")
+      .to.emit(tokenInstance, "VestingStarted")
       .withArgs(
         await accounts[0].getAddress(),
         BN.from(10),
@@ -187,7 +187,6 @@ describe("Vesting", async () => {
       BN.from(10),
       BN.from(start + 11),
       BN.from(0),
-      BN.from(0),
     ]);
     const vestingPoolSize = await tokenInstance.vestingLeftSupply();
     expect(vestingPoolSize).to.eq(BN.from(2900));
@@ -199,7 +198,7 @@ describe("Vesting", async () => {
       .connect(accounts[0])
       .withdrawVesting(BN.from(10));
     expect(tx)
-      .to.emit("MinterGuruToken", "VestingWithdrawn")
+      .to.emit(tokenInstance, "VestingWithdrawn")
       .withArgs(await accounts[0].getAddress(), BN.from(10));
   });
 
@@ -215,10 +214,10 @@ describe("Vesting", async () => {
       .connect(accounts[2])
       .revokeVesting(await accounts[0].getAddress());
     expect(tx)
-      .to.emit("MinterGuruToken", "VestingWithdrawn")
+      .to.emit(tokenInstance, "VestingWithdrawn")
       .withArgs(await accounts[0].getAddress(), BN.from(10));
     expect(tx)
-      .to.emit("MinterGuruToken", "VestingRevoked")
+      .to.emit(tokenInstance, "VestingRevoked")
       .withArgs(await accounts[0].getAddress(), BN.from(20));
     const vestingPoolSize = await tokenInstance.vestingLeftSupply();
     expect(vestingPoolSize).to.eq(BN.from(2980));
@@ -239,10 +238,10 @@ describe("Vesting", async () => {
       .connect(accounts[0])
       .withdrawVesting(BN.from(30));
     expect(tx)
-      .to.emit("MinterGuruToken", "VestingWithdrawn")
+      .to.emit(tokenInstance, "VestingWithdrawn")
       .withArgs(await accounts[0].getAddress(), BN.from(30));
     expect(tx)
-      .to.emit("MinterGuruToken", "VestingFullWithdrawn")
+      .to.emit(tokenInstance, "VestingFullWithdrawn")
       .withArgs(await accounts[0].getAddress(), BN.from(30));
   });
 });
