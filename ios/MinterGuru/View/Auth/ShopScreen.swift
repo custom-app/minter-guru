@@ -209,7 +209,7 @@ struct ShopScreen: View {
                                         globalVm.approveTokens()
                                     }
                                 } label: {
-                                    Text("Create")
+                                    Text(enoughtAllowance ? "Create" : "Approve")
                                         .font(.custom("rubik-bold", size: 17))
                                         .foregroundColor(Colors.mainWhite)
                                         .padding(.vertical, 17)

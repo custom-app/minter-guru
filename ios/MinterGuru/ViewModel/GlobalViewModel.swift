@@ -785,6 +785,7 @@ class GlobalViewModel: ObservableObject {
                             self?.purchaseFinished = true
                             self?.purchasingInProgress = false
                             self?.vibrationWorker.vibrate()
+                            self?.getAllowance()
                             self?.getMinterBalance()
                         }
                         let newTokensCount = collections.reduce(0) { $0 + $1.tokensCount}
@@ -998,11 +999,11 @@ class GlobalViewModel: ObservableObject {
                             let metaLink = "ipfs://\(cid)"
                             if self.connectedAddress != nil && self.isAgentAccount {
                                 self.web3.purchasePrivateCollectionAgent(salt: salt,
-                                                                    name: collectionData.name,
-                                                                    collectionMeta: metaLink,
-                                                                    accessTokenMeta: metaLink,
-                                                                    symbol: "",
-                                                                    data: data) { [weak self] err in
+                                                                         name: collectionData.name,
+                                                                         collectionMeta: metaLink,
+                                                                         accessTokenMeta: Constants.ipfsAccessTokenMeta,
+                                                                         symbol: "",
+                                                                         data: data) { [weak self] err in
                                     if let err = err {
                                         print("Tx error: \(err)")
                                     } else {
@@ -1013,7 +1014,7 @@ class GlobalViewModel: ObservableObject {
                                 guard let data = self.web3.purchasePrivateCollectionData(salt: salt,
                                                                                     name: collectionData.name,
                                                                                     collectionMeta: metaLink,
-                                                                                    accessTokenMeta: metaLink,
+                                                                                    accessTokenMeta: Constants.ipfsAccessTokenMeta,
                                                                                     symbol: "",
                                                                                     data: data) else {
                                     //TODO: handle error

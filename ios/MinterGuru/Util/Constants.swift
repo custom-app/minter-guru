@@ -16,7 +16,7 @@ struct Constants {
     static let sessionKey = "session_key"
     static let currentVersion = 0
     static let ipfsMinterImage = "ipfs://QmabMpksqkBnD48a4sdSNj5Y3uEG4hTzJxri7jE88vTz2g"
-    static let ipfsAccessTokenMeta = "ipfs://"
+    static let ipfsAccessTokenMeta = "ipfs://bafkreigvvqwpop4aeucnjdw6ozjecinuwujka7cjzj7cd323pmsek7mvxu"
     static let minterTwitterLink = "https://twitter.com/MinterGuru"
     
     struct Bridges {
