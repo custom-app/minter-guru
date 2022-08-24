@@ -13,7 +13,6 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 steps;                       // count of unlock periods
         uint256 createdAt;                   // started at timestamp
         uint256 withdrawn;                   // already released
-        uint256 revokedAt;                   // revocation timestamp
     }
 
     /// @dev CommunityEvent - struct with some gaming activity details
@@ -132,7 +131,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         require(steps > 0, "MinterGuruToken: steps quantity must be positive");
         require(vestingRecords[receiver].stepValue == 0, "MinterGuruToken: single receive can't have multiple vesting records");
         require(stepValue * steps <= vestingLeftSupply, "MinterGuruToken: vesting limit reached");
-        vestingRecords[receiver] = VestingRecord(receiver, stepValue, stepDuration, steps, block.timestamp, 0, 0);
+        vestingRecords[receiver] = VestingRecord(receiver, stepValue, stepDuration, steps, block.timestamp, 0);
         vestingLeftSupply -= stepValue * steps;
         emit VestingStarted(receiver, stepValue, stepDuration, steps);
     }
@@ -159,8 +158,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
     function revokeVesting(address receiver) external onlyRole(VESTING_ADMIN_ROLE) {
         VestingRecord storage record = vestingRecords[receiver];
         require(record.stepValue > 0, "MinterGuruToken: vesting record doesn't exist");
-        record.revokedAt = block.timestamp;
-        uint256 availableAfterRevocation = record.stepValue * ((record.revokedAt - record.createdAt) / record.stepDuration);
+        uint256 availableAfterRevocation = record.stepValue * ((block.timestamp - record.createdAt) / record.stepDuration);
         vestingLeftSupply += (record.stepValue * record.steps - availableAfterRevocation);
         if (availableAfterRevocation > record.withdrawn) {
             _sendTokens(receiver, availableAfterRevocation - record.withdrawn);
@@ -176,9 +174,6 @@ contract MinterGuruToken is AccessControl, ERC20 {
         VestingRecord storage record = vestingRecords[_msgSender()];
         require(record.stepValue > 0, "MinterGuruToken: vesting record doesn't exist");
         uint256 rightBound = block.timestamp;
-        if (record.revokedAt > 0) {
-            rightBound = record.revokedAt;
-        }
         return record.stepValue * ((rightBound - record.createdAt) / record.stepDuration) - record.withdrawn;
     }
 
@@ -203,6 +198,7 @@ contract MinterGuruToken is AccessControl, ERC20 {
         uint256 id = eventsCount;
         eventsCount++;
         currentEvents[id] = CommunityEvent(id, value, start, finish, thresholds, values, 0);
+        communityRewardLeftSupply -= value;
         emit CommunityEventCreated(id, value, start, finish, thresholds, values);
     }
 
@@ -313,7 +309,6 @@ contract MinterGuruToken is AccessControl, ERC20 {
             address to = receivers[i];
             uint256 value = _calcGamingReward(ev);
             _sendTokens(to, value);
-            communityRewardLeftSupply -= value;
             ev.currentSupply += value;
             if (ev.currentSupply == ev.value) {
                 require(i == receivers.length - 1, "MinterGuruToken: supply finished");

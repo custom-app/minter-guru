@@ -1,4 +1,3 @@
-
 import {
   // eslint-disable-next-line camelcase
   MinterGuruCollectionsAccessToken__factory,

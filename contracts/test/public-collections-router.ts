@@ -11,6 +11,7 @@ import {
   MinterGuruPublicCollectionsRouter__factory,
   // eslint-disable-next-line node/no-missing-import
 } from "../typechain";
+import "@nomicfoundation/hardhat-chai-matchers";
 
 const genRanHex = (size: number) =>
   [...Array(size)]
@@ -60,7 +61,7 @@ describe("PublicCollectionRouter single version", async () => {
       .connect(accounts[0])
       .createCollectionClone(salt, "test", "TEST", "");
     expect(cloneTx)
-      .to.emit("PublicCollectionsRouter", "CollectionCreated")
+      .to.emit(router, "CollectionCreated")
       .withArgs(collectionAddress, "0");
     collection = factory.attach(collectionAddress);
   });
@@ -84,7 +85,7 @@ describe("PublicCollectionRouter single version", async () => {
       .connect(accounts[1])
       .mint(BN.from(0), BN.from(0), "kek", "0x10");
     expect(tx)
-      .to.emit("PublicCollectionsRouter", "PublicMint")
+      .to.emit(router, "PublicMint")
       .withArgs(collection.address, await accounts[1].getAddress(), BN.from(0));
   });
 
@@ -119,8 +120,8 @@ describe("PublicCollectionRouter single version", async () => {
       .connect(accounts[1])
       .mint(BN.from(0), BN.from(1), "kekes", "0x20");
     expect(tx)
-      .to.emit("PublicCollectionsRouter", "PublicMint")
-      .withArgs(collection.address, await accounts[1].getAddress(), BN.from(0));
+      .to.emit(router, "PublicMint")
+      .withArgs(collection.address, await accounts[1].getAddress(), BN.from(1));
   });
 
   it("token list after two mint", async () => {
@@ -146,6 +147,27 @@ describe("PublicCollectionRouter single version", async () => {
       [[collection.address, BN.from(0)]],
       [[[BN.from(1), "kekes", "0x20"]]],
       2
+    );
+  });
+
+  it("third mint should be successful", async () => {
+    const tx = router
+      .connect(accounts[1])
+      .mint(BN.from(0), BN.from(2), "kekes", "0x30");
+    await expect(tx)
+      .to.emit(router, "PublicMint")
+      .withArgs(collection.address, await accounts[1].getAddress(), BN.from(2));
+  });
+
+  it("get not from begin", async () => {
+    await checkCollectionsList(
+      router,
+      accounts[1],
+      1,
+      2,
+      [[collection.address, BN.from(0)]],
+      [[[BN.from(2), "kekes", "0x30"]]],
+      3
     );
   });
 });
@@ -198,7 +220,7 @@ describe("PublicCollectionRouter multiple versions", async () => {
       .connect(accounts[1])
       .mintWithoutId(BN.from(0), "kek", "0x10");
     expect(txV1)
-      .to.emit("PublicCollectionsRouter", "PublicMint")
+      .to.emit(router, "PublicMint")
       .withArgs(
         collectionV1.address,
         await accounts[1].getAddress(),
@@ -209,7 +231,7 @@ describe("PublicCollectionRouter multiple versions", async () => {
       .connect(accounts[1])
       .mint(BN.from(1), BN.from(0), "kekes", "0x20");
     expect(txV2)
-      .to.emit("PublicCollectionsRouter", "PublicMint")
+      .to.emit(router, "PublicMint")
       .withArgs(
         collectionV2.address,
         await accounts[1].getAddress(),

@@ -15,3 +15,10 @@ artifacts
 .mumbai-test-account
 contract-metadata.json
 token-metadata.json
+.polygon-secret
+.polygon-liquidity-secret
+.polygon-vesting-secret
+.polygon-events-secret
+public-contract-meta.json
+access-token-token-meta.json
+access-token-contract-meta.json
