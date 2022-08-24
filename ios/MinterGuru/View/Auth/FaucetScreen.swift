@@ -25,7 +25,7 @@ struct FaucetScreen: View {
                     Spacer()
                     Text("Faucet successfully used!")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 28))
+                        .font(.custom("rubik-bold", fixedSize: 28))
                         .multilineTextAlignment(.center)
                         .padding(.top, 26)
                         .padding(.horizontal, 20)
@@ -36,7 +36,7 @@ struct FaucetScreen: View {
                     showingSheet = false
                 } label: {
                     Text("Go mint")
-                        .font(.custom("rubik-bold", size: 17))
+                        .font(.custom("rubik-bold", fixedSize: 17))
                         .foregroundColor(Colors.mainWhite)
                         .padding(.vertical, 17)
                         .padding(.horizontal, 60)
@@ -51,7 +51,7 @@ struct FaucetScreen: View {
                 Spacer()
                 
                 Text("Processing faucet transaction")
-                    .font(.custom("rubik-bold", size: 28))
+                    .font(.custom("rubik-bold", fixedSize: 28))
                     .foregroundColor(Colors.darkGrey)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
@@ -67,28 +67,28 @@ struct FaucetScreen: View {
             } else {
                 Text("Faucet")
                     .foregroundColor(Colors.darkGrey)
-                    .font(.custom("rubik-bold", size: 28))
+                    .font(.custom("rubik-bold", fixedSize: 28))
                     .padding(.top, 26)
                     .padding(.horizontal, 10)
                 
                 Text("Get crypto coins to pay the fees")
                     .foregroundColor(Colors.mainGrey)
                     .multilineTextAlignment(.center)
-                    .font(.custom("rubik-bold", size: 19))
+                    .font(.custom("rubik-bold", fixedSize: 19))
                     .padding(.top, 10)
                     .padding(.horizontal, 10)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("How does it work?")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 17))
+                        .font(.custom("rubik-bold", fixedSize: 17))
                     
                     Text("We can gift you some Matics to pay for a transaction fee and try out our service. All you need to do is just click the button “Get Matic” below.")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-regular", size: 17))
+                        .font(.custom("rubik-regular", fixedSize: 17))
                     Text("It's free.")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-regular", size: 17))
+                        .font(.custom("rubik-regular", fixedSize: 17))
                 }
                 .padding(20)
                 .background(Colors.mainWhite)
@@ -128,7 +128,7 @@ struct FaucetScreen: View {
                                     globalVm.callFaucet()
                                 } label: {
                                     Text("Get Matic")
-                                        .font(.custom("rubik-bold", size: 17))
+                                        .font(.custom("rubik-bold", fixedSize: 17))
                                         .foregroundColor(Colors.mainWhite)
                                         .padding(.vertical, 17)
                                         .padding(.horizontal, 42)
@@ -160,7 +160,7 @@ struct FaucetUnusableView: View {
                 .padding(.horizontal, 26)
             
             Text("Get Matic")
-                .font(.custom("rubik-bold", size: 17))
+                .font(.custom("rubik-bold", fixedSize: 17))
                 .foregroundColor(Colors.mainWhite)
                 .padding(.vertical, 17)
                 .padding(.horizontal, 42)

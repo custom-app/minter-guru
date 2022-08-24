@@ -33,25 +33,25 @@ struct MinterInfoScreen: View {
                     
                     Text("How to earn")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 28))
+                        .font(.custom("rubik-bold", fixedSize: 28))
                         .padding(.top, 20)
                         .padding(.horizontal, 10)
                     
                     Text("Minter Guru (MIGU) tokens")
                         .foregroundColor(Colors.mainGrey)
                         .multilineTextAlignment(.center)
-                        .font(.custom("rubik-bold", size: 19))
+                        .font(.custom("rubik-bold", fixedSize: 19))
                         .padding(.top, 10)
                         .padding(.horizontal, 10)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Ways to get MIGU tokens")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                         
                         Text("You can earn our tokens for your activity on Twitter. To receive rewards, you need to link your Twitter account in the input field below.")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-regular", size: 17))
+                            .font(.custom("rubik-regular", fixedSize: 17))
                         
                         if let info = globalVm.twitterFollowInfo, globalVm.twitterFollowRewardReceived || (info.open && info.spent < info.limit) {
                         
@@ -59,7 +59,7 @@ struct MinterInfoScreen: View {
                                 HStack(spacing: 0) {
                                     Text("- Follow us on ")
                                         .foregroundColor(Colors.darkGrey)
-                                        .font(.custom("rubik-regular", size: 17))
+                                        .font(.custom("rubik-regular", fixedSize: 17))
                                     
                                     Button {
                                         if !globalVm.twitterFollowRewardReceived {
@@ -74,23 +74,23 @@ struct MinterInfoScreen: View {
                                     } label: {
                                         Text("Twitter")
                                             .foregroundColor(Colors.mainPurple)
-                                            .font(.custom("rubik-bold", size: 17))
+                                            .font(.custom("rubik-bold", fixedSize: 17))
                                     }
                                     
                                     if globalVm.twitterFollowRewardReceived {
                                         Text(" (+)")
                                             .foregroundColor(Colors.darkGrey)
-                                            .font(.custom("rubik-regular", size: 17))
+                                            .font(.custom("rubik-regular", fixedSize: 17))
                                     }
                                 }
                                 
                                 Text("•  reward - \(Tools.formatUint256(BigUInt(info.value)!, decimals: 0)) MIGU")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 17))
+                                    .font(.custom("rubik-regular", fixedSize: 17))
                                     .padding(.leading, 20)
                                 Text("•  one time only")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 17))
+                                    .font(.custom("rubik-regular", fixedSize: 17))
                                     .padding(.leading, 20)
                             }
                         }
@@ -104,31 +104,31 @@ struct MinterInfoScreen: View {
                                 
                                 Text("- Share your photos on Twitter \(addition)")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 17))
+                                    .font(.custom("rubik-regular", fixedSize: 17))
                                 
                                 Text("•  reward - \(Tools.formatUint256(BigUInt(info.value)!, decimals: 0)) MIGU per post")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 17))
+                                    .font(.custom("rubik-regular", fixedSize: 17))
                                     .padding(.leading, 20)
                                 
                                 Text("•  up to \(info.personalLimit) rewards per day")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 17))
+                                    .font(.custom("rubik-regular", fixedSize: 17))
                                     .padding(.leading, 20)
                                 
                                 Text("•  total \(info.personalTotalLimit) rewards limit")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 17))
+                                    .font(.custom("rubik-regular", fixedSize: 17))
                                     .padding(.leading, 20)
                             }
                             
                             Text("Tokens will be sent 24 hours after the post is published.")
                                 .foregroundColor(Colors.darkGrey)
-                                .font(.custom("rubik-regular", size: 17))
+                                .font(.custom("rubik-regular", fixedSize: 17))
                             
                             Text("The post must contain the #MIGU hashtag to earn tokens.")
                                 .foregroundColor(Colors.darkGrey)
-                                .font(.custom("rubik-semibold", size: 17))
+                                .font(.custom("rubik-semibold", fixedSize: 17))
                         }
                         
 //                        if let twitterInfo = globalVm.twitterInfo, let rewards = globalVm.rewards {
@@ -159,11 +159,11 @@ struct MinterInfoScreen: View {
                     }
                     
                     TextField("", text: $twitterName)
-                        .font(.custom("rubik-bold", size: 17))
+                        .font(.custom("rubik-bold", fixedSize: 17))
                         .placeholder(when: twitterName.isEmpty) {
                             HStack {
                                 Text("Enter your twitter nickname")
-                                    .font(.custom("rubik-bold", size: 17))
+                                    .font(.custom("rubik-bold", fixedSize: 17))
                                     .foregroundColor(Colors.mainGrey)
                                 Spacer()
                             }
@@ -204,7 +204,7 @@ struct MinterInfoScreen: View {
                         }
                     } label: {
                         Text("Save")
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .foregroundColor(Colors.mainWhite)
                             .padding(.vertical, 17)
                             .padding(.horizontal, 60)
@@ -247,7 +247,7 @@ struct RepostsInfo: View {
                     HStack {
                         Text("Earned today:")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 16))
+                            .font(.custom("rubik-bold", fixedSize: 16))
                         Spacer()
                     }
                     HStack(spacing: 0) {
@@ -259,7 +259,7 @@ struct RepostsInfo: View {
 
                             Text(String(Tools.calcTodayRewards(rewards: rewards)))
                                 .foregroundColor(Colors.darkGrey)
-                                .font(.custom("rubik-regular", size: 16))
+                                .font(.custom("rubik-regular", fixedSize: 16))
                                 .padding(.leading, 5)
                         }
                         Spacer()
@@ -276,7 +276,7 @@ struct RepostsInfo: View {
                     HStack {
                         Text("Daily limit:")
                             .foregroundColor(Colors.mainGrey)
-                            .font(.custom("rubik-bold", size: 16))
+                            .font(.custom("rubik-bold", fixedSize: 16))
                         Spacer()
                     }
                     HStack(spacing: 0) {
@@ -288,7 +288,7 @@ struct RepostsInfo: View {
 
                             Text(String(info.personalLimit))
                                 .foregroundColor(Colors.mainGrey)
-                                .font(.custom("rubik-regular", size: 16))
+                                .font(.custom("rubik-regular", fixedSize: 16))
                                 .padding(.leading, 5)
                         }
                         Spacer()

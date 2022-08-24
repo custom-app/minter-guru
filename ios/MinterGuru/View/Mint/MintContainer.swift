@@ -45,12 +45,12 @@ struct MintContainer: View {
                         
                         Text("Minting")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 28))
+                            .font(.custom("rubik-bold", fixedSize: 28))
                             .padding(.top, 10)
                         
                         Text("Select a photo")
                             .foregroundColor(Colors.mainGrey)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .padding(.top, 25)
                             .padding(.horizontal, 10)
                         
@@ -72,7 +72,7 @@ struct MintContainer: View {
                                                     Spacer()
                                                     Text("Edit")
                                                         .foregroundColor(Colors.mainPurple)
-                                                        .font(.custom("rubik-bold", size: 17))
+                                                        .font(.custom("rubik-bold", fixedSize: 17))
                                                     Spacer()
                                                 }
                                                 .padding(.vertical, 12)
@@ -107,7 +107,7 @@ struct MintContainer: View {
                                         
                                         Text("Library")
                                             .foregroundColor(Colors.mainPurple)
-                                            .font(.custom("rubik-bold", size: 16))
+                                            .font(.custom("rubik-bold", fixedSize: 16))
                                             .padding(.top, 8)
                                     }
                                     .padding(.horizontal, 37)
@@ -124,11 +124,11 @@ struct MintContainer: View {
                         }
                         
                         TextField("", text: $globalVm.pictureName)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .placeholder(when: globalVm.pictureName.isEmpty) {
                                 HStack {
                                     Text("Picture name")
-                                        .font(.custom("rubik-bold", size: 17))
+                                        .font(.custom("rubik-bold", fixedSize: 17))
                                         .foregroundColor(Colors.mainGrey)
                                     Spacer()
                                 }
@@ -164,7 +164,7 @@ struct MintContainer: View {
                         
                         Text("Collection")
                             .foregroundColor(Colors.mainGrey)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .padding(.top, 25)
                         
                         CollectionMenu(pickedPrivateCollection: $globalVm.pickedPrivateCollection)
@@ -175,14 +175,14 @@ struct MintContainer: View {
                                 HStack(spacing: 10) {
                                     Text("Select a Private collection")
                                         .foregroundColor(Colors.mainGrey)
-                                        .font(.custom("rubik-bold", size: 16))
+                                        .font(.custom("rubik-bold", fixedSize: 16))
                                     
                                     Button {
                                         showCreateCollectionSheet = true
                                     } label: {
                                         Text("Create")
                                             .foregroundColor(Colors.mainPurple)
-                                            .font(.custom("rubik-bold", size: 16))
+                                            .font(.custom("rubik-bold", fixedSize: 16))
                                     }
                                 }
                                 
@@ -195,7 +195,7 @@ struct MintContainer: View {
                                         ForEach(globalVm.privateCollections, id: \.self) { collection in
                                             Text("#\(collection.data.name)")
                                                 .foregroundColor(Colors.mainPurple)
-                                                .font(.custom("rubik-bold", size: 16))
+                                                .font(.custom("rubik-bold", fixedSize: 16))
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 10)
                                                 .background(Colors.palePurple)
@@ -247,7 +247,7 @@ struct MintContainer: View {
                                         showFaucet = true
                                     } label: {
                                         Text("Faucet")
-                                            .font(.custom("rubik-bold", size: 17))
+                                            .font(.custom("rubik-bold", fixedSize: 17))
                                             .foregroundColor(Colors.mainPurple)
                                     }
                                     .padding(.top, 10)
@@ -298,7 +298,7 @@ struct MintContainer: View {
                                     }
                                 } label: {
                                     Text("Mint")
-                                        .font(.custom("rubik-bold", size: 17))
+                                        .font(.custom("rubik-bold", fixedSize: 17))
                                         .foregroundColor(Colors.mainWhite)
                                         .padding(.vertical, 17)
                                         .padding(.horizontal, 60)
@@ -355,7 +355,7 @@ struct CollectionMenu: View {
         HStack(spacing: 6) {
             Text("Common")
                 .foregroundColor(pickedPrivateCollection ? Colors.mainPurple : Colors.mainWhite)
-                .font(.custom("rubik-bold", size: 16))
+                .font(.custom("rubik-bold", fixedSize: 16))
                 .frame(width: 94)
                 .padding(.vertical, 10)
                 .background(pickedPrivateCollection ?
@@ -374,7 +374,7 @@ struct CollectionMenu: View {
                 .foregroundColor(globalVm.isPassBought ?
                                  (pickedPrivateCollection ? Colors.mainWhite : Colors.mainPurple) : Colors.mainGrey
                 )
-                .font(.custom("rubik-bold", size: 16))
+                .font(.custom("rubik-bold", fixedSize: 16))
                 .frame(width: 94)
                 .padding(.vertical, 10)
                 .background(pickedPrivateCollection ?

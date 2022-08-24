@@ -24,7 +24,7 @@ struct MintProcessingScreen: View {
                 MinterProgress()
             } else {
                 Text("Minting in progress")
-                    .font(.custom("rubik-bold", size: 28))
+                    .font(.custom("rubik-bold", fixedSize: 28))
                     .foregroundColor(Colors.darkGrey)
                     .padding(.horizontal, 10)
                 

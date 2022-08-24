@@ -34,23 +34,23 @@ struct AddressAuthSheet: View {
             
             Text("Auth through wallet address")
                 .foregroundColor(Colors.darkGrey)
-                .font(.custom("rubik-bold", size: 28))
+                .font(.custom("rubik-bold", fixedSize: 28))
                 .multilineTextAlignment(.center)
                 .padding(.top, 26)
                 .padding(.horizontal, 30)
             
             Text("Enter your address")
                 .foregroundColor(Colors.mainGrey)
-                .font(.custom("rubik-bold", size: 24))
+                .font(.custom("rubik-bold", fixedSize: 24))
                 .padding(.top, 25)
                 .padding(.horizontal, 10)
             
             TextField("", text: $address)
-                .font(.custom("rubik-bold", size: 17))
+                .font(.custom("rubik-bold", fixedSize: 17))
                 .placeholder(when: address.isEmpty) {
                     HStack {
                         Text("0x.......")
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .foregroundColor(Colors.mainGrey)
                         Spacer()
                     }
@@ -83,7 +83,7 @@ struct AddressAuthSheet: View {
                 }
             } label: {
                 Text("Authorize")
-                    .font(.custom("rubik-bold", size: 17))
+                    .font(.custom("rubik-bold", fixedSize: 17))
                     .foregroundColor(Colors.mainWhite)
                     .padding(.vertical, 17)
                     .padding(.horizontal, 40)

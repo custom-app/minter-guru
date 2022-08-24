@@ -17,7 +17,7 @@ struct Tip: View {
         HStack(spacing: 0) {
             Spacer()
             Text(text)
-                .font(.custom("rubik-regular", size: 14))
+                .font(.custom("rubik-regular", fixedSize: 14))
                 .foregroundColor(Colors.darkGrey)
                 .multilineTextAlignment(.center)
                 .padding(10)

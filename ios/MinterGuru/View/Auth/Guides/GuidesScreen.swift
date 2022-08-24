@@ -21,21 +21,21 @@ struct GuidesScreen: View {
                     
                     Text("Guides")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 28))
+                        .font(.custom("rubik-bold", fixedSize: 28))
                         .padding(.top, 26)
                         .padding(.horizontal, 10)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Wallet:")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                         
                         Button {
                             
                         } label: {
                             Text("Some guide 1")
                                 .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                         }
                         
                         Rectangle()
@@ -47,7 +47,7 @@ struct GuidesScreen: View {
                         } label: {
                             Text("Some guide 2")
                                 .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                         }
                         
                         Rectangle()
@@ -59,7 +59,7 @@ struct GuidesScreen: View {
                         } label: {
                             Text("Some guide 3")
                                 .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                         }
                     }
                     .padding(20)
@@ -73,14 +73,14 @@ struct GuidesScreen: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Tokens:")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                         
                         Button {
                             
                         } label: {
                             Text("About")
                                 .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                         }
                         .padding(.top, 8)
                         
@@ -102,7 +102,7 @@ struct GuidesScreen: View {
                         }
                     } label: {
                         Text("General guide")
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .foregroundColor(Colors.mainWhite)
                             .padding(.vertical, 17)
                             .padding(.horizontal, 50)
@@ -126,7 +126,7 @@ struct GuidesScreen: View {
                     } label: {
                         Text("Help")
                             .foregroundColor(Colors.mainPurple)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                     }
                     .padding(.top, 10)
                     

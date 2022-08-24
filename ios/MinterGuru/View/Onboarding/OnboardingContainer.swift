@@ -39,31 +39,31 @@ struct OnboardingContainer: View {
                     switch state {
                     case .first:
                         Text("You enter the temple and see a monk in front of you")
-                            .font(.custom("rubik-semibold", size: 20))
+                            .font(.custom("rubik-semibold", fixedSize: 20))
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.leading)
                             .transition(.backslide.combined(with: .opacity))
                     case .second:
                         Text("In front of your eyes, a guru turns a photo into an NFT")
-                            .font(.custom("rubik-semibold", size: 20))
+                            .font(.custom("rubik-semibold", fixedSize: 20))
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.leading)
                             .transition(.backslide.combined(with: .opacity))
                     case .third:
                         Text("The Guru has chosen you and gave you a great mission")
-                            .font(.custom("rubik-semibold", size: 20))
+                            .font(.custom("rubik-semibold", fixedSize: 20))
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.leading)
                             .transition(.backslide.combined(with: .opacity))
                     case .fourth:
                         Text("To become a Guru a hero must own a smartcontract")
-                            .font(.custom("rubik-semibold", size: 20))
+                            .font(.custom("rubik-semibold", fixedSize: 20))
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.leading)
                             .transition(.backslide.combined(with: .opacity))
                     case .fifth:
                         Text("The Access Token is your key to the smartcontract ownership")
-                            .font(.custom("rubik-semibold", size: 20))
+                            .font(.custom("rubik-semibold", fixedSize: 20))
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.leading)
                             .transition(.backslide.combined(with: .opacity))
@@ -278,7 +278,7 @@ struct OnboardingContainer: View {
                         }
                     } label: {
                         Text(state == .first ? "skip >>" : "< back")
-                            .font(.custom("rubik-semibold", size: 20))
+                            .font(.custom("rubik-semibold", fixedSize: 20))
                             .foregroundColor(Color.white.opacity(0.25))
                     }
                     .frame(maxWidth: .infinity)
@@ -304,7 +304,7 @@ struct OnboardingContainer: View {
                                                endPoint: .topTrailing)
                                     .mask (
                                         Text(state.nextText())
-                                            .font(.custom("rubik-semibold", size: 20))
+                                            .font(.custom("rubik-semibold", fixedSize: 20))
                                             .foregroundColor(Color.white)
                                     )
                                     .frame(width: 150, height: 50)
@@ -315,7 +315,7 @@ struct OnboardingContainer: View {
                                     )
                             } else {
                                 Text(state.nextText())
-                                    .font(.custom("rubik-semibold", size: 20))
+                                    .font(.custom("rubik-semibold", fixedSize: 20))
                                     .foregroundColor(Color.white)
                                     .frame(width: 150, height: 50)
                                     .background(
@@ -452,40 +452,6 @@ struct OnboardingContainer: View {
             case .fifth:
                 return "GOT IT!"
             }
-        }
-    }
-}
-
-struct StrokeText: View {
-    let text: String
-    let width: CGFloat
-    let color: Color
-
-    var body: some View {
-        ZStack{
-            ZStack{
-                Text(text)
-                    .font(Font.custom("rubik-bold", fixedSize: 30))
-                    .multilineTextAlignment(.center)
-                    .offset(x:  width, y:  width)
-                Text(text)
-                    .font(Font.custom("rubik-bold", fixedSize: 30))
-                    .multilineTextAlignment(.center)
-                    .offset(x: -width, y: -width)
-                Text(text)
-                    .font(Font.custom("rubik-bold", fixedSize: 30))
-                    .multilineTextAlignment(.center)
-                    .offset(x: -width, y:  width)
-                Text(text)
-                    .font(Font.custom("rubik-bold", fixedSize: 30))
-                    .multilineTextAlignment(.center)
-                    .offset(x:  width, y: -width)
-            }
-            .foregroundColor(color)
-            Text(text)
-                .font(Font.custom("rubik-bold", fixedSize: 30))
-                .multilineTextAlignment(.center)
-                .foregroundColor(Color.black)
         }
     }
 }

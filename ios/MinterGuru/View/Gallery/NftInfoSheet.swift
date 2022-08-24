@@ -35,7 +35,7 @@ struct NftInfoSheet: View {
                 VStack(spacing: 0) {
                     Text("NFT")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 28))
+                        .font(.custom("rubik-bold", fixedSize: 28))
                         .padding(.top, 26)
                     
                     VStack(spacing: 10) {
@@ -49,12 +49,12 @@ struct NftInfoSheet: View {
                             
                             Text(nft.data.name)
                                 .foregroundColor(Colors.darkGrey)
-                                .font(.custom("rubik-bold", size: 24))
+                                .font(.custom("rubik-bold", fixedSize: 24))
                             
                             if let collection = nft.collectionName {
                                 Text(collection.isEmpty ? "#Public collection" : "#\(collection)")
                                     .foregroundColor(Colors.mainGrey)
-                                    .font(.custom("rubik-bold", size: 18))
+                                    .font(.custom("rubik-bold", fixedSize: 18))
                             }
                         } else {
                             MinterProgress()
@@ -91,7 +91,7 @@ struct NftInfoSheet: View {
                     } label: {
                         Text("Watch on the OpenSea")
                             .foregroundColor(Colors.mainPurple)
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .padding(.top, 14)
                     }
                     
@@ -106,7 +106,7 @@ struct NftInfoSheet: View {
                         } label: {
                             Text("Watch on the IPFS")
                                 .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                                 .padding(.top, 10)
                         }
                     }
@@ -116,7 +116,7 @@ struct NftInfoSheet: View {
                         textForShare = "\(Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId))\n#MIGU"
                     } label: {
                         Text("Share")
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .foregroundColor(Colors.mainWhite)
                             .padding(.vertical, 17)
                             .padding(.horizontal, 58)
@@ -142,7 +142,7 @@ struct NftInfoSheet: View {
                         } label: {
                             Text("More info")
                                 .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", size: 16))
+                                .font(.custom("rubik-bold", fixedSize: 16))
                         }
                         .padding(.vertical, 10)
                         .sheet(isPresented: $showMinterInfo) {

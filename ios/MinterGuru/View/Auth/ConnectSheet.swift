@@ -26,13 +26,13 @@ struct ConnectSheet: View {
                         
                         Text("Connect crypto wallet")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 28))
+                            .font(.custom("rubik-bold", fixedSize: 28))
                             .padding(.top, 26)
                             .padding(.horizontal, 10)
                         
                         Text("Select the wallet")
                             .foregroundColor(Colors.mainGrey)
-                            .font(.custom("rubik-bold", size: 24))
+                            .font(.custom("rubik-bold", fixedSize: 24))
                             .padding(.top, 50)
                             .padding(.horizontal, 10)
                         
@@ -57,7 +57,7 @@ struct ConnectSheet: View {
                                     
                                     Text("Trust Wallet")
                                         .foregroundColor(selectedTrust ? Colors.darkGrey : Colors.mainGrey)
-                                        .font(.custom("rubik-bold", size: 18))
+                                        .font(.custom("rubik-bold", fixedSize: 18))
                                         .padding(.top, 16)
                                 }
                             }
@@ -82,7 +82,7 @@ struct ConnectSheet: View {
                                     
                                     Text("Metamask")
                                         .foregroundColor(selectedTrust ? Colors.mainGrey : Colors.darkGrey)
-                                        .font(.custom("rubik-bold", size: 18))
+                                        .font(.custom("rubik-bold", fixedSize: 18))
                                         .padding(.top, 16)
                                 }
                             }
@@ -112,7 +112,7 @@ struct ConnectSheet: View {
                             }
                         } label: {
                             Text("Connect")
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                                 .foregroundColor(Colors.mainWhite)
                                 .padding(.vertical, 17)
                                 .padding(.horizontal, 45)

@@ -34,12 +34,12 @@ struct GalleryContainer: View {
                 LazyVStack(spacing: 0) {
                     Text("Nft Album")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 28))
+                        .font(.custom("rubik-bold", fixedSize: 28))
                         .padding(.top, 10)
                     
                     Text("Collections")
                         .foregroundColor(Colors.mainGrey)
-                        .font(.custom("rubik-bold", size: 17))
+                        .font(.custom("rubik-bold", fixedSize: 17))
                         .padding(.top, 25)
                     
                     CollectionMenu(pickedPrivateCollection: $globalVm.privateCollectionsInGallery,
@@ -52,7 +52,7 @@ struct GalleryContainer: View {
                                 ForEach(globalVm.privateCollections, id: \.self) { collection in
                                     Text("#\(collection.data.name)")
                                         .foregroundColor(Colors.mainPurple)
-                                        .font(.custom("rubik-bold", size: 16))
+                                        .font(.custom("rubik-bold", fixedSize: 16))
                                         .padding(.vertical, 8)
                                         .padding(.horizontal, 10)
                                         .background(Colors.palePurple)
@@ -83,11 +83,11 @@ struct GalleryContainer: View {
                         let searchEmpty = globalVm.nftSearch.isEmpty
                         
                         TextField("", text: $globalVm.nftSearch.animation())
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .placeholder(when: globalVm.nftSearch.isEmpty) {
                                 HStack {
                                     Text("Nft name")
-                                        .font(.custom("rubik-bold", size: 17))
+                                        .font(.custom("rubik-bold", fixedSize: 17))
                                         .foregroundColor(Colors.mainGrey)
                                     Spacer()
                                 }
@@ -151,14 +151,14 @@ struct GalleryContainer: View {
                                     Text("You don't have any private collections")
                                         .foregroundColor(Colors.mainGrey)
                                         .multilineTextAlignment(.center)
-                                        .font(.custom("rubik-bold", size: 19))
+                                        .font(.custom("rubik-bold", fixedSize: 19))
                                         .padding(.horizontal, 20)
                                     
                                     Button {
                                         showCreateCollectionSheet = true
                                     } label: {
                                         Text("Create")
-                                            .font(.custom("rubik-bold", size: 17))
+                                            .font(.custom("rubik-bold", fixedSize: 17))
                                             .foregroundColor(Colors.mainWhite)
                                             .padding(.vertical, 17)
                                             .padding(.horizontal, 50)
@@ -193,7 +193,7 @@ struct GalleryContainer: View {
                                             Text("There is no NFTs with this name")
                                                 .foregroundColor(Colors.mainGrey)
                                                 .multilineTextAlignment(.center)
-                                                .font(.custom("rubik-bold", size: 19))
+                                                .font(.custom("rubik-bold", fixedSize: 19))
                                                 .padding(.horizontal, 20)
                                         }
                                         .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
@@ -243,7 +243,7 @@ struct GalleryContainer: View {
                                     Text("There is no NFTs with this name")
                                         .foregroundColor(Colors.mainGrey)
                                         .multilineTextAlignment(.center)
-                                        .font(.custom("rubik-bold", size: 19))
+                                        .font(.custom("rubik-bold", fixedSize: 19))
                                         .padding(.horizontal, 20)
                                 }
                                 .frame(width: geometry.size.width, height: calcWindowHeight(fullHeight: geometry.size.height))
@@ -314,7 +314,7 @@ struct NftListView: View {
                 HStack {
                     Text(nft.data.name)
                         .foregroundColor(Colors.mainPurple)
-                        .font(.custom("rubik-bold", size: 17))
+                        .font(.custom("rubik-bold", fixedSize: 17))
                     Spacer()
                 }
             }
@@ -342,7 +342,7 @@ struct EmptyCollectionView: View {
             Text(text)
                 .foregroundColor(Colors.mainGrey)
                 .multilineTextAlignment(.center)
-                .font(.custom("rubik-bold", size: 19))
+                .font(.custom("rubik-bold", fixedSize: 19))
                 .padding(.horizontal, 28)
             
             Button {
@@ -354,7 +354,7 @@ struct EmptyCollectionView: View {
                 }
             } label: {
                 Text("Mint now!")
-                    .font(.custom("rubik-bold", size: 17))
+                    .font(.custom("rubik-bold", fixedSize: 17))
                     .foregroundColor(Colors.mainWhite)
                     .padding(.vertical, 17)
                     .padding(.horizontal, 50)

@@ -48,21 +48,21 @@ struct AuthContainer: View {
             VStack(spacing: 0) {
                 Text("Crypto wallet")
                     .foregroundColor(Colors.darkGrey)
-                    .font(.custom("rubik-bold", size: 28))
+                    .font(.custom("rubik-bold", fixedSize: 28))
                     .padding(.top, 16)
                     .padding(.horizontal, 10)
                 
                 Text("Status: \(connectedByAddress ? "connected by address" : (connected ? "connected to \(globalVm.walletName)" : "disconnected"))")
                     .foregroundColor(Colors.greyBlue)
                     .multilineTextAlignment(.center)
-                    .font(.custom("rubik-bold", size: 20))
+                    .font(.custom("rubik-bold", fixedSize: 20))
                     .padding(.top, 10)
                     .padding(.horizontal, 10)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Address:")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 16))
+                        .font(.custom("rubik-bold", fixedSize: 16))
                     
                     HStack(spacing: 0) {
                         if connected {
@@ -74,7 +74,7 @@ struct AuthContainer: View {
                             HStack(spacing: 0) {
                                 Text("\(globalVm.walletAccount ?? "")")
                                     .foregroundColor(Colors.darkGrey)
-                                    .font(.custom("rubik-regular", size: 16))
+                                    .font(.custom("rubik-regular", fixedSize: 16))
                                     .lineLimit(1)
                                     .truncationMode(.middle)
                                 
@@ -102,7 +102,7 @@ struct AuthContainer: View {
                             
                             Text("wallet not connected")
                                 .foregroundColor(Colors.darkGrey)
-                                .font(.custom("rubik-regular", size: 16))
+                                .font(.custom("rubik-regular", fixedSize: 16))
                                 .padding(.leading, 5)
                         }
                     }
@@ -115,7 +115,7 @@ struct AuthContainer: View {
                     
                     Text("Tokens:")
                         .foregroundColor(Colors.darkGrey)
-                        .font(.custom("rubik-bold", size: 16))
+                        .font(.custom("rubik-bold", fixedSize: 16))
                         .padding(.top, 8)
                     
                     HStack(spacing: 0) {
@@ -128,7 +128,7 @@ struct AuthContainer: View {
                         let balance = globalVm.loadedMinterBalance ? Tools.formatUint256(globalVm.minterBalance) : "Loading"
                         Text(showBalance ? balance : "tokens are not available")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-regular", size: 16))
+                            .font(.custom("rubik-regular", fixedSize: 16))
                             .padding(.leading, 5)
                     }
                     .padding(.top, 8)
@@ -138,7 +138,7 @@ struct AuthContainer: View {
                     } label: {
                         Text("How to earn")
                             .foregroundColor(Colors.mainPurple)
-                            .font(.custom("rubik-bold", size: 16))
+                            .font(.custom("rubik-bold", fixedSize: 16))
                             .padding(.top, 6)
                     }
                     .sheet(isPresented: $showMinterInfo) {
@@ -174,7 +174,7 @@ struct AuthContainer: View {
                         
                         Text("Guides")
                             .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", size: 16))
+                            .font(.custom("rubik-bold", fixedSize: 16))
                             .padding(.top, 10)
                     }
                     .sheet(isPresented: $showGuides) {
@@ -207,7 +207,7 @@ struct AuthContainer: View {
                         
                         Text("Faucet")
                             .foregroundColor(accessShopAndFaucet ? Colors.darkGrey : Colors.greyBlue)
-                            .font(.custom("rubik-bold", size: 16))
+                            .font(.custom("rubik-bold", fixedSize: 16))
                             .padding(.top, 10)
                     }
                     .sheet(isPresented: $showFaucet, onDismiss: {
@@ -242,7 +242,7 @@ struct AuthContainer: View {
                         
                         Text("Shop")
                             .foregroundColor(accessShopAndFaucet ? Colors.darkGrey : Colors.greyBlue)
-                            .font(.custom("rubik-bold", size: 16))
+                            .font(.custom("rubik-bold", fixedSize: 16))
                             .padding(.top, 10)
                     }
                     .sheet(isPresented: $showShop, onDismiss: {
@@ -271,7 +271,7 @@ struct AuthContainer: View {
                             globalVm.disconnect()
                         } label: {
                             Text("Disconnect")
-                                .font(.custom("rubik-bold", size: 17))
+                                .font(.custom("rubik-bold", fixedSize: 17))
                                 .foregroundColor(Colors.mainPurple)
                                 .padding(.vertical, 15)
                                 .padding(.horizontal, 34)
@@ -293,7 +293,7 @@ struct AuthContainer: View {
                             HStack(spacing: 0) {
                                 Spacer()
                                 Text("Connect crypto wallet")
-                                    .font(.custom("rubik-bold", size: 17))
+                                    .font(.custom("rubik-bold", fixedSize: 17))
                                     .fontWeight(.bold)
                                     .foregroundColor(Colors.mainWhite)
                                 Spacer()
@@ -314,7 +314,7 @@ struct AuthContainer: View {
                             showAddressAuthSheet = true
                         } label: {
                             Text("Or you can log in with address")
-                                .font(.custom("rubik-bold", size: 16))
+                                .font(.custom("rubik-bold", fixedSize: 16))
                                 .underline()
                                 .foregroundColor(Colors.greyBlue)
                         }
@@ -330,12 +330,12 @@ struct AuthContainer: View {
                             Spacer()
                             VStack(spacing: 0) {
                                 Text("Wrong blockchain")
-                                    .font(.custom("rubik-bold", size: 16))
+                                    .font(.custom("rubik-bold", fixedSize: 16))
                                     .foregroundColor(Colors.darkGrey)
                                     .multilineTextAlignment(.center)
                                 
                                 Text("Check out the guidelines to find out how to connect your wallet to the Polygon blockchain or change the wallet")
-                                    .font(.custom("rubik-regular", size: 14))
+                                    .font(.custom("rubik-regular", fixedSize: 14))
                                     .foregroundColor(Colors.mainGrey)
                                     .multilineTextAlignment(.center)
                                     .padding(.top, 8)
@@ -359,7 +359,7 @@ struct AuthContainer: View {
                         globalVm.disconnect()
                     } label: {
                         Text("Disconnect")
-                            .font(.custom("rubik-bold", size: 17))
+                            .font(.custom("rubik-bold", fixedSize: 17))
                             .foregroundColor(Colors.mainPurple)
                             .padding(.vertical, 15)
                             .padding(.horizontal, 34)
