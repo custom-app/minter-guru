@@ -86,7 +86,7 @@ class GlobalViewModel: ObservableObject {
     var alert: IdentifiableAlert?
     
     var backgroundManager = BackgroundTasksManager.shared
-    var web3 = Web3Worker(endpoint: Config.endpoint)
+    var web3 = Web3Worker(endpoint: Config.polygonEndpoint)
     
     @Published
     var polygonBalance = 0.0
@@ -257,6 +257,12 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
+    func isAllPersonalInfoLoaded() -> Bool {
+        return publicNftsLoaded && privateCollectionsLoaded &&
+        allowanceLoaded && rewards != nil &&
+        loadedMinterBalance && polygonBalanceLoaded
+    }
+    
     func loadGeneralInfo() {
         getPrivateCollectionPrice()
         getFaucetInfo()
@@ -414,6 +420,9 @@ class GlobalViewModel: ObservableObject {
                     } else if let result = result {
                         print("got rewards list: \(result)")
                         self.rewards = result
+                        if self.isAllPersonalInfoLoaded() {
+                            self.backgroundManager.finishConnectBackgroundTask()
+                        }
                     }
                 }
             }
@@ -480,7 +489,7 @@ class GlobalViewModel: ObservableObject {
     
     func uploadImageToIpfs(image: UIImage,
                            name: String,
-                           quality: Double = 0.92) {
+                           quality: Double = 1.0) {
         if let address = walletAccount, address.count > 2 {
             print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in
@@ -500,7 +509,7 @@ class GlobalViewModel: ObservableObject {
                                            description: "",
                                            image: "ipfs://\(cid)",
                                            properties: MetaProperties(
-                                            id: "1",
+                                            id: nil,
                                             imageName: filename))
                         self.uploadMetaToIpfs(meta: meta,
                                               filename: "\(filename)_meta.json",
@@ -675,9 +684,13 @@ class GlobalViewModel: ObservableObject {
                         self?.polygonBalance = balance
                         self?.polygonBalanceLoaded = true
                     }
+                    if let loaded = self?.isAllPersonalInfoLoaded(), loaded {
+                        self?.backgroundManager.finishConnectBackgroundTask()
+                    }
                     if let observing = self?.observingBalance, observing, balance > 0 {
                         self?.stopObservingBalance()
                         withAnimation {
+                            self?.faucetUsed = true
                             self?.faucetFinished = true
                             self?.faucetProcessing = false
                         }
@@ -729,6 +742,9 @@ class GlobalViewModel: ObservableObject {
                             self?.publicNfts = tokens
                             self?.publicNftsLoaded = true
                             self?.refreshingPublicNfts = false
+                            if let loaded = self?.isAllPersonalInfoLoaded(), loaded {
+                                self?.backgroundManager.finishConnectBackgroundTask()
+                            }
                         }
                         if let observing = self?.observingNftsCount,
                             let lastCount = self?.lastNftsCount,
@@ -772,6 +788,9 @@ class GlobalViewModel: ObservableObject {
                     withAnimation {
                         self?.minterBalance = balance
                         self?.loadedMinterBalance = true
+                        if let loaded = self?.isAllPersonalInfoLoaded(), loaded {
+                            self?.backgroundManager.finishConnectBackgroundTask()
+                        }
                     }
                 }
             }
@@ -780,33 +799,39 @@ class GlobalViewModel: ObservableObject {
     
     func getPrivateCollections(page: Int = 0, size: Int = 1000) {
         if let address = walletAccount {
-            web3.getPrivateCollections(page: page, size: size, address: address) { [weak self] collections, error in
+            web3.getPrivateCollections(page: page, size: size, address: address) { [self] collections, error in
                 if let error = error {
                     print("get private collections error: \(error)")
                     //TODO: handle error?
                 } else {
                     print("get private collections: \(collections)")
                     DispatchQueue.main.async {
-                        let oldTokensCount = self?.privateCollections.reduce(0) { $0 + $1.tokensCount }
+                        let oldTokensCount = self.privateCollections.reduce(0) { $0 + $1.tokensCount }
                         withAnimation {
-                            self?.privateCollections = collections
-                            self?.privateCollectionsLoaded = true
+                            self.privateCollections = collections
+                            self.privateCollectionsLoaded = true
+                            if self.pickedPrivateCollection &&
+                                self.pickedCollection == nil && self.privateCollections.count > 0 {
+                                self.pickedCollection = self.privateCollections[0]
+                            }
                         }
-                        if let observing = self?.observingCollectionsCount,
-                            let lastCount = self?.lastCollectionsCount,
-                           observing && collections.count > lastCount {
+                        if let lastCount = self.lastCollectionsCount,
+                           observingCollectionsCount && collections.count > lastCount {
                             print("stopping observing")
-                            self?.stopObservingPrivateCollections()
-                            self?.purchaseFinished = true
-                            self?.purchasingInProgress = false
-                            self?.vibrationWorker.vibrate()
-                            self?.getAllowance()
-                            self?.getMinterBalance()
+                            self.stopObservingPrivateCollections()
+                            self.purchaseFinished = true
+                            self.purchasingInProgress = false
+                            self.vibrationWorker.vibrate()
+                            self.getAllowance()
+                            self.getMinterBalance()
                         }
                         let newTokensCount = collections.reduce(0) { $0 + $1.tokensCount}
                         if oldTokensCount != newTokensCount {
-                            self?.privateNftsRequestTimer?.cancel()
-                            self?.getPrivateTokens()
+                            self.privateNftsRequestTimer?.cancel()
+                            self.getPrivateTokens()
+                        }
+                        if self.isAllPersonalInfoLoaded() {
+                            self.backgroundManager.finishConnectBackgroundTask()
                         }
                     }
                 }
@@ -884,6 +909,9 @@ class GlobalViewModel: ObservableObject {
                     withAnimation {
                         self?.allowance = allowance
                         self?.allowanceLoaded = true
+                    }
+                    if let loaded = self?.isAllPersonalInfoLoaded(), loaded {
+                        self?.backgroundManager.finishConnectBackgroundTask()
                     }
                     if let observing = self?.observingAllowance, observing, allowance >= self?.privateCollectionPrice ?? 0 {
                         print("allowance updated")
@@ -1000,7 +1028,7 @@ class GlobalViewModel: ObservableObject {
                 let meta = NftMeta(name: collectionData.name,
                                    description: "",
                                    image: Constants.ipfsMinterImage,
-                                   properties: MetaProperties(id: "", imageName: ""))
+                                   properties: MetaProperties(id: nil, imageName: ""))
                 HttpRequester.shared.uploadMetaToFilebase(meta: meta, filename: filename) { cid, error in
                     if let error = error {
                         print("Error uploading meta: \(error)")
@@ -1015,9 +1043,9 @@ class GlobalViewModel: ObservableObject {
                             if self.connectedAddress != nil && self.isAgentAccount {
                                 self.web3.purchasePrivateCollectionAgent(salt: salt,
                                                                          name: collectionData.name,
+                                                                         symbol: "",
                                                                          collectionMeta: metaLink,
                                                                          accessTokenMeta: Constants.ipfsAccessTokenMeta,
-                                                                         symbol: "",
                                                                          data: data) { [weak self] err in
                                     if let err = err {
                                         print("Tx error: \(err)")
@@ -1027,11 +1055,11 @@ class GlobalViewModel: ObservableObject {
                                 }
                             } else {
                                 guard let data = self.web3.purchasePrivateCollectionData(salt: salt,
-                                                                                    name: collectionData.name,
-                                                                                    collectionMeta: metaLink,
-                                                                                    accessTokenMeta: Constants.ipfsAccessTokenMeta,
-                                                                                    symbol: "",
-                                                                                    data: data) else {
+                                                                                         name: collectionData.name,
+                                                                                         symbol: "",
+                                                                                         collectionMeta: metaLink,
+                                                                                         accessTokenMeta: Constants.ipfsAccessTokenMeta,
+                                                                                         data: data) else {
                                     //TODO: handle error
                                     return
                                 }

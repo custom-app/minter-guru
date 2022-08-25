@@ -539,9 +539,9 @@ class Web3Worker: ObservableObject {
     
     func purchasePrivateCollectionAgent(salt: Data,
                                         name: String,
+                                        symbol: String,
                                         collectionMeta: String,
                                         accessTokenMeta: String,
-                                        symbol: String,
                                         data: Data,
                                         onResult: @escaping (Error?) -> ()) {
         DispatchQueue.global(qos: .userInitiated).async { [self] in
@@ -549,9 +549,9 @@ class Web3Worker: ObservableObject {
                               method: "purchasePrivateCollection",
                               params: [salt as AnyObject,
                                        name as AnyObject,
+                                       symbol as AnyObject,
                                        collectionMeta as AnyObject,
                                        accessTokenMeta as AnyObject,
-                                       symbol as AnyObject,
                                        data as AnyObject],
                               onResult: onResult)
         }
@@ -611,17 +611,17 @@ class Web3Worker: ObservableObject {
     
     func purchasePrivateCollectionData(salt: Data,
                                        name: String,
+                                       symbol: String,
                                        collectionMeta: String,
                                        accessTokenMeta: String,
-                                       symbol: String,
                                        data: Data) -> String? {
         return encodeFunctionData(contract: accessTokenContract,
                                   method: "purchasePrivateCollection",
                                   parameters: [salt as AnyObject,
                                                name as AnyObject,
+                                               symbol as AnyObject,
                                                collectionMeta as AnyObject,
                                                accessTokenMeta as AnyObject,
-                                               symbol as AnyObject,
                                                data as AnyObject])?.toHexString(withPrefix: true)
     }
     

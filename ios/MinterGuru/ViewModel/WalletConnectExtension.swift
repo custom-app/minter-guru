@@ -120,6 +120,7 @@ extension GlobalViewModel {
     func triggerPendingDeepLink() {
         guard let deepLink = pendingDeepLink else { return }
         pendingDeepLink = nil
+        backgroundManager.createConnectBackgroundTask()
         DispatchQueue.main.asyncAfter(deadline: .now() + deepLinkDelay) {
             withAnimation {
                 self.connectingToBridge = false
@@ -130,7 +131,6 @@ extension GlobalViewModel {
                 //TODO: deeplink into app in store
             }
         }
-        backgroundManager.createConnectBackgroundTask()
     }
     
 }
@@ -151,7 +151,6 @@ extension GlobalViewModel: WalletConnectDelegate {
 
     func didConnect() {
         print("did connect callback")
-        backgroundManager.finishConnectBackgroundTask()
         let wasReconnecting = isReconnecting
         DispatchQueue.main.async { [unowned self] in
             withAnimation {

@@ -33,7 +33,7 @@ struct NftMeta: Codable {
         description = ""
         image = ""
         properties = MetaProperties(
-            id: "",
+            id: nil,
             imageName: ""
         )
     }
@@ -44,6 +44,6 @@ struct NftMeta: Codable {
 }
 
 struct MetaProperties: Codable {
-    let id: String
+    let id: String?
     let imageName: String
 }

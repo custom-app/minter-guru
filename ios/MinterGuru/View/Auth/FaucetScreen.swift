@@ -122,9 +122,6 @@ struct FaucetScreen: View {
                             } else {
                                 Button {
                                     UserDefaultsWorker.shared.setFaucetUsed()
-                                    withAnimation {
-                                        globalVm.faucetUsed = true
-                                    }
                                     globalVm.callFaucet()
                                 } label: {
                                     Text("Get Matic")

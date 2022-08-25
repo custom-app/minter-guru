@@ -65,11 +65,13 @@ struct MinterInfoScreen: View {
                                         if !globalVm.twitterFollowRewardReceived {
                                             globalVm.applyForFollowReward()
                                         }
-                                        if let url = URL(string: Constants.minterTwitterLink),
-                                           UIApplication.shared.canOpenURL(url) {
-                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                        } else {
-                                            //TODO: handle error
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            if let url = URL(string: Constants.minterTwitterLink),
+                                               UIApplication.shared.canOpenURL(url) {
+                                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                            } else {
+                                                //TODO: handle error
+                                            }
                                         }
                                     } label: {
                                         Text("Twitter")
@@ -122,7 +124,7 @@ struct MinterInfoScreen: View {
                                     .padding(.leading, 20)
                             }
                             
-                            Text("Tokens will be sent 24 hours after the post is published.")
+                            Text("Tokens will be sent 5 minutes after the post is published.")
                                 .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-regular", fixedSize: 17))
                             

@@ -54,7 +54,7 @@ class AttributedStringWorker {
     }
     
     var onboardingThird: NSAttributedString {
-        let string = "GURU: Every time you mint tweet about it, the magic smartcontract will reward you with 6 $MIGU tokens. Follow @MinterGuru on Twitter to receive 2 $MIGU tokens."
+        let string = "GURU: Every time you mint tweet about it, the magic smartcontract will reward you with 10 $MIGU tokens. Follow @MinterGuru on Twitter to receive 5 $MIGU tokens."
         let attrString = defaultOnboarding(string: string)
         addAttributes(string: string, attrString: attrString,
                       part: "@MinterGuru", attrs: [.foregroundColor : UIColor(Colors.brightGreen)])
@@ -62,7 +62,7 @@ class AttributedStringWorker {
     }
     
     var onboardingFourth: NSAttributedString {
-        let string = "GURU: You will need 20 $MIGU to activate the spell and get your own NFT collection smartcontract deployed on Polygon."
+        let string = "GURU: You will need 35 $MIGU to activate the spell and get your own NFT collection smartcontract deployed on Polygon."
         return defaultOnboarding(string: string)
     }
     

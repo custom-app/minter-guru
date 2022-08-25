@@ -71,6 +71,12 @@ struct MintFinishedSheet: View {
                                 .padding(.top, 10)
                         }
                         
+                        Text("*Nft will be available on OpenSea in a few minutes")
+                            .font(.custom("rubik-regular", fixedSize: 13))
+                            .foregroundColor(Colors.mainGrey)
+                            .padding(.top, 6)
+                            .padding(.horizontal, 26)
+                        
                         Button {
                             globalVm.applyForRepostReward()
                             textForShare = "\(Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId))\n\(Constants.minterHashtag)"

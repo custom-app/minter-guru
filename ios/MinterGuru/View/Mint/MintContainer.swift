@@ -272,6 +272,13 @@ struct MintContainer: View {
                                     .padding(.horizontal, 26)
                             } else {
                                 Button {
+                                    if globalVm.session == nil && (globalVm.connectedAddress == nil || !globalVm.isAgentAccount) {
+                                        globalVm.alert = IdentifiableAlert.build(
+                                            id: "wallet not connected",
+                                            title: "Wallet not connected",
+                                            message: "To mint a picture, you need to connect the wallet")
+                                        return
+                                    }
                                     if globalVm.isWrongChain {
                                         globalVm.alert = IdentifiableAlert.build(
                                             id: "wrong chain",
@@ -279,11 +286,11 @@ struct MintContainer: View {
                                             message: "Please connect to the Polygon network in your wallet")
                                         return
                                     }
-                                    if globalVm.session == nil && (globalVm.connectedAddress == nil || !globalVm.isAgentAccount) {
+                                    if globalVm.pickedPrivateCollection && globalVm.privateCollections.isEmpty {
                                         globalVm.alert = IdentifiableAlert.build(
-                                            id: "wallet not connected",
-                                            title: "Wallet not connected",
-                                            message: "To mint a picture, you need to connect the wallet")
+                                            id: "wrong chain",
+                                            title: "Missing collection",
+                                            message: "You don't have any private collections")
                                         return
                                     }
                                     globalVm.pictureName = globalVm.pictureName.trimmingCharacters(in: .whitespacesAndNewlines)

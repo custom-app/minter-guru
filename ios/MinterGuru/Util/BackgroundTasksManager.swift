@@ -17,19 +17,20 @@ class BackgroundTasksManager {
     
     func createConnectBackgroundTask() {
         connectBackgroundTaskID =
-        UIApplication.shared.beginBackgroundTask (withName: "Connect to wallet") { [weak self] in
+        UIApplication.shared.beginBackgroundTask (withName: "Connect_to_wallet") { [weak self] in
             self?.finishConnectBackgroundTask()
         }
     }
     
     func createSendTxBackgroundTask() {
         sendTxBackgroundTaskID =
-        UIApplication.shared.beginBackgroundTask (withName: "Send tx") { [weak self] in
+        UIApplication.shared.beginBackgroundTask (withName: "Send_tx") { [weak self] in
             self?.finishSendTxBackgroundTask()
         }
     }
     
     func finishConnectBackgroundTask() {
+        print("finishing connect background task")
         if let taskId = connectBackgroundTaskID {
             UIApplication.shared.endBackgroundTask(taskId)
             self.connectBackgroundTaskID = nil

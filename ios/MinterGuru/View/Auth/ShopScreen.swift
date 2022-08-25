@@ -205,6 +205,13 @@ struct ShopScreen: View {
                                             message: "Please enter collection name")
                                         return
                                     }
+                                    if globalVm.minterBalance < globalVm.privateCollectionPrice {
+                                        alert = IdentifiableAlert.build(
+                                            id: "not_enough_migu",
+                                            title: "Insufficient funds",
+                                            message: "You don't have enough MIGU tokens to purchase the collection")
+                                        return
+                                    }
                                     withAnimation {
                                         globalVm.purchasingInProgress = true
                                     }
