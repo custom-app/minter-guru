@@ -113,7 +113,7 @@ struct NftInfoSheet: View {
                     
                     Button {
                         globalVm.applyForRepostReward()
-                        textForShare = "\(Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId))\n#MIGU"
+                        textForShare = "\(Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId))\n\(Constants.minterHashtag)"
                     } label: {
                         Text("Share")
                             .font(.custom("rubik-bold", fixedSize: 17))

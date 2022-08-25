@@ -18,6 +18,7 @@ struct Constants {
     static let ipfsMinterImage = "ipfs://QmabMpksqkBnD48a4sdSNj5Y3uEG4hTzJxri7jE88vTz2g"
     static let ipfsAccessTokenMeta = "ipfs://bafkreigvvqwpop4aeucnjdw6ozjecinuwujka7cjzj7cd323pmsek7mvxu"
     static let minterTwitterLink = "https://twitter.com/MinterGuru"
+    static let minterHashtag = "#MinterGuru"
     
     struct Bridges {
         static let Gnosis = "https://safe-walletconnect.gnosis.io/"
@@ -42,23 +43,23 @@ struct Constants {
     }
     
     struct RouterContract {
-        static let Mainnet = ""
+        static let Mainnet = "0xe760Cf4Ef449139541d2674aCAAE22f906775baC"
         static let Testnet = "0x551750045d9DeC7Fb5023E96c9543492395af946"
     }
     
     struct AccessTokenContract {
-        static let Mainnet = ""
+        static let Mainnet = "0x8dDAC2F23730E168C3684C2567338b6697B291e0"
         static let Testnet = "0xe8e273aA17227972709B9FE389871C74e9f8C382"
     }
     
     struct MinterContract {
-        static let Mainnet = ""
+        static let Mainnet = "0x580aeE9658cC4382cbFbCC32977379a3f4695D25"
         static let Testnet = "0x3962276a988347A1DD8EBEa5f0ea44798d09803D"
     }
     
     struct BackendEndpoint {
         static let Prod = ""
-        static let Dev = "https://api-dev.minter.guru"
+        static let Dev = "https://api.minter.guru"
     }
     
     static var routerAddress: String {

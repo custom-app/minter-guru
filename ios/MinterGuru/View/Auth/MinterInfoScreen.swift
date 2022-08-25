@@ -126,7 +126,7 @@ struct MinterInfoScreen: View {
                                 .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-regular", fixedSize: 17))
                             
-                            Text("The post must contain the #MIGU hashtag to earn tokens.")
+                            Text("The post must contain the \(Constants.minterHashtag) hashtag to earn tokens.")
                                 .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-semibold", fixedSize: 17))
                         }
