@@ -272,6 +272,13 @@ struct MintContainer: View {
                                     .padding(.horizontal, 26)
                             } else {
                                 Button {
+                                    if globalVm.isWrongChain {
+                                        globalVm.alert = IdentifiableAlert.build(
+                                            id: "wrong chain",
+                                            title: "Wrong chain",
+                                            message: "Please connect to the Polygon network in your wallet")
+                                        return
+                                    }
                                     if globalVm.session == nil && (globalVm.connectedAddress == nil || !globalVm.isAgentAccount) {
                                         globalVm.alert = IdentifiableAlert.build(
                                             id: "wallet not connected",

@@ -190,6 +190,13 @@ struct ShopScreen: View {
                             } else {
                                 Button {
                                     hideKeyboard()
+                                    if globalVm.isWrongChain {
+                                        alert = IdentifiableAlert.build(
+                                            id: "wrong chain",
+                                            title: "Wrong chain",
+                                            message: "Please connect to the Polygon network in your wallet")
+                                        return
+                                    }
                                     collectionName = collectionName.trimmingCharacters(in: .whitespacesAndNewlines)
                                     if collectionName.isEmpty {
                                         alert = IdentifiableAlert.build(
