@@ -262,6 +262,7 @@ class GlobalViewModel: ObservableObject {
         getFaucetInfo()
         getTwitterInfo()
         getTwitterFollowInfo()
+        getContractsConfig()
     }
     
     func clearAccountInfo() {
@@ -296,6 +297,20 @@ class GlobalViewModel: ObservableObject {
             return !nfts.isEmpty
         } else {
             return !publicNfts.isEmpty
+        }
+    }
+    
+    func getContractsConfig() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            HttpRequester.shared.getContractsConfig { result, error in
+                if let error = error {
+                    print("got contracts config error: \(error)")
+                    //TODO: handle error
+                } else if let result = result {
+                    print("got contracts config: \(result)")
+                    Constants.contractsConfig = result
+                }
+            }
         }
     }
     

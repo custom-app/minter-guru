@@ -243,6 +243,10 @@ class HttpRequester {
         doApiRequest(route: ApiRoute.twitterFollowInfo, data: Data(), onResult: onResult)
     }
     
+    func getContractsConfig(onResult: @escaping (ContractsConfig?, Error?) -> ()) {
+        doApiRequest(route: ApiRoute.contractsConfig, data: Data(), onResult: onResult)
+    }
+    
     func doApiRequest<T: Decodable>(route: ApiRoute, data: Data, onResult: @escaping (T?, Error?) -> Void) {
         let url = URL(string: Constants.backendUrl + route.rawValue)!
         print("doRequest on: " + url.absoluteString)

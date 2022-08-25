@@ -20,6 +20,8 @@ struct Constants {
     static let minterTwitterLink = "https://twitter.com/MinterGuru"
     static let minterHashtag = "#MinterGuru"
     
+    static var contractsConfig: ContractsConfig? = nil
+    
     struct Bridges {
         static let Gnosis = "https://safe-walletconnect.gnosis.io/"
         static let Wc = "https://bridge.walletconnect.org"
@@ -58,11 +60,14 @@ struct Constants {
     }
     
     struct BackendEndpoint {
-        static let Prod = ""
-        static let Dev = "https://api.minter.guru"
+        static let Prod = "https://api.minter.guru"
+        static let Dev = "https://api-dev.minter.guru"
     }
     
     static var routerAddress: String {
+        if let contractsConfig = contractsConfig {
+            return contractsConfig.router
+        }
         if Config.TESTING {
             return RouterContract.Testnet
         } else {
@@ -71,6 +76,9 @@ struct Constants {
     }
     
     static var accessTokenAddress: String {
+        if let contractsConfig = contractsConfig {
+            return contractsConfig.accessToken
+        }
         if Config.TESTING {
             return AccessTokenContract.Testnet
         } else {
@@ -79,6 +87,9 @@ struct Constants {
     }
     
     static var minterAddress: String {
+        if let contractsConfig = contractsConfig {
+            return contractsConfig.miguToken
+        }
         if Config.TESTING {
             return MinterContract.Testnet
         } else {
