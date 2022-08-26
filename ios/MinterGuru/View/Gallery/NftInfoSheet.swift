@@ -83,7 +83,6 @@ struct NftInfoSheet: View {
                     Button {
                         if let url = URL(string: Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId)),
                            UIApplication.shared.canOpenURL(url) {
-                            print("link: \(Tools.formOpenseaLink(contract: nft.contractAddress, tokenId: nft.tokenId))")
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         } else {
                             //TODO: show error alert

@@ -631,34 +631,55 @@ class GlobalViewModel: ObservableObject {
     }
     
     func loadImageFromFilebase(nft: Nft) {
-        print("loading image from filebase")
         DispatchQueue.global(qos: .userInitiated).async {
             if let filebaseName = nft.data.filebaseName,
                 let url = URL(string: Tools.formFilebaseLink(filename: filebaseName)) {
-                URLSession.shared.dataTask(with: url) { [self] data, response, error in
-                    print("got image response, error: \(error)")
-                    guard error == nil, let data = data else {
-                        //TODO: handle error
-                        return
-                    }
-                    let image = UIImage(data: data)
+                print("loading image from filebase: \(url.absoluteString)")
+                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        print("searching index")
                         if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                            print("index found")
+                            print("index found, image: \(self.publicNfts[index].data.name)")
                             withAnimation {
                                 self.publicNfts[index].image = image
                             }
+                            return
                         }
                         if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                            print("index found")
+                            print("index found, image: \(self.privateNfts[index].data.name)")
                             withAnimation {
                                 self.privateNfts[index].image = image
                             }
+                            return
                         }
                     }
+                } else {
+                    URLSession.shared.dataTask(with: url) { [self] data, response, error in
+                        print("got image response, error: \(error)")
+                        guard error == nil, let data = data else {
+                            //TODO: handle error
+                            return
+                        }
+                        let image = UIImage(data: data)
+                        print("is image nil: \(image == nil)")
+                        DispatchQueue.main.async {
+                            if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                                print("index found, image: \(self.publicNfts[index].data.name)")
+                                withAnimation {
+                                    self.publicNfts[index].image = image
+                                }
+                                return
+                            }
+                            if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+                                print("index found, image: \(self.privateNfts[index].data.name)")
+                                withAnimation {
+                                    self.privateNfts[index].image = image
+                                }
+                                return
+                            }
+                        }
+                    }
+                    .resume()
                 }
-                .resume()
             } else {
                 //TODO: handle error
             }
