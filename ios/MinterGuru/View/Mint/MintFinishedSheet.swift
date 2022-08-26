@@ -36,7 +36,7 @@ struct MintFinishedSheet: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .scaledToFit()
-                                .background(Color.black)
+                                .background(Color.white)
                                 .cornerRadius(10)
                                 .frame(maxWidth: .infinity, maxHeight: 325)
                             

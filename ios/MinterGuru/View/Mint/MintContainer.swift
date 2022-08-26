@@ -57,9 +57,10 @@ struct MintContainer: View {
                         if let image = globalVm.pickedImage {
                             
                             ZStack(alignment: .bottom) {
-                                Image(uiImage: image)
+                                Image(uiImage: image.image)
                                     .resizable()
                                     .scaledToFit()
+                                    .background(Color.white)
                                     .overlay(
                                         Button {
                                             globalVm.checkGalleryAuth {

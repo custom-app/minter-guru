@@ -10,7 +10,7 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPicker: UIViewControllerRepresentable {
-    var handlePickedImage: (UIImage?) -> Void
+    var handlePickedImage: (UIImageWithFormat?) -> Void
     
     static var isAvailable: Bool {
         return true
@@ -23,6 +23,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         configuration.filter = .images
+        configuration.selectionLimit = 1
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = context.coordinator
         return picker
@@ -33,20 +34,44 @@ struct PhotoPicker: UIViewControllerRepresentable {
     }
     
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
-        var handlePickedImage: (UIImage?) -> Void
+        var handlePickedImage: (UIImageWithFormat?) -> Void
 
-        init(handlePickedImage: @escaping (UIImage?) -> Void) {
+        init(handlePickedImage: @escaping (UIImageWithFormat?) -> Void) {
             self.handlePickedImage = handlePickedImage
         }
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             let found = results.map { $0.itemProvider }.loadObjects(ofType: UIImage.self) { [weak self] image, index in
-                self?.handlePickedImage(image)
+                results[index].itemProvider.loadFileRepresentation(forTypeIdentifier: "public.item") { (url, error) in
+                    if let error = error {
+                       print("error getting image format \(error)");
+                    } else {
+                        if let url = url {
+                            let filename = url.lastPathComponent;
+                            if let format = filename.split(separator: ".").last, format == "png" {
+                                print("png image")
+                                self?.handlePickedImage(UIImageWithFormat(image: image, format: .png))
+                                return
+                            }
+                        }
+                    }
+                    self?.handlePickedImage(UIImageWithFormat(image: image, format: .jpg))
+                }
             }
             if !found {
                 handlePickedImage(nil)
             }
         }
+    }
+}
+
+struct UIImageWithFormat {
+    let image: UIImage
+    let format: ImageFormat
+    
+    enum ImageFormat {
+        case png
+        case jpg
     }
 }
 

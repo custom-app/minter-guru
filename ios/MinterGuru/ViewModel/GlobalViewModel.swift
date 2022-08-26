@@ -60,7 +60,7 @@ class GlobalViewModel: ObservableObject {
     var currentTab: TabItem = .wallet
     
     @Published
-    var pickedImage: UIImage?
+    var pickedImage: UIImageWithFormat?
     @Published
     var mintedImage: UIImage?
     @Published
@@ -205,8 +205,8 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func handleImagePicked(photo: UIImage) {
-        let sidesRatio = photo.size.height / photo.size.width
+    func handleImagePicked(photo: UIImageWithFormat) {
+        let sidesRatio = photo.image.size.height / photo.image.size.width
         if sidesRatio > imageSidesMaxRatio || sidesRatio < (1.0 / imageSidesMaxRatio) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.alert = IdentifiableAlert.build(
@@ -218,10 +218,10 @@ class GlobalViewModel: ObservableObject {
             return
         }
         DispatchQueue.global(qos: .userInitiated).async { [self] in
-            let compressed = ImageWorker.compressImage(image: photo)
+            let compressed = ImageWorker.compressImage(image: photo.image)
             DispatchQueue.main.async {
                 withAnimation {
-                    self.pickedImage = compressed
+                    self.pickedImage = UIImageWithFormat(image: compressed, format: photo.format)
                 }
             }
         }
@@ -487,18 +487,25 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
-    func uploadImageToIpfs(image: UIImage,
+    func uploadImageToIpfs(image: UIImageWithFormat,
                            name: String,
                            quality: Double = 1.0) {
         if let address = walletAccount, address.count > 2 {
             print("uploading image to ipfs")
             DispatchQueue.global(qos: .userInitiated).async { [self] in
-                guard let data = image.jpegData(compressionQuality: quality) else {
-                    print("error getting jpeg data for photo")
+                var data: Data? = nil
+                if image.format == .png {
+                    data = image.image.pngData()
+                } else {
+                    data = image.image.jpegData(compressionQuality: quality)
+                }
+                guard let data = data else {
+                    print("error getting \(image.format) data for photo")
                     return
                 }
+                print("\(image.format)")
                 let filename = Tools.generatePictureName(address: address)
-                HttpRequester.shared.uploadPictureToFilebase(data: data, filename: "\(filename).jpg") { cid, error in
+                HttpRequester.shared.uploadPictureToFilebase(data: data, filename: "\(filename).\(image.format)") { cid, error in
                     if let error = error {
                         print("Error uploading photo: \(error)")
                         return
@@ -513,7 +520,7 @@ class GlobalViewModel: ObservableObject {
                                             imageName: filename))
                         self.uploadMetaToIpfs(meta: meta,
                                               filename: "\(filename)_meta.json",
-                                              filebaseImageName: "\(filename).jpg")
+                                              filebaseImageName: "\(filename).\(image.format)")
                     }
                 }
             }
@@ -539,7 +546,7 @@ class GlobalViewModel: ObservableObject {
                     print("uploaded meta: \(cid)")
                     DispatchQueue.main.async {
                         withAnimation {
-                            self.mintedImage = self.pickedImage
+                            self.mintedImage = self.pickedImage?.image
                             self.pickedImage = nil
                             self.mintedPictureName = self.pictureName
                             self.pictureName = ""
