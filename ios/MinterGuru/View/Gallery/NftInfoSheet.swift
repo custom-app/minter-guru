@@ -76,7 +76,8 @@ struct NftInfoSheet: View {
                             globalVm.loadNftMeta(nft: nft, loadImageAfter: loadImageFromIpfs)
                         }
                         if let filebaseName = nft.data.filebaseName, !filebaseName.isEmpty, nft.image == nil {
-                            globalVm.loadImageFromFilebase(nft: nft)
+                            globalVm.tryToGetImageFromCache(nft: nft, ifNotExist: { globalVm.loadImageFromFilebase(nft: $0)})
+//                            globalVm.loadImageFromFilebase(nft: nft)
                         }
                     }
                     

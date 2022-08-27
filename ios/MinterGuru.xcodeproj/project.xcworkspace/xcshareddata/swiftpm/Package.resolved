@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "Shallows",
+        "repositoryURL": "https://github.com/dreymonde/Shallows",
+        "state": {
+          "branch": null,
+          "revision": "3a9d673a7c01d6fd4fbaa5cd592648dbae42d4a7",
+          "version": "0.13.4"
+        }
+      },
+      {
         "package": "Starscream",
         "repositoryURL": "https://github.com/daltoniam/Starscream.git",
         "state": {

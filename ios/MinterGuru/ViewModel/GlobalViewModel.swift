@@ -637,6 +637,24 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
+    func tryToGetImageFromCache(nft: Nft, ifNotExist: @escaping (Nft) -> ()) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let key = nft.data.filebaseName {
+                ImageCache.shared.get(key: key) { image in
+                    if let image = image {
+                        DispatchQueue.main.async {
+                            self.setNftPicture(image: image, nft: nft)
+                        }
+                    } else {
+                        ifNotExist(nft)
+                    }
+                }
+            } else {
+                ifNotExist(nft)
+            }
+        }
+    }
+    
     func loadImageFromFilebase(nft: Nft) {
         DispatchQueue.global(qos: .userInitiated).async {
             if let filebaseName = nft.data.filebaseName,
@@ -644,21 +662,9 @@ class GlobalViewModel: ObservableObject {
                 print("loading image from filebase: \(url.absoluteString)")
                 if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                            print("index found, image: \(self.publicNfts[index].data.name)")
-                            withAnimation {
-                                self.publicNfts[index].image = image
-                            }
-                            return
-                        }
-                        if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                            print("index found, image: \(self.privateNfts[index].data.name)")
-                            withAnimation {
-                                self.privateNfts[index].image = image
-                            }
-                            return
-                        }
+                        self.setNftPicture(image: image, nft: nft)
                     }
+                    ImageCache.shared.save(image, key: filebaseName)
                 } else {
                     URLSession.shared.dataTask(with: url) { [self] data, response, error in
                         print("got image response, error: \(error)")
@@ -669,20 +675,10 @@ class GlobalViewModel: ObservableObject {
                         let image = UIImage(data: data)
                         print("is image nil: \(image == nil)")
                         DispatchQueue.main.async {
-                            if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                                print("index found, image: \(self.publicNfts[index].data.name)")
-                                withAnimation {
-                                    self.publicNfts[index].image = image
-                                }
-                                return
-                            }
-                            if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
-                                print("index found, image: \(self.privateNfts[index].data.name)")
-                                withAnimation {
-                                    self.privateNfts[index].image = image
-                                }
-                                return
-                            }
+                            self.setNftPicture(image: image, nft: nft)
+                        }
+                        if let image = image {
+                            ImageCache.shared.save(image, key: filebaseName)
                         }
                     }
                     .resume()
@@ -690,6 +686,23 @@ class GlobalViewModel: ObservableObject {
             } else {
                 //TODO: handle error
             }
+        }
+    }
+    
+    func setNftPicture(image: UIImage?, nft: Nft) {
+        if let index = self.publicNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+            print("index found, image: \(self.publicNfts[index].data.name)")
+            withAnimation {
+                self.publicNfts[index].image = image
+            }
+            return
+        }
+        if let index = self.privateNfts.firstIndex(where: { $0.metaUrl == nft.metaUrl}) {
+            print("index found, image: \(self.privateNfts[index].data.name)")
+            withAnimation {
+                self.privateNfts[index].image = image
+            }
+            return
         }
     }
     

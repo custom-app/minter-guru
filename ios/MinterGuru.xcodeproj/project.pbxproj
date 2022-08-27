@@ -80,6 +80,8 @@
 		11ED5AAA284710B400F0D61D /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AA9284710B400F0D61D /* AuthContainer.swift */; };
 		11ED5AAC284710BE00F0D61D /* MintContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AAB284710BE00F0D61D /* MintContainer.swift */; };
 		11ED5AAE284710C800F0D61D /* GalleryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED5AAD284710C800F0D61D /* GalleryContainer.swift */; };
+		11F344EA28BA90960068F6BD /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F344E928BA90960068F6BD /* ImageCache.swift */; };
+		11F344ED28BA95120068F6BD /* Shallows in Frameworks */ = {isa = PBXBuildFile; productRef = 11F344EC28BA95120068F6BD /* Shallows */; };
 		11F9729C285CE62B000026FD /* GuidesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729B285CE62B000026FD /* GuidesScreen.swift */; };
 		11F9729E285CE738000026FD /* SheetStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729D285CE738000026FD /* SheetStroke.swift */; };
 		11F972A0285CED11000026FD /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F9729F285CED11000026FD /* Tip.swift */; };
@@ -160,6 +162,7 @@
 		11ED5AA9284710B400F0D61D /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
 		11ED5AAB284710BE00F0D61D /* MintContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintContainer.swift; sourceTree = "<group>"; };
 		11ED5AAD284710C800F0D61D /* GalleryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryContainer.swift; sourceTree = "<group>"; };
+		11F344E928BA90960068F6BD /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		11F9729B285CE62B000026FD /* GuidesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidesScreen.swift; sourceTree = "<group>"; };
 		11F9729D285CE738000026FD /* SheetStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetStroke.swift; sourceTree = "<group>"; };
 		11F9729F285CED11000026FD /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
@@ -172,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11BE8CE02855D4410088F261 /* WalletConnectSwift in Frameworks */,
+				11F344ED28BA95120068F6BD /* Shallows in Frameworks */,
 				11A7496E2849CD6700387869 /* AWSSigner in Frameworks */,
 				11CE41A728665D66000A15EA /* web3swift in Frameworks */,
 			);
@@ -322,6 +326,7 @@
 				1183DD792891CEA7002189FB /* VibrationWorker.swift */,
 				1177C27B2893022900A43AB1 /* Config.swift */,
 				1110D52228B13686009568CF /* AttributedStringWorker.swift */,
+				11F344E928BA90960068F6BD /* ImageCache.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -419,6 +424,7 @@
 				11A7496D2849CD6700387869 /* AWSSigner */,
 				11BE8CDF2855D4410088F261 /* WalletConnectSwift */,
 				11CE41A628665D66000A15EA /* web3swift */,
+				11F344EC28BA95120068F6BD /* Shallows */,
 			);
 			productName = CryptoInsta;
 			productReference = 11D2572128444C790028E2B4 /* MinterGuru.app */;
@@ -452,6 +458,7 @@
 				11A7496C2849CD6700387869 /* XCRemoteSwiftPackageReference "aws-signer-v4" */,
 				11BE8CDE2855D4410088F261 /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
 				11CE41A528665D65000A15EA /* XCRemoteSwiftPackageReference "web3swift" */,
+				11F344EB28BA95120068F6BD /* XCRemoteSwiftPackageReference "Shallows" */,
 			);
 			productRefGroup = 11D2572228444C790028E2B4 /* Products */;
 			projectDirPath = "";
@@ -527,6 +534,7 @@
 				1183DD7A2891CEA7002189FB /* VibrationWorker.swift in Sources */,
 				1110D52128B12749009568CF /* AttributedText.swift in Sources */,
 				11C6D896287C9FA100CE0950 /* ShopScreen.swift in Sources */,
+				11F344EA28BA90960068F6BD /* ImageCache.swift in Sources */,
 				11C804A22889E0A50001F4BC /* TwitterInfo.swift in Sources */,
 				11C804A62889E2630001F4BC /* FaucetUsageInfo.swift in Sources */,
 				11088652284B244A002C4E5A /* NftInfoSheet.swift in Sources */,
@@ -789,6 +797,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		11F344EB28BA95120068F6BD /* XCRemoteSwiftPackageReference "Shallows" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dreymonde/Shallows";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -806,6 +822,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 11CE41A528665D65000A15EA /* XCRemoteSwiftPackageReference "web3swift" */;
 			productName = web3swift;
+		};
+		11F344EC28BA95120068F6BD /* Shallows */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11F344EB28BA95120068F6BD /* XCRemoteSwiftPackageReference "Shallows" */;
+			productName = Shallows;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
