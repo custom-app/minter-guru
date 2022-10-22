@@ -23,7 +23,7 @@ struct Constants {
     static var contractsConfig: ContractsConfig? = nil
     
     struct Bridges {
-        static let Gnosis = "https://safe-walletconnect.gnosis.io/"
+        static let Gnosis = "https://safe-walletconnect.safe.global/"
         static let Wc = "https://bridge.walletconnect.org"
     }
     

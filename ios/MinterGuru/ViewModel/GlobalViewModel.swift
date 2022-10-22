@@ -290,10 +290,21 @@ class GlobalViewModel: ObservableObject {
     func isRepostRewarded() -> Bool {
         if let rewards = rewards, let info = twitterInfo {
             let todayRewards = Tools.calcTodayRewards(rewards: rewards)
-            return todayRewards < info.personalLimit && rewards.count < info.personalTotalLimit && info.open && info.spent < info.limit
+            return todayRewards < info.personalLimit && getSuccessfullRewardsCount() < info.personalTotalLimit && info.open && info.spent < info.limit
         } else {
             return true
         }
+    }
+    
+    func getSuccessfullRewardsCount() -> Int {
+        guard let rewards = rewards else { return 0 }
+        var res = 0
+        for reward in rewards {
+            if let tx = reward.transaction, let txId = tx.id, !txId.isEmpty {
+                res += 1
+            }
+        }
+        return res
     }
     
     func showSearch() -> Bool {

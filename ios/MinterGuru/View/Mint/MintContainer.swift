@@ -368,7 +368,7 @@ struct CollectionMenu: View {
     
     var body: some View {
         HStack(spacing: 6) {
-            Text("Common")
+            Text("Public")
                 .foregroundColor(pickedPrivateCollection ? Colors.mainPurple : Colors.mainWhite)
                 .font(.custom("rubik-bold", fixedSize: 16))
                 .frame(width: 94)

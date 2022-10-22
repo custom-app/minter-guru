@@ -12,4 +12,9 @@ struct RewardInfo: Codable {
     let createdAt: Int
     let username: String
     let url: String
+    let transaction: Transaction?
+}
+
+struct Transaction: Codable {
+    let id: String?
 }

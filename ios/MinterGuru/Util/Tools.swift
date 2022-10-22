@@ -79,7 +79,9 @@ class Tools {
         var count = 0
         for reward in rewards {
             if reward.createdAt >= dayStart {
-                count += 1
+                if let tx = reward.transaction, let txId = tx.id, !txId.isEmpty {
+                    count += 1
+                }
             } else {
                 break
             }

@@ -26,41 +26,53 @@ struct GuidesScreen: View {
                         .padding(.horizontal, 10)
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Wallet:")
-                            .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", fixedSize: 17))
                         
-                        Button {
-                            
-                        } label: {
-                            Text("Some guide 1")
-                                .foregroundColor(Colors.mainPurple)
+                        HStack {
+                            Spacer()
+                            Text("Guides section will be available soon!")
+                                .foregroundColor(Colors.darkGrey)
                                 .font(.custom("rubik-bold", fixedSize: 17))
+                                .multilineTextAlignment(.center)
+                            Spacer()
                         }
+                        .padding(.horizontal, 20)
                         
-                        Rectangle()
-                            .fill(Color(hex: "#EAEAEA"))
-                            .frame(height: 1)
                         
-                        Button {
-                            
-                        } label: {
-                            Text("Some guide 2")
-                                .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", fixedSize: 17))
-                        }
-                        
-                        Rectangle()
-                            .fill(Color(hex: "#EAEAEA"))
-                            .frame(height: 1)
-                        
-                        Button {
-                            
-                        } label: {
-                            Text("Some guide 3")
-                                .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", fixedSize: 17))
-                        }
+//                        Text("Wallet:")
+//                            .foregroundColor(Colors.darkGrey)
+//                            .font(.custom("rubik-bold", fixedSize: 17))
+//
+//                        Button {
+//
+//                        } label: {
+//                            Text("Some guide 1")
+//                                .foregroundColor(Colors.mainPurple)
+//                                .font(.custom("rubik-bold", fixedSize: 17))
+//                        }
+//
+//                        Rectangle()
+//                            .fill(Color(hex: "#EAEAEA"))
+//                            .frame(height: 1)
+//
+//                        Button {
+//
+//                        } label: {
+//                            Text("Some guide 2")
+//                                .foregroundColor(Colors.mainPurple)
+//                                .font(.custom("rubik-bold", fixedSize: 17))
+//                        }
+//
+//                        Rectangle()
+//                            .fill(Color(hex: "#EAEAEA"))
+//                            .frame(height: 1)
+//
+//                        Button {
+//
+//                        } label: {
+//                            Text("Some guide 3")
+//                                .foregroundColor(Colors.mainPurple)
+//                                .font(.custom("rubik-bold", fixedSize: 17))
+//                        }
                     }
                     .padding(20)
                     .background(Colors.mainWhite)
@@ -70,31 +82,31 @@ struct GuidesScreen: View {
                     .padding(.top, 70)
                     .padding(.horizontal, 26)
                     
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("Tokens:")
-                            .foregroundColor(Colors.darkGrey)
-                            .font(.custom("rubik-bold", fixedSize: 17))
-                        
-                        Button {
-                            
-                        } label: {
-                            Text("About")
-                                .foregroundColor(Colors.mainPurple)
-                                .font(.custom("rubik-bold", fixedSize: 17))
-                        }
-                        .padding(.top, 8)
-                        
-                        Rectangle()
-                            .fill(Color(hex: "#EAEAEA"))
-                            .frame(height: 0)
-                    }
-                    .padding(20)
-                    .background(Colors.mainWhite)
-                    .cornerRadius(30, corners: [.topLeft, .bottomRight])
-                    .cornerRadius(10, corners: [.bottomLeft, .topRight])
-                    .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
-                    .padding(.top, 25)
-                    .padding(.horizontal, 26)
+//                    VStack(alignment: .leading, spacing: 0) {
+//                        Text("Tokens:")
+//                            .foregroundColor(Colors.darkGrey)
+//                            .font(.custom("rubik-bold", fixedSize: 17))
+//
+//                        Button {
+//
+//                        } label: {
+//                            Text("About")
+//                                .foregroundColor(Colors.mainPurple)
+//                                .font(.custom("rubik-bold", fixedSize: 17))
+//                        }
+//                        .padding(.top, 8)
+//
+//                        Rectangle()
+//                            .fill(Color(hex: "#EAEAEA"))
+//                            .frame(height: 0)
+//                    }
+//                    .padding(20)
+//                    .background(Colors.mainWhite)
+//                    .cornerRadius(30, corners: [.topLeft, .bottomRight])
+//                    .cornerRadius(10, corners: [.bottomLeft, .topRight])
+//                    .shadow(color: Colors.darkGrey.opacity(0.25), radius: 10, x: 0, y: 0)
+//                    .padding(.top, 25)
+//                    .padding(.horizontal, 26)
                     
                     Button {
                         withAnimation {

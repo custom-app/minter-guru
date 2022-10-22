@@ -99,7 +99,7 @@ struct MinterInfoScreen: View {
                         
                         if let info = globalVm.twitterInfo {
                             VStack(alignment: .leading, spacing: 0) {
-                                let rewardsCount = globalVm.rewards?.count ?? 0
+                                let rewardsCount = globalVm.getSuccessfullRewardsCount()
                                 let totalLimit = info.personalTotalLimit
                                 let addition = rewardsCount >= info.personalTotalLimit ? "(done \(totalLimit)/\(totalLimit))" :
                                 (info.spent >= info.limit ? "" : "(done \(rewardsCount)/\(totalLimit))")
